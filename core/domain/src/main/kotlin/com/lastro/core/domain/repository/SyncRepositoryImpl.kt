@@ -28,6 +28,7 @@ class SyncRepositoryImpl @Inject constructor(
                         TransactionEntity(
                             id = id,
                             clientId = clientId,
+                            userId = userId,
                             categoryId = categoryId,
                             amount = amount,
                             direction = direction,

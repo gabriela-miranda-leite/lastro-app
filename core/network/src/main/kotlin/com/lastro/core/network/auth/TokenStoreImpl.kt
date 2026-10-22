@@ -29,10 +29,13 @@ class TokenStoreImpl @Inject constructor(
 
     override fun getRefreshToken(): String? = prefs.getString(KEY_REFRESH, null)
 
-    override fun saveTokens(accessToken: String, refreshToken: String) {
+    override fun getUserId(): String? = prefs.getString(KEY_USER_ID, null)
+
+    override fun saveTokens(accessToken: String, refreshToken: String, userId: String) {
         prefs.edit()
             .putString(KEY_ACCESS, accessToken)
             .putString(KEY_REFRESH, refreshToken)
+            .putString(KEY_USER_ID, userId)
             .apply()
     }
 
@@ -43,5 +46,6 @@ class TokenStoreImpl @Inject constructor(
     private companion object {
         const val KEY_ACCESS = "access_token"
         const val KEY_REFRESH = "refresh_token"
+        const val KEY_USER_ID = "user_id"
     }
 }

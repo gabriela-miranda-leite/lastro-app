@@ -12,6 +12,7 @@ import com.lastro.core.network.dto.transaction.TransactionDto
 import com.lastro.core.network.dto.transaction.UpdateTransactionRequest
 import com.lastro.core.network.service.TransactionApiService
 import com.lastro.core.domain.worker.SyncWorker
+import com.lastro.core.network.auth.TokenStore
 import com.lastro.core.network.util.safeApiCall
 import androidx.work.WorkManager
 import java.math.BigDecimal
@@ -22,6 +23,7 @@ class TransactionRepositoryImpl @Inject constructor(
     private val api: TransactionApiService,
     private val dao: TransactionDao,
     private val workManager: WorkManager,
+    private val tokenStore: TokenStore,
 ) : TransactionRepository {
 
     override suspend fun getTransactions(year: Int, month: Int, direction: TransactionType?): Result<List<Transaction>> {
@@ -54,6 +56,7 @@ class TransactionRepositoryImpl @Inject constructor(
         val pending = TransactionEntity(
             id = clientId,
             clientId = clientId,
+            userId = tokenStore.getUserId().orEmpty(),
             categoryId = categoryId,
             amount = amount.toPlainString(),
             direction = direction.name,
@@ -132,6 +135,7 @@ class TransactionRepositoryImpl @Inject constructor(
     private fun TransactionDto.toEntity(status: SyncStatus) = TransactionEntity(
         id = id,
         clientId = clientId,
+        userId = userId,
         categoryId = categoryId,
         amount = amount,
         direction = direction,
