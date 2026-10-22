@@ -6,10 +6,16 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-val localProperties = Properties().apply {
-    val file = rootProject.file("local.properties")
-    if (file.exists()) load(file.inputStream())
-}
+val localProperties =
+    Properties().apply {
+        val file = rootProject.file("local.properties")
+        if (file.exists()) load(file.inputStream())
+    }
+
+val apiBaseUrl: String =
+    localProperties.getProperty("API_BASE_URL")
+        ?: System.getenv("API_BASE_URL")
+        ?: "http://10.0.2.2:8080/"
 
 android {
     namespace = "com.lastro.core.network"
@@ -17,11 +23,7 @@ android {
         buildConfig = true
     }
     defaultConfig {
-        buildConfigField(
-            "String",
-            "API_BASE_URL",
-            "\"${localProperties.getProperty("API_BASE_URL", System.getenv("API_BASE_URL") ?: "http://10.0.2.2:8080/")}\"",
-        )
+        buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
     }
 }
 
