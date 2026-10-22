@@ -19,7 +19,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun login(email: String, password: String): Result<Unit> {
         val result = safeApiCall { api.login(LoginRequest(email, password)) }
         if (result is Result.Success) {
-            tokenStore.saveTokens(result.data.accessToken, result.data.refreshToken)
+            tokenStore.saveTokens(result.data.accessToken, result.data.refreshToken, result.data.user.id)
         }
         return result.mapSuccess { Unit }
     }
@@ -27,7 +27,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun register(email: String, password: String, name: String): Result<Unit> {
         val result = safeApiCall { api.register(RegisterRequest(name, email, password)) }
         if (result is Result.Success) {
-            tokenStore.saveTokens(result.data.accessToken, result.data.refreshToken)
+            tokenStore.saveTokens(result.data.accessToken, result.data.refreshToken, result.data.user.id)
         }
         return result.mapSuccess { Unit }
     }
@@ -45,7 +45,7 @@ class AuthRepositoryImpl @Inject constructor(
             ?: return Result.Error(IllegalStateException("No refresh token"))
         val result = safeApiCall { api.refresh(RefreshRequest(refreshToken)) }
         if (result is Result.Success) {
-            tokenStore.saveTokens(result.data.accessToken, result.data.refreshToken)
+            tokenStore.saveTokens(result.data.accessToken, result.data.refreshToken, result.data.user.id)
         }
         return result.mapSuccess { Unit }
     }
