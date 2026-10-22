@@ -2,11 +2,29 @@ package com.lastro.core.domain.repository
 
 import com.lastro.core.common.Result
 import com.lastro.core.domain.model.Transaction
-import kotlinx.coroutines.flow.Flow
+import com.lastro.core.domain.model.TransactionType
+import java.math.BigDecimal
+import java.time.LocalDate
 
 interface TransactionRepository {
-    fun getTransactions(): Flow<Result<List<Transaction>>>
+    suspend fun getTransactions(year: Int, month: Int, direction: TransactionType? = null): Result<List<Transaction>>
     suspend fun getTransaction(id: String): Result<Transaction>
-    suspend fun saveTransaction(transaction: Transaction): Result<Unit>
+    suspend fun createTransaction(
+        clientId: String,
+        amount: BigDecimal,
+        direction: TransactionType,
+        categoryId: String?,
+        description: String?,
+        isShared: Boolean,
+        date: LocalDate,
+    ): Result<Transaction>
+    suspend fun updateTransaction(
+        id: String,
+        amount: BigDecimal?,
+        categoryId: String?,
+        description: String?,
+        isShared: Boolean?,
+        date: LocalDate?,
+    ): Result<Transaction>
     suspend fun deleteTransaction(id: String): Result<Unit>
 }

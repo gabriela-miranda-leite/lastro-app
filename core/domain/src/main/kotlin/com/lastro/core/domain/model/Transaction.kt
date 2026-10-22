@@ -1,14 +1,16 @@
 package com.lastro.core.domain.model
 
+import java.math.BigDecimal
+import java.time.LocalDate
+
 data class Transaction(
     val id: String,
-    val title: String,
-    val amount: Double,
-    val date: Long,
-    val type: TransactionType,
+    val clientId: String,
+    val amount: BigDecimal,
+    val direction: TransactionType,
+    val category: Category?,
+    val description: String?,
+    val isShared: Boolean,
+    val date: LocalDate,
+    val syncStatus: SyncStatus,
 )
-
-enum class TransactionType {
-    INCOME,
-    EXPENSE,
-}
