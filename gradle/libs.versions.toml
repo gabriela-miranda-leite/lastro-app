@@ -28,7 +28,7 @@ navigation = "2.8.9"
 # Lifecycle
 lifecycleViewmodelCompose = "2.9.1"
 # Security
-securityCrypto = "1.1.0-alpha06"
+securityCrypto = "1.1.0"
 # Ktlint
 ktlint = "12.1.2"
 
