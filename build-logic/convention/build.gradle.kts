@@ -12,6 +12,7 @@ dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
+    compileOnly(libs.ktlint.gradlePlugin)
 }
 
 gradlePlugin {
@@ -31,6 +32,10 @@ gradlePlugin {
         register("androidCompose") {
             id = "lastro.android.compose"
             implementationClass = "LastroComposePlugin"
+        }
+        register("ktlint") {
+            id = "lastro.ktlint"
+            implementationClass = "LastroKtlintPlugin"
         }
     }
 }
