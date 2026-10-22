@@ -11,7 +11,9 @@ import com.lastro.core.network.dto.transaction.CreateTransactionRequest
 import com.lastro.core.network.dto.transaction.TransactionDto
 import com.lastro.core.network.dto.transaction.UpdateTransactionRequest
 import com.lastro.core.network.service.TransactionApiService
+import com.lastro.core.domain.worker.SyncWorker
 import com.lastro.core.network.util.safeApiCall
+import androidx.work.WorkManager
 import java.math.BigDecimal
 import java.time.LocalDate
 import javax.inject.Inject
@@ -19,6 +21,7 @@ import javax.inject.Inject
 class TransactionRepositoryImpl @Inject constructor(
     private val api: TransactionApiService,
     private val dao: TransactionDao,
+    private val workManager: WorkManager,
 ) : TransactionRepository {
 
     override suspend fun getTransactions(year: Int, month: Int, direction: TransactionType?): Result<List<Transaction>> {
@@ -83,6 +86,7 @@ class TransactionRepositoryImpl @Inject constructor(
             }
             is Result.Error -> {
                 dao.upsert(pending.copy(syncStatus = SyncStatus.ERROR.name))
+                SyncWorker.scheduleOneTime(workManager)
                 result
             }
             else -> result as Result<Transaction>
@@ -111,6 +115,8 @@ class TransactionRepositoryImpl @Inject constructor(
         }
         if (result is Result.Success) {
             dao.upsert(result.data.toEntity(SyncStatus.SYNCED))
+        } else if (result is Result.Error) {
+            SyncWorker.scheduleOneTime(workManager)
         }
         return result.mapSuccess { it.toEntity(SyncStatus.SYNCED).toDomain() }
     }
