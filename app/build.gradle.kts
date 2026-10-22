@@ -1,6 +1,7 @@
 plugins {
     id("lastro.android.app")
     id("lastro.android.compose")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -17,4 +18,13 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+    implementation(libs.androidx.navigation.compose)
+    implementation(project(":core:common"))
+
+    // Features
+    implementation(project(":feature:auth"))
+    implementation(project(":feature:dashboard"))
+    implementation(project(":feature:transactions"))
+    implementation(project(":feature:couple"))
+    implementation(project(":feature:profile"))
 }
