@@ -19,7 +19,6 @@ fun NavGraphBuilder.transactionsGraph(navController: NavController) {
         )
     }
 
-    // Tela de formulário com argumento opcional de ID (edição vs criação)
     composable(
         route = "transactions/form/{id}",
         arguments = listOf(
@@ -32,12 +31,11 @@ fun NavGraphBuilder.transactionsGraph(navController: NavController) {
     ) { backStackEntry ->
         val id = backStackEntry.arguments?.getString("id")
         TransactionFormScreen(
-            transactionId = id, // null = nova transação, não-null = edição
+            transactionId = id,
             onBack = { navController.popBackStack() }
         )
     }
 
-    // Rota sem ID (nova transação)
     composable(Route.Transactions.Form().path) {
         TransactionFormScreen(
             transactionId = null,

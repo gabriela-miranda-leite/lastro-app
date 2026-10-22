@@ -10,10 +10,6 @@ import com.lastro.feature.dashboard.navigation.dashboardGraph
 import com.lastro.feature.profile.navigation.profileGraph
 import com.lastro.feature.transactions.navigation.transactionsGraph
 
-
-// Equivalente ao NavigationContainer + root navigator do React Navigation.
-// É o único lugar que conhece todas as rotas do app.
-// Cada feature contribui com seu "pedaço" do grafo via função de extensão.
 @Composable
 fun AppNavHost() {
     val navController = rememberNavController()

@@ -11,7 +11,6 @@ fun NavGraphBuilder.profileGraph(navController: NavController) {
         ProfileScreen(
             onLogout = {
                 navController.navigate(Route.Auth.Login.path) {
-                    // No logout, limpa TODO o back stack — igual ao login
                     popUpTo(0) { inclusive = true }
                 }
             },

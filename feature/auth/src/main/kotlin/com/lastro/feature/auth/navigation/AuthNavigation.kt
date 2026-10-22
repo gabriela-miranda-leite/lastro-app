@@ -12,9 +12,6 @@ fun NavGraphBuilder.authGraph(navController: NavController) {
         LoginScreen(
             onLoginSuccess = {
                 navController.navigate(Route.Dashboard.path) {
-                    // Remove Login (e tudo abaixo) do back stack.
-                    // inclusive = true: remove o próprio Login também.
-                    // Resultado: apertar "voltar" no Dashboard fecha o app.
                     popUpTo(Route.Auth.Login.path) { inclusive = true }
                 }
             },

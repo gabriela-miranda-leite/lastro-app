@@ -2,13 +2,11 @@ package com.lastro.core.common.navigation
 
 sealed class Route(val path: String) {
 
-    // Auth
     sealed class Auth(path: String) : Route(path) {
         data object Login : Auth("auth/login")
         data object Register : Auth("auth/register")
     }
 
-    // App principal
     data object Dashboard : Route("dashboard")
 
     sealed class Transactions(path: String) : Route(path) {
