@@ -30,6 +30,7 @@ include(":core:common")
 include(":core:database")
 include(":core:domain")
 include(":core:network")
+include(":core:testing")
 include(":core:ui")
 // Features
 include(":feature:auth")
