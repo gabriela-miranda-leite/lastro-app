@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:domain"))
     implementation(libs.hilt.android)
+    implementation(libs.hilt.android.testing)
     ksp(libs.hilt.compiler)
     implementation(libs.kotlinx.coroutines.android)
 }

@@ -21,6 +21,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(project(":core:common"))
 
+    testImplementation(libs.junit)
+
     // Features
     implementation(project(":feature:auth"))
     implementation(project(":feature:dashboard"))
