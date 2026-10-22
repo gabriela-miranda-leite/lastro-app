@@ -27,6 +27,8 @@ coroutines = "1.9.0"
 navigation = "2.8.9"
 # Lifecycle
 lifecycleViewmodelCompose = "2.9.1"
+# Ktlint
+ktlint = "12.1.2"
 
 [libraries]
 # AndroidX Core
@@ -76,8 +78,6 @@ compose-ui = ["androidx-compose-ui", "androidx-compose-ui-graphics", "androidx-c
 lifecycle = ["androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-compose"]
 coroutines = ["kotlinx-coroutines-android"]
 network = ["retrofit-core", "okhttp-logging", "kotlinx-serialization-json"]
-
-ktlint = "12.1.2"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
