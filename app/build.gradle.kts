@@ -18,8 +18,12 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+    implementation(libs.hilt.work)
+    ksp(libs.hilt.work.compiler)
+    implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
     implementation(project(":core:common"))
+    implementation(project(":core:domain"))
 
     testImplementation(libs.junit)
 

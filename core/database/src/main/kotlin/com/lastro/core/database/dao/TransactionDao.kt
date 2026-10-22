@@ -21,6 +21,9 @@ interface TransactionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAll(entities: List<TransactionEntity>): List<Long>
 
+    @Query("SELECT * FROM transactions WHERE syncStatus IN ('PENDING', 'ERROR')")
+    suspend fun getPendingOrError(): List<TransactionEntity>
+
     @Query("DELETE FROM transactions WHERE id = :id")
     suspend fun deleteById(id: String): Int
 }
