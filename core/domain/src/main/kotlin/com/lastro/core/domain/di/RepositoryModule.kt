@@ -4,6 +4,8 @@ import com.lastro.core.domain.repository.AuthRepository
 import com.lastro.core.domain.repository.AuthRepositoryImpl
 import com.lastro.core.domain.repository.CategoryRepository
 import com.lastro.core.domain.repository.CategoryRepositoryImpl
+import com.lastro.core.domain.repository.CoupleRepository
+import com.lastro.core.domain.repository.CoupleRepositoryImpl
 import com.lastro.core.domain.repository.TransactionRepository
 import com.lastro.core.domain.repository.TransactionRepositoryImpl
 import com.lastro.core.domain.repository.UserRepository
@@ -33,4 +35,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindCategoryRepository(impl: CategoryRepositoryImpl): CategoryRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindCoupleRepository(impl: CoupleRepositoryImpl): CoupleRepository
 }
