@@ -12,16 +12,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class AuthUiState(
-    val isLoading: Boolean = false,
-    val error: String? = null,
-)
-
-sealed interface AuthEvent {
-    data object LoginSuccess : AuthEvent
-    data object RegisterSuccess : AuthEvent
-}
-
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository,
