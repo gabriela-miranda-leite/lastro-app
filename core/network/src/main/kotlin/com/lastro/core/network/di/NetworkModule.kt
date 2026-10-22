@@ -4,6 +4,10 @@ import com.lastro.core.network.BuildConfig
 import com.lastro.core.network.auth.AuthInterceptor
 import com.lastro.core.network.auth.TokenStore
 import com.lastro.core.network.auth.TokenStoreImpl
+import com.lastro.core.network.service.AuthApiService
+import com.lastro.core.network.service.CoupleApiService
+import com.lastro.core.network.service.TransactionApiService
+import com.lastro.core.network.service.UserApiService
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -59,5 +63,25 @@ abstract class NetworkModule {
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
+
+        @Provides
+        @Singleton
+        fun provideAuthApiService(retrofit: Retrofit): AuthApiService =
+            retrofit.create(AuthApiService::class.java)
+
+        @Provides
+        @Singleton
+        fun provideTransactionApiService(retrofit: Retrofit): TransactionApiService =
+            retrofit.create(TransactionApiService::class.java)
+
+        @Provides
+        @Singleton
+        fun provideUserApiService(retrofit: Retrofit): UserApiService =
+            retrofit.create(UserApiService::class.java)
+
+        @Provides
+        @Singleton
+        fun provideCoupleApiService(retrofit: Retrofit): CoupleApiService =
+            retrofit.create(CoupleApiService::class.java)
     }
 }

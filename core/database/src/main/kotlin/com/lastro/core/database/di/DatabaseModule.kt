@@ -3,6 +3,7 @@ package com.lastro.core.database.di
 import android.content.Context
 import androidx.room.Room
 import com.lastro.core.database.LastroDatabase
+import com.lastro.core.database.dao.TransactionDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,5 +22,9 @@ object DatabaseModule {
             context,
             LastroDatabase::class.java,
             "lastro.db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
+
+    @Provides
+    @Singleton
+    fun provideTransactionDao(db: LastroDatabase): TransactionDao = db.transactionDao()
 }

@@ -1,0 +1,26 @@
+package com.lastro.core.network.service
+
+import com.lastro.core.network.dto.auth.AuthResponse
+import com.lastro.core.network.dto.auth.LoginRequest
+import com.lastro.core.network.dto.auth.LogoutRequest
+import com.lastro.core.network.dto.auth.RefreshRequest
+import com.lastro.core.network.dto.auth.RegisterRequest
+import retrofit2.http.Body
+import retrofit2.http.POST
+
+interface AuthApiService {
+    @POST("auth/register")
+    suspend fun register(@Body body: RegisterRequest): AuthResponse
+
+    @POST("auth/login")
+    suspend fun login(@Body body: LoginRequest): AuthResponse
+
+    @POST("auth/refresh")
+    suspend fun refresh(@Body body: RefreshRequest): AuthResponse
+
+    @POST("auth/logout")
+    suspend fun logout(@Body body: LogoutRequest)
+
+    @POST("auth/logout/all")
+    suspend fun logoutAll(@Body body: LogoutRequest)
+}
