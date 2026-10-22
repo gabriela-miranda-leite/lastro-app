@@ -13,6 +13,12 @@ class UserRepositoryImpl @Inject constructor() : UserRepository {
     override suspend fun updateMe(name: String?, monthlyIncome: BigDecimal?, savingGoalPct: Double?): Result<User> =
         Result.Error(NotImplementedError())
 
+    override suspend fun changePassword(currentPassword: String, newPassword: String): Result<Unit> =
+        Result.Error(NotImplementedError())
+
     override suspend fun deleteAccount(password: String): Result<Unit> =
+        Result.Error(NotImplementedError())
+
+    override suspend fun exportData(): Result<String> =
         Result.Error(NotImplementedError())
 }
