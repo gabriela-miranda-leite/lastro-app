@@ -6,8 +6,12 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "transactions")
 data class TransactionEntity(
     @PrimaryKey val id: String,
-    val title: String,
-    val amount: Double,
-    val date: Long,
-    val type: String,
+    val clientId: String,
+    val categoryId: String?,
+    val amount: String,
+    val direction: String,
+    val description: String?,
+    val isShared: Boolean,
+    val date: String,
+    val syncStatus: String,
 )

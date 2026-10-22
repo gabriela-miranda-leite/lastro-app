@@ -1,16 +1,22 @@
 package com.lastro.core.domain.repository
 
 import com.lastro.core.common.Result
+import com.lastro.core.common.mapSuccess
+import com.lastro.core.network.dto.couple.JoinRequest
+import com.lastro.core.network.service.CoupleApiService
+import com.lastro.core.network.util.safeApiCall
 import javax.inject.Inject
 
-class CoupleRepositoryImpl @Inject constructor() : CoupleRepository {
+class CoupleRepositoryImpl @Inject constructor(
+    private val api: CoupleApiService,
+) : CoupleRepository {
 
     override suspend fun generateInvite(): Result<String> =
-        Result.Error(NotImplementedError())
+        safeApiCall { api.invite() }.mapSuccess { it.code }
 
     override suspend fun joinCouple(code: String): Result<Unit> =
-        Result.Error(NotImplementedError())
+        safeApiCall { api.join(JoinRequest(code)) }.mapSuccess { Unit }
 
     override suspend fun unlinkCouple(): Result<Unit> =
-        Result.Error(NotImplementedError())
+        safeApiCall { api.unlink() }.mapSuccess { Unit }
 }
