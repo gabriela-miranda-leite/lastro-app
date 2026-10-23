@@ -34,6 +34,8 @@ workManager = "2.10.1"
 hiltWork = "1.2.0"
 # Ktlint
 ktlint = "12.1.2"
+# MockK
+mockk = "1.13.13"
 
 [libraries]
 # AndroidX Core
@@ -78,6 +80,7 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 # Gradle plugins (used in build-logic)
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
