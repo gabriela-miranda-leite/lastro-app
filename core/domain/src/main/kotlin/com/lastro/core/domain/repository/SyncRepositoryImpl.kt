@@ -35,6 +35,7 @@ class SyncRepositoryImpl @Inject constructor(
                             description = description,
                             isShared = isShared,
                             date = date,
+                            updatedAt = updatedAt,
                             syncStatus = SyncStatus.SYNCED.name,
                         )
                     }

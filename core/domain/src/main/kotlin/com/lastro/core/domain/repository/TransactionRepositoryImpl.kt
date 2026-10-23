@@ -63,6 +63,7 @@ class TransactionRepositoryImpl @Inject constructor(
             description = description,
             isShared = isShared,
             date = date.toString(),
+            updatedAt = "",
             syncStatus = SyncStatus.PENDING.name,
         )
         dao.upsert(pending)
@@ -142,6 +143,7 @@ class TransactionRepositoryImpl @Inject constructor(
         description = description,
         isShared = isShared,
         date = date,
+        updatedAt = updatedAt,
         syncStatus = status.name,
     )
 

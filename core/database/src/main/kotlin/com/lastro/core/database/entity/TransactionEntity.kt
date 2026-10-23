@@ -14,5 +14,6 @@ data class TransactionEntity(
     val description: String?,
     val isShared: Boolean,
     val date: String,
+    val updatedAt: String,
     val syncStatus: String,
 )
