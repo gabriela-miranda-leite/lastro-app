@@ -53,7 +53,7 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Run unit tests with coverage
-        run: ./gradlew :core:ui:testDebugUnitTestCoverage
+        run: ./gradlew :core:ui:testDebugUnitTest :core:ui:createDebugUnitTestCoverageReport
 
       - name: Upload test results
         if: always()
@@ -67,7 +67,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-reports
-          path: '**/build/reports/jacoco/**/*.xml'
+          path: '**/build/reports/coverage/**/*.xml'
 
   coverage:
     name: Coverage Report
@@ -88,12 +88,12 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Generate coverage report
-        run: ./gradlew :core:ui:testDebugUnitTestCoverage
+        run: ./gradlew :core:ui:testDebugUnitTest :core:ui:createDebugUnitTestCoverageReport
 
       - name: Comment coverage on PR
         uses: madrapps/jacoco-report@v1.6.0
         with:
-          paths: ${{ github.workspace }}/core/ui/build/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml
+          paths: ${{ github.workspace }}/core/ui/build/reports/coverage/test/debug/report.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           title: Coverage Report — core:ui
           min-coverage-overall: 0
