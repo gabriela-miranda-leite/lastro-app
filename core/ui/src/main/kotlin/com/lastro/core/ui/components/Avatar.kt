@@ -56,14 +56,15 @@ fun LastroAvatarOverlap(
         Brush.linearGradient(listOf(LastroColors.Positive, Color(0xFF2DB89A))),
         Brush.linearGradient(listOf(Color(0xFFFF7C6B), Color(0xFFFFD06B))),
     )
-    Box(modifier = modifier.size(size + (initials.size - 1) * (size * 0.4f))) {
+    val overlap = size * 0.4f
+    Box(modifier = modifier.size(size + overlap * (initials.size - 1))) {
         initials.forEachIndexed { index, initial ->
             LastroAvatar(
                 initial = initial,
                 size = size,
                 brush = brushes[index % brushes.size],
                 modifier = Modifier
-                    .offset(x = (size * 0.4f * index))
+                    .offset(x = overlap * index)
                     .border(3.dp, MaterialTheme.colorScheme.background, CircleShape),
             )
         }

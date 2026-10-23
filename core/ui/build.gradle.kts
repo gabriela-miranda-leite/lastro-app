@@ -21,6 +21,7 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
+    implementation(libs.androidx.compose.material.icons.extended)
 
     val composeBom = platform(libs.androidx.compose.bom)
     testImplementation(composeBom)
