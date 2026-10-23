@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.lastro.core.domain.model.Category
+import androidx.compose.material3.MaterialTheme
 
 @Composable
 fun CategoryChip(
@@ -24,7 +25,7 @@ fun CategoryChip(
         label = { Text(category.name) },
         leadingIcon = {
             if (category.icon != null) {
-                Text(text = category.icon, modifier = Modifier.size(18.dp))
+                Text(text = category.icon, style = MaterialTheme.typography.bodySmall)
             } else {
                 Icon(
                     imageVector = Icons.Default.Star,

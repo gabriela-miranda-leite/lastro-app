@@ -11,6 +11,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lastro.feature.auth.viewmodel.AuthEvent
@@ -37,13 +41,17 @@ fun LoginScreen(
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text("Login")
             if (uiState.isLoading) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(
+                    modifier = Modifier.semantics { contentDescription = "Carregando" }
+                )
             } else {
                 Button(onClick = { viewModel.login("user@test.com", "123456") }) {
                     Text("Entrar")
                 }
             }
-            uiState.error?.let { Text(it) }
+            uiState.error?.let {
+                Text(it, modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
+            }
             Button(onClick = onNavigateToRegister) { Text("Criar conta") }
         }
     }
