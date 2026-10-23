@@ -1,19 +1,23 @@
 package com.lastro.core.ui
 
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import org.junit.Assert.assertTrue
-import org.junit.Rule
-import org.junit.Test
 import com.lastro.core.ui.components.ButtonVariant
 import com.lastro.core.ui.components.LastroButton
 import com.lastro.core.ui.theme.LastroTheme
+import org.junit.Assert.assertTrue
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [34])
 class LastroButtonTest {
 
     @get:Rule
@@ -28,27 +32,20 @@ class LastroButtonTest {
     }
 
     @Test
-    fun shows_loading_indicator_and_hides_text_when_loading() {
+    fun hides_text_and_shows_loading_indicator_when_loading() {
         composeRule.setContent {
             LastroTheme { LastroButton(text = "Entrar", onClick = {}, loading = true) }
         }
         composeRule.onNodeWithText("Entrar").assertDoesNotExist()
+        composeRule.onNodeWithContentDescription("Carregando").assertIsDisplayed()
     }
 
     @Test
-    fun button_is_disabled_when_enabled_false() {
+    fun is_disabled_when_enabled_false() {
         composeRule.setContent {
             LastroTheme { LastroButton(text = "Entrar", onClick = {}, enabled = false) }
         }
         composeRule.onNodeWithText("Entrar").assertIsNotEnabled()
-    }
-
-    @Test
-    fun button_is_disabled_when_loading() {
-        composeRule.setContent {
-            LastroTheme { LastroButton(text = "Entrar", onClick = {}, loading = true) }
-        }
-        composeRule.onNodeWithContentDescription("Carregando").assertIsDisplayed()
     }
 
     @Test
@@ -64,9 +61,7 @@ class LastroButtonTest {
     @Test
     fun outlined_variant_renders_text() {
         composeRule.setContent {
-            LastroTheme {
-                LastroButton(text = "Criar conta", onClick = {}, variant = ButtonVariant.Outlined)
-            }
+            LastroTheme { LastroButton(text = "Criar conta", onClick = {}, variant = ButtonVariant.Outlined) }
         }
         composeRule.onNodeWithText("Criar conta").assertIsDisplayed()
     }
@@ -74,9 +69,7 @@ class LastroButtonTest {
     @Test
     fun ghost_variant_renders_text() {
         composeRule.setContent {
-            LastroTheme {
-                LastroButton(text = "Pular", onClick = {}, variant = ButtonVariant.Ghost)
-            }
+            LastroTheme { LastroButton(text = "Pular", onClick = {}, variant = ButtonVariant.Ghost) }
         }
         composeRule.onNodeWithText("Pular").assertIsDisplayed()
     }
