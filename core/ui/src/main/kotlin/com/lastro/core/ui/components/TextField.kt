@@ -80,6 +80,8 @@ fun LastroTextField(
     )
 }
 
+internal val moneyVisualTransformationForTest: VisualTransformation get() = MoneyVisualTransformation
+
 private object MoneyVisualTransformation : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val digits = text.text.filter { it.isDigit() }.takeLast(13)
