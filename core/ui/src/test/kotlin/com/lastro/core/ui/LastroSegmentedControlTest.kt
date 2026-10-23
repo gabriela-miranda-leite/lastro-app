@@ -4,12 +4,17 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import com.lastro.core.ui.components.LastroSegmentedControl
+import com.lastro.core.ui.theme.LastroTheme
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
-import com.lastro.core.ui.components.LastroSegmentedControl
-import com.lastro.core.ui.theme.LastroTheme
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [34])
 class LastroSegmentedControlTest {
 
     @get:Rule
@@ -20,9 +25,7 @@ class LastroSegmentedControlTest {
     @Test
     fun renders_all_options() {
         composeRule.setContent {
-            LastroTheme {
-                LastroSegmentedControl(options = options, selectedIndex = 0, onOptionSelected = {})
-            }
+            LastroTheme { LastroSegmentedControl(options = options, selectedIndex = 0, onOptionSelected = {}) }
         }
         options.forEach { composeRule.onNodeWithText(it).assertIsDisplayed() }
     }
