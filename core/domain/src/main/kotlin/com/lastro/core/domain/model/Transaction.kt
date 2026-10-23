@@ -6,6 +6,7 @@ import java.time.LocalDate
 data class Transaction(
     val id: String,
     val clientId: String,
+    val userId: String,
     val amount: BigDecimal,
     val direction: TransactionType,
     val category: Category?,

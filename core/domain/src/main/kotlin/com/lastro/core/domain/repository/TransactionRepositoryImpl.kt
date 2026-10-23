@@ -26,9 +26,9 @@ class TransactionRepositoryImpl @Inject constructor(
     private val tokenStore: TokenStore,
 ) : TransactionRepository {
 
-    override suspend fun getTransactions(year: Int, month: Int, direction: TransactionType?): Result<List<Transaction>> {
+    override suspend fun getTransactions(year: Int, month: Int, direction: TransactionType?, partnerUserId: String?): Result<List<Transaction>> {
         val apiResult = safeApiCall {
-            api.list(year, month, direction?.name)
+            api.list(year, month, direction?.name, userId = partnerUserId)
         }
         if (apiResult is Result.Success) {
             dao.upsertAll(apiResult.data.map { it.toEntity(SyncStatus.SYNCED) })
@@ -150,6 +150,7 @@ class TransactionRepositoryImpl @Inject constructor(
     private fun TransactionEntity.toDomain() = Transaction(
         id = id,
         clientId = clientId,
+        userId = userId,
         amount = BigDecimal(amount),
         direction = TransactionType.valueOf(direction),
         category = null,

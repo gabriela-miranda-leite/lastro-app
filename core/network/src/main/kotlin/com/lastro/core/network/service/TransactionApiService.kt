@@ -18,6 +18,7 @@ interface TransactionApiService {
         @Query("month") month: Int,
         @Query("direction") direction: String? = null,
         @Query("category_id") categoryId: String? = null,
+        @Query("user_id") userId: String? = null,
     ): List<TransactionDto>
 
     @POST("transactions")

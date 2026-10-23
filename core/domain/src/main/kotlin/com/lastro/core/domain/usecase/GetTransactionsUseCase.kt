@@ -13,5 +13,6 @@ class GetTransactionsUseCase @Inject constructor(
         year: Int,
         month: Int,
         direction: TransactionType? = null,
-    ): Result<List<Transaction>> = repository.getTransactions(year, month, direction)
+        partnerUserId: String? = null,
+    ): Result<List<Transaction>> = repository.getTransactions(year, month, direction, partnerUserId)
 }

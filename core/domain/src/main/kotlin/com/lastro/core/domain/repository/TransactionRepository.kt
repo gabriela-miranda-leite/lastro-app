@@ -7,7 +7,7 @@ import java.math.BigDecimal
 import java.time.LocalDate
 
 interface TransactionRepository {
-    suspend fun getTransactions(year: Int, month: Int, direction: TransactionType? = null): Result<List<Transaction>>
+    suspend fun getTransactions(year: Int, month: Int, direction: TransactionType? = null, partnerUserId: String? = null): Result<List<Transaction>>
     suspend fun getTransaction(id: String): Result<Transaction>
     suspend fun createTransaction(
         clientId: String,
