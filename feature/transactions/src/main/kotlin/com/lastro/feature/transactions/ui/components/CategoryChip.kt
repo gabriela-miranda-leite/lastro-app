@@ -24,8 +24,9 @@ fun CategoryChip(
         onClick = { onSelected(!selected) },
         label = { Text(category.name) },
         leadingIcon = {
-            if (category.icon != null) {
-                Text(text = category.icon, style = MaterialTheme.typography.bodySmall)
+            val icon = category.icon
+            if (icon != null) {
+                Text(text = icon, style = MaterialTheme.typography.bodySmall)
             } else {
                 Icon(
                     imageVector = Icons.Default.Star,
