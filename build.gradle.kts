@@ -7,37 +7,9 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.ktlint) apply false
-    alias(libs.plugins.kover)
+    alias(libs.plugins.kover) apply false
 }
 
 subprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
-}
-
-dependencies {
-    kover(project(":core:common"))
-    kover(project(":core:domain"))
-    kover(project(":core:network"))
-    kover(project(":feature:auth"))
-    kover(project(":feature:transactions"))
-}
-
-kover {
-    reports {
-        variant("debug") {
-            filters {
-                excludes {
-                    classes(
-                        "*.di.*",
-                        "*.BuildConfig",
-                        "*_Factory",
-                        "*_HiltModules*",
-                        "*.ComposableSingletons*",
-                        "Hilt_*",
-                        "*Module_*",
-                    )
-                }
-            }
-        }
-    }
 }

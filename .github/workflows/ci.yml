@@ -98,7 +98,7 @@ jobs:
         with:
           cache-read-only: true
 
-      - name: Generate coverage report
+      - name: Generate coverage reports
         run: ./gradlew koverXmlReportDebug
 
       - name: Comment coverage on PR
@@ -106,20 +106,23 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const path = require('path');
+            const { execSync } = require('child_process');
 
-            const reportPath = 'build/reports/kover/reportDebug.xml';
-            if (!fs.existsSync(reportPath)) {
-              console.log('Coverage report not found, skipping comment.');
+            const files = execSync('find . -path "*/build/reports/kover/reportDebug.xml"')
+              .toString().trim().split('\n').filter(Boolean);
+
+            if (files.length === 0) {
+              console.log('No coverage reports found, skipping comment.');
               return;
             }
 
-            const xml = fs.readFileSync(reportPath, 'utf8');
+            const combined = files.map(f => fs.readFileSync(f, 'utf8')).join('\n');
+            const modules = files.map(f => f.replace(/^\.\//, '').replace(/\/build.*$/, ''));
 
             function parseCoverage(type) {
               const regex = new RegExp(`<counter type="${type}" missed="(\\d+)" covered="(\\d+)"`, 'g');
               let missed = 0, covered = 0, match;
-              while ((match = regex.exec(xml)) !== null) {
+              while ((match = regex.exec(combined)) !== null) {
                 missed += parseInt(match[1]);
                 covered += parseInt(match[2]);
               }
@@ -138,6 +141,8 @@ jobs:
               return '🔴';
             }
 
+            const moduleList = modules.map(m => `\`${m}\``).join(' · ');
+
             const body = [
               '## 📊 Cobertura de testes',
               '',
@@ -147,9 +152,9 @@ jobs:
               `| ${badge(branch.pct)} Branches | ${branch.pct}% | ${branch.covered}/${branch.total} |`,
               `| ${badge(instruction.pct)} Instruções | ${instruction.pct}% | ${instruction.covered}/${instruction.total} |`,
               '',
-              '<details><summary>Módulos cobertos</summary>',
+              `<details><summary>Módulos cobertos (${modules.length})</summary>`,
               '',
-              '`core:common` · `core:domain` · `core:network` · `feature:auth` · `feature:transactions`',
+              moduleList,
               '</details>',
             ].join('\n');
 
