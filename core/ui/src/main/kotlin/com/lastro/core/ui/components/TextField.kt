@@ -86,8 +86,11 @@ private object MoneyVisualTransformation : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val digits = text.text.filter { it.isDigit() }.takeLast(13)
         val number = digits.toLongOrNull() ?: 0L
-        val formatted = "R$ %,.2f".format(number / 100.0)
-            .replace(',', 'X').replace('.', ',').replace('X', '.')
+        val cents = number % 100
+        val units = number / 100
+        val intPart = String.format(java.util.Locale.US, "%,d", units)
+            .replace(',', '.')
+        val formatted = "R$ $intPart,${cents.toString().padStart(2, '0')}"
         return TransformedText(
             AnnotatedString(formatted),
             object : OffsetMapping {
