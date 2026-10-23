@@ -22,7 +22,9 @@ object DatabaseModule {
             context,
             LastroDatabase::class.java,
             "lastro.db"
-        ).fallbackToDestructiveMigration().build()
+        ).fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigrationOnDowngrade()
+            .build()
 
     @Provides
     @Singleton
