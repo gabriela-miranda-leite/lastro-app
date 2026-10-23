@@ -38,9 +38,9 @@ class CalculateBudgetBreakdownUseCase @Inject constructor() {
                 amount = actual,
                 percentage = actualPct,
                 targetPercentage = targetPct,
-                status = when {
-                    actual < targetAmount -> BudgetStatus.UNDER
-                    actual == targetAmount -> BudgetStatus.MET
+                status = when (actual.compareTo(targetAmount)) {
+                    -1 -> BudgetStatus.UNDER
+                    0 -> BudgetStatus.MET
                     else -> BudgetStatus.OVER
                 },
             )
