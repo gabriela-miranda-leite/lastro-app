@@ -13,6 +13,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lastro.core.ui.theme.LastroTheme
@@ -41,7 +43,7 @@ fun LastroButton(
         ) {
             if (loading) {
                 CircularProgressIndicator(
-                    modifier = Modifier.size(18.dp),
+                    modifier = Modifier.size(18.dp).semantics { contentDescription = "Carregando" },
                     color = Color.White,
                     strokeWidth = 2.dp,
                 )
@@ -58,7 +60,7 @@ fun LastroButton(
         ) {
             if (loading) {
                 CircularProgressIndicator(
-                    modifier = Modifier.size(18.dp),
+                    modifier = Modifier.size(18.dp).semantics { contentDescription = "Carregando" },
                     strokeWidth = 2.dp,
                 )
             } else {
