@@ -24,17 +24,19 @@ dependencies {
 
 kover {
     reports {
-        filters {
-            excludes {
-                classes(
-                    "*.di.*",
-                    "*.BuildConfig",
-                    "*_Factory",
-                    "*_HiltModules*",
-                    "*.ComposableSingletons*",
-                    "Hilt_*",
-                    "*Module_*",
-                )
+        variant("debug") {
+            filters {
+                excludes {
+                    classes(
+                        "*.di.*",
+                        "*.BuildConfig",
+                        "*_Factory",
+                        "*_HiltModules*",
+                        "*.ComposableSingletons*",
+                        "Hilt_*",
+                        "*Module_*",
+                    )
+                }
             }
         }
     }
