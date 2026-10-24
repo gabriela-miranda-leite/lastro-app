@@ -42,7 +42,7 @@ class AuthScreenshotTest {
                 )
             }
         }
-        composeTestRule.onRoot().captureRoboImage(snap("login_default"))
+        composeTestRule.onRoot().captureRoboImage(login("default"))
     }
 
     @Test
@@ -61,7 +61,7 @@ class AuthScreenshotTest {
                 )
             }
         }
-        composeTestRule.onRoot().captureRoboImage(snap("login_filled"))
+        composeTestRule.onRoot().captureRoboImage(login("filled"))
     }
 
     @Test
@@ -80,7 +80,7 @@ class AuthScreenshotTest {
                 )
             }
         }
-        composeTestRule.onRoot().captureRoboImage(snap("login_error_401"))
+        composeTestRule.onRoot().captureRoboImage(login("error_401"))
     }
 
     @Test
@@ -99,103 +99,7 @@ class AuthScreenshotTest {
                 )
             }
         }
-        composeTestRule.onRoot().captureRoboImage(snap("login_loading"))
-    }
-
-    @Test
-    fun registerScreen_default() {
-        composeTestRule.setContent {
-            LastroTheme(darkTheme = false) {
-                RegisterScreenContent(
-                    uiState = AuthUiState(),
-                    name = "",
-                    email = "",
-                    password = "",
-                    confirmPassword = "",
-                    termsAccepted = false,
-                    onNameChange = {},
-                    onEmailChange = {},
-                    onPasswordChange = {},
-                    onConfirmPasswordChange = {},
-                    onTermsChange = {},
-                    onRegister = {},
-                    onBack = {},
-                )
-            }
-        }
-        composeTestRule.onRoot().captureRoboImage(snap("register_default"))
-    }
-
-    @Test
-    fun registerScreen_error() {
-        composeTestRule.setContent {
-            LastroTheme(darkTheme = false) {
-                RegisterScreenContent(
-                    uiState = AuthUiState(error = "email already in use"),
-                    name = "Gabriela",
-                    email = "gabriela@lastro.app",
-                    password = "Senha123",
-                    confirmPassword = "Senha123",
-                    termsAccepted = true,
-                    onNameChange = {},
-                    onEmailChange = {},
-                    onPasswordChange = {},
-                    onConfirmPasswordChange = {},
-                    onTermsChange = {},
-                    onRegister = {},
-                    onBack = {},
-                )
-            }
-        }
-        composeTestRule.onRoot().captureRoboImage(snap("register_error"))
-    }
-
-    @Test
-    fun forgotPasswordScreen_default() {
-        composeTestRule.setContent {
-            LastroTheme(darkTheme = false) {
-                ForgotPasswordScreenContent(
-                    uiState = ForgotPasswordUiState(),
-                    email = "",
-                    onEmailChange = {},
-                    onSubmit = {},
-                    onBack = {},
-                )
-            }
-        }
-        composeTestRule.onRoot().captureRoboImage(snap("forgot_default"))
-    }
-
-    @Test
-    fun forgotPasswordScreen_success() {
-        composeTestRule.setContent {
-            LastroTheme(darkTheme = false) {
-                ForgotPasswordScreenContent(
-                    uiState = ForgotPasswordUiState(success = true),
-                    email = "gabriela@lastro.app",
-                    onEmailChange = {},
-                    onSubmit = {},
-                    onBack = {},
-                )
-            }
-        }
-        composeTestRule.onRoot().captureRoboImage(snap("forgot_success"))
-    }
-
-    @Test
-    fun forgotPasswordScreen_error() {
-        composeTestRule.setContent {
-            LastroTheme(darkTheme = false) {
-                ForgotPasswordScreenContent(
-                    uiState = ForgotPasswordUiState(error = "Muitas tentativas. Aguarde alguns minutos"),
-                    email = "gabriela@lastro.app",
-                    onEmailChange = {},
-                    onSubmit = {},
-                    onBack = {},
-                )
-            }
-        }
-        composeTestRule.onRoot().captureRoboImage(snap("forgot_error"))
+        composeTestRule.onRoot().captureRoboImage(login("loading"))
     }
 
     @Test
@@ -209,7 +113,41 @@ class AuthScreenshotTest {
                 )
             }
         }
-        composeTestRule.onRoot().captureRoboImage(snap("login_default_dark"))
+        composeTestRule.onRoot().captureRoboImage(login("default_dark"))
+    }
+
+    @Test
+    fun registerScreen_default() {
+        composeTestRule.setContent {
+            LastroTheme(darkTheme = false) {
+                RegisterScreenContent(
+                    uiState = AuthUiState(),
+                    name = "", email = "", password = "", confirmPassword = "", termsAccepted = false,
+                    onNameChange = {}, onEmailChange = {}, onPasswordChange = {},
+                    onConfirmPasswordChange = {}, onTermsChange = {}, onRegister = {}, onBack = {},
+                )
+            }
+        }
+        composeTestRule.onRoot().captureRoboImage(register("default"))
+    }
+
+    @Test
+    fun registerScreen_error() {
+        composeTestRule.setContent {
+            LastroTheme(darkTheme = false) {
+                RegisterScreenContent(
+                    uiState = AuthUiState(error = "email already in use"),
+                    name = "Gabriela",
+                    email = "gabriela@lastro.app",
+                    password = "Senha123",
+                    confirmPassword = "Senha123",
+                    termsAccepted = true,
+                    onNameChange = {}, onEmailChange = {}, onPasswordChange = {},
+                    onConfirmPasswordChange = {}, onTermsChange = {}, onRegister = {}, onBack = {},
+                )
+            }
+        }
+        composeTestRule.onRoot().captureRoboImage(register("error"))
     }
 
     @Test
@@ -224,7 +162,48 @@ class AuthScreenshotTest {
                 )
             }
         }
-        composeTestRule.onRoot().captureRoboImage(snap("register_default_dark"))
+        composeTestRule.onRoot().captureRoboImage(register("default_dark"))
+    }
+
+    @Test
+    fun forgotPasswordScreen_default() {
+        composeTestRule.setContent {
+            LastroTheme(darkTheme = false) {
+                ForgotPasswordScreenContent(
+                    uiState = ForgotPasswordUiState(), email = "",
+                    onEmailChange = {}, onSubmit = {}, onBack = {},
+                )
+            }
+        }
+        composeTestRule.onRoot().captureRoboImage(forgot("default"))
+    }
+
+    @Test
+    fun forgotPasswordScreen_success() {
+        composeTestRule.setContent {
+            LastroTheme(darkTheme = false) {
+                ForgotPasswordScreenContent(
+                    uiState = ForgotPasswordUiState(success = true),
+                    email = "gabriela@lastro.app",
+                    onEmailChange = {}, onSubmit = {}, onBack = {},
+                )
+            }
+        }
+        composeTestRule.onRoot().captureRoboImage(forgot("success"))
+    }
+
+    @Test
+    fun forgotPasswordScreen_error() {
+        composeTestRule.setContent {
+            LastroTheme(darkTheme = false) {
+                ForgotPasswordScreenContent(
+                    uiState = ForgotPasswordUiState(error = "Muitas tentativas. Aguarde alguns minutos"),
+                    email = "gabriela@lastro.app",
+                    onEmailChange = {}, onSubmit = {}, onBack = {},
+                )
+            }
+        }
+        composeTestRule.onRoot().captureRoboImage(forgot("error"))
     }
 
     @Test
@@ -237,7 +216,7 @@ class AuthScreenshotTest {
                 )
             }
         }
-        composeTestRule.onRoot().captureRoboImage(snap("forgot_default_dark"))
+        composeTestRule.onRoot().captureRoboImage(forgot("default_dark"))
     }
 
     @Test
@@ -250,8 +229,10 @@ class AuthScreenshotTest {
                 )
             }
         }
-        composeTestRule.onRoot().captureRoboImage(snap("forgot_success_dark"))
+        composeTestRule.onRoot().captureRoboImage(forgot("success_dark"))
     }
 
-    private fun snap(name: String) = "src/test/snapshots/$name.png"
+    private fun login(name: String) = "src/test/snapshots/login/$name.png"
+    private fun register(name: String) = "src/test/snapshots/register/$name.png"
+    private fun forgot(name: String) = "src/test/snapshots/forgot/$name.png"
 }
