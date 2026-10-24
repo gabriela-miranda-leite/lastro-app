@@ -99,7 +99,7 @@ jobs:
           cache-read-only: true
 
       - name: Generate coverage reports
-        run: ./gradlew :core:common:koverXmlReportDebug :core:domain:koverXmlReportDebug :core:network:koverXmlReportDebug :feature:auth:koverXmlReportDebug :feature:transactions:koverXmlReportDebug --continue
+        run: ./gradlew :core:common:koverXmlReport :core:domain:koverXmlReport :core:network:koverXmlReport :feature:auth:koverXmlReport :feature:transactions:koverXmlReport --continue
 
       - name: Comment coverage on PR
         uses: actions/github-script@v7
@@ -108,7 +108,7 @@ jobs:
             const fs = require('fs');
             const { execSync } = require('child_process');
 
-            const files = execSync('find . -path "*/build/reports/kover/reportDebug.xml"')
+            const files = execSync('find . -path "*/build/reports/kover/report.xml"')
               .toString().trim().split('\n').filter(Boolean);
 
             if (files.length === 0) {
