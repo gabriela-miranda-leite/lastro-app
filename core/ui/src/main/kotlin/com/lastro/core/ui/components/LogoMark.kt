@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Diamond
+import androidx.compose.material.icons.outlined.Anchor
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,7 +37,7 @@ fun LastroLogoMark(
         contentAlignment = Alignment.Center,
     ) {
         Icon(
-            imageVector = Icons.Outlined.Diamond,
+            imageVector = Icons.Outlined.Anchor,
             contentDescription = "Lastro",
             tint = Color.White,
             modifier = Modifier.size(iconSize),
