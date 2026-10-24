@@ -29,7 +29,7 @@ class AuthScreenshotTest {
     @Test
     fun loginScreen_default() {
         composeTestRule.setContent {
-            LastroTheme {
+            LastroTheme(darkTheme = false) {
                 LoginScreenContent(
                     uiState = AuthUiState(),
                     email = "",
@@ -48,7 +48,7 @@ class AuthScreenshotTest {
     @Test
     fun loginScreen_filled() {
         composeTestRule.setContent {
-            LastroTheme {
+            LastroTheme(darkTheme = false) {
                 LoginScreenContent(
                     uiState = AuthUiState(),
                     email = "gabriela@lastro.app",
@@ -67,7 +67,7 @@ class AuthScreenshotTest {
     @Test
     fun loginScreen_error_401() {
         composeTestRule.setContent {
-            LastroTheme {
+            LastroTheme(darkTheme = false) {
                 LoginScreenContent(
                     uiState = AuthUiState(error = ApiException.Unauthorized.message),
                     email = "gabriela@lastro.app",
@@ -86,7 +86,7 @@ class AuthScreenshotTest {
     @Test
     fun loginScreen_loading() {
         composeTestRule.setContent {
-            LastroTheme {
+            LastroTheme(darkTheme = false) {
                 LoginScreenContent(
                     uiState = AuthUiState(isLoading = true),
                     email = "gabriela@lastro.app",
@@ -105,7 +105,7 @@ class AuthScreenshotTest {
     @Test
     fun registerScreen_default() {
         composeTestRule.setContent {
-            LastroTheme {
+            LastroTheme(darkTheme = false) {
                 RegisterScreenContent(
                     uiState = AuthUiState(),
                     name = "",
@@ -129,7 +129,7 @@ class AuthScreenshotTest {
     @Test
     fun registerScreen_error() {
         composeTestRule.setContent {
-            LastroTheme {
+            LastroTheme(darkTheme = false) {
                 RegisterScreenContent(
                     uiState = AuthUiState(error = "email already in use"),
                     name = "Gabriela",
@@ -153,7 +153,7 @@ class AuthScreenshotTest {
     @Test
     fun forgotPasswordScreen_default() {
         composeTestRule.setContent {
-            LastroTheme {
+            LastroTheme(darkTheme = false) {
                 ForgotPasswordScreenContent(
                     uiState = ForgotPasswordUiState(),
                     email = "",
@@ -169,7 +169,7 @@ class AuthScreenshotTest {
     @Test
     fun forgotPasswordScreen_success() {
         composeTestRule.setContent {
-            LastroTheme {
+            LastroTheme(darkTheme = false) {
                 ForgotPasswordScreenContent(
                     uiState = ForgotPasswordUiState(success = true),
                     email = "gabriela@lastro.app",
@@ -185,7 +185,7 @@ class AuthScreenshotTest {
     @Test
     fun forgotPasswordScreen_error() {
         composeTestRule.setContent {
-            LastroTheme {
+            LastroTheme(darkTheme = false) {
                 ForgotPasswordScreenContent(
                     uiState = ForgotPasswordUiState(error = "Muitas tentativas. Aguarde alguns minutos"),
                     email = "gabriela@lastro.app",

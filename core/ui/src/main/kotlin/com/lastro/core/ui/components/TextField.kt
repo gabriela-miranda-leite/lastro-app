@@ -1,7 +1,13 @@
 package com.lastro.core.ui.components
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Icon
@@ -23,9 +29,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.lastro.core.ui.theme.LastroTheme
 
-enum class TextFieldType { Default, Money, Password }
+enum class TextFieldType { Default, Money, Password, Email }
 
 @Composable
 fun LastroTextField(
@@ -47,8 +54,16 @@ fun LastroTextField(
                 Icon(
                     imageVector = if (passwordVisible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
                     contentDescription = if (passwordVisible) "Ocultar senha" else "Mostrar senha",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
+        })
+        type == TextFieldType.Email -> ({
+            Icon(
+                imageVector = Icons.Outlined.Email,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         })
         trailingIcon != null -> trailingIcon
         else -> null
@@ -63,31 +78,47 @@ fun LastroTextField(
     val resolvedKeyboardOptions = when {
         type == TextFieldType.Money -> KeyboardOptions(keyboardType = KeyboardType.NumberPassword)
         type == TextFieldType.Password -> KeyboardOptions(keyboardType = KeyboardType.Password)
+        type == TextFieldType.Email -> KeyboardOptions(keyboardType = KeyboardType.Email)
         else -> keyboardOptions
     }
 
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier,
-        label = { Text(label, style = MaterialTheme.typography.labelMedium) },
-        isError = error != null,
-        supportingText = error?.let { { Text(it, color = MaterialTheme.colorScheme.error) } },
-        trailingIcon = resolvedTrailingIcon,
-        visualTransformation = resolvedVisualTransformation,
-        keyboardOptions = resolvedKeyboardOptions,
-        singleLine = singleLine,
-        shape = MaterialTheme.shapes.medium,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedContainerColor = MaterialTheme.colorScheme.surface,
-            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-            focusedLabelColor = MaterialTheme.colorScheme.primary,
-            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            errorBorderColor = MaterialTheme.colorScheme.error,
-        ),
-    )
+    Column(modifier = modifier) {
+        Text(
+            text = label.uppercase(),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+        Spacer(modifier = Modifier.height(6.dp))
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = Modifier.fillMaxWidth(),
+            label = null,
+            placeholder = {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            },
+            isError = error != null,
+            supportingText = error?.let { { Text(it, color = MaterialTheme.colorScheme.error) } },
+            trailingIcon = resolvedTrailingIcon,
+            visualTransformation = resolvedVisualTransformation,
+            keyboardOptions = resolvedKeyboardOptions,
+            singleLine = singleLine,
+            shape = MaterialTheme.shapes.medium,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                focusedLabelColor = MaterialTheme.colorScheme.primary,
+                unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                errorBorderColor = MaterialTheme.colorScheme.error,
+            ),
+        )
+    }
 }
 
 internal val moneyVisualTransformationForTest: VisualTransformation get() = MoneyVisualTransformation
@@ -111,26 +142,26 @@ private object MoneyVisualTransformation : VisualTransformation {
     }
 }
 
-@Preview(name = "Default - Dark")
+@Preview(name = "Default - Light")
 @Composable
-private fun PreviewDefault() = LastroTheme {
-    LastroTextField(value = "gabriela@email.com", onValueChange = {}, label = "Email")
+private fun PreviewDefault() = LastroTheme(darkTheme = false) {
+    LastroTextField(value = "gabriela@email.com", onValueChange = {}, label = "Email", type = TextFieldType.Email)
 }
 
-@Preview(name = "Money - Dark")
+@Preview(name = "Money - Light")
 @Composable
-private fun PreviewMoney() = LastroTheme {
+private fun PreviewMoney() = LastroTheme(darkTheme = false) {
     LastroTextField(value = "25000", onValueChange = {}, label = "Valor", type = TextFieldType.Money)
 }
 
-@Preview(name = "Error - Dark")
+@Preview(name = "Error - Light")
 @Composable
-private fun PreviewError() = LastroTheme {
+private fun PreviewError() = LastroTheme(darkTheme = false) {
     LastroTextField(value = "", onValueChange = {}, label = "Email", error = "Campo obrigatório")
 }
 
-@Preview(name = "Password - Dark")
+@Preview(name = "Password - Light")
 @Composable
-private fun PreviewPassword() = LastroTheme {
+private fun PreviewPassword() = LastroTheme(darkTheme = false) {
     LastroTextField(value = "senha123", onValueChange = {}, label = "Senha", type = TextFieldType.Password)
 }

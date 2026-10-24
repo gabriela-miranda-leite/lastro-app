@@ -1,8 +1,8 @@
 package com.lastro.feature.auth.ui
 
 import android.view.WindowManager
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,9 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -29,23 +28,22 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lastro.core.network.exception.ApiException
-import com.lastro.core.ui.components.ButtonVariant
 import com.lastro.core.ui.components.ErrorBanner
 import com.lastro.core.ui.components.LastroButton
+import com.lastro.core.ui.components.LastroLogoMark
 import com.lastro.core.ui.components.LastroTextField
 import com.lastro.core.ui.components.TextFieldType
-import com.lastro.core.ui.theme.LastroColors
 import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
 import com.lastro.feature.auth.viewmodel.AuthEvent
@@ -116,27 +114,10 @@ internal fun LoginScreenContent(
                 .padding(horizontal = LastroSpacing.screenHorizontal)
                 .verticalScroll(rememberScrollState())
                 .imePadding(),
-            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(LastroSpacing.sectionTopLarge))
 
-            Box(
-                modifier = Modifier
-                    .size(72.dp)
-                    .clip(RoundedCornerShape(18.dp))
-                    .background(
-                        Brush.linearGradient(
-                            colors = listOf(LastroColors.Accent, LastroColors.AccentSecondary),
-                        )
-                    ),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = "L",
-                    style = MaterialTheme.typography.displayLarge,
-                    color = Color.White,
-                )
-            }
+            LastroLogoMark(size = 64.dp)
 
             Spacer(modifier = Modifier.height(LastroSpacing.xl))
 
@@ -165,10 +146,7 @@ internal fun LoginScreenContent(
                 onValueChange = onEmailChange,
                 label = "Email",
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next,
-                ),
+                type = TextFieldType.Email,
             )
 
             Spacer(modifier = Modifier.height(LastroSpacing.md))
@@ -184,7 +162,7 @@ internal fun LoginScreenContent(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.End,
+                horizontalArrangement = Arrangement.End,
             ) {
                 Text(
                     text = "Esqueci a senha",
@@ -215,10 +193,16 @@ internal fun LoginScreenContent(
                     modifier = Modifier
                         .weight(1f)
                         .height(1.dp)
-                        .background(MaterialTheme.colorScheme.outline),
+                        .padding(end = LastroSpacing.sm)
+                        .run {
+                            this.then(
+                                Modifier.fillMaxWidth()
+                                    .height(1.dp)
+                            )
+                        }
                 )
                 Text(
-                    text = "  ou  ",
+                    text = "ou",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -226,26 +210,46 @@ internal fun LoginScreenContent(
                     modifier = Modifier
                         .weight(1f)
                         .height(1.dp)
-                        .background(MaterialTheme.colorScheme.outline),
                 )
             }
 
             Spacer(modifier = Modifier.height(LastroSpacing.xl))
 
-            LastroButton(
-                text = "Criar conta",
-                onClick = onRegister,
-                variant = ButtonVariant.Outlined,
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = onRegister),
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = buildAnnotatedString {
+                        append("Não tem conta? ")
+                        withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)) {
+                            append("Criar conta")
+                        }
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
 
-            Spacer(modifier = Modifier.height(LastroSpacing.bottomSafe))
+            Spacer(modifier = Modifier.weight(1f))
+
+            Text(
+                text = "Seus dados são criptografados e protegidos",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = LastroSpacing.xxl),
+            )
         }
     }
 }
 
 @Preview(name = "Login - Default")
 @Composable
-private fun LoginScreenPreview() = LastroTheme {
+private fun LoginScreenPreview() = LastroTheme(darkTheme = false) {
     LoginScreenContent(
         uiState = AuthUiState(),
         email = "",
@@ -260,7 +264,7 @@ private fun LoginScreenPreview() = LastroTheme {
 
 @Preview(name = "Login - Preenchido")
 @Composable
-private fun LoginScreenFilledPreview() = LastroTheme {
+private fun LoginScreenFilledPreview() = LastroTheme(darkTheme = false) {
     LoginScreenContent(
         uiState = AuthUiState(),
         email = "gabriela@lastro.app",
@@ -275,7 +279,7 @@ private fun LoginScreenFilledPreview() = LastroTheme {
 
 @Preview(name = "Login - Carregando")
 @Composable
-private fun LoginScreenLoadingPreview() = LastroTheme {
+private fun LoginScreenLoadingPreview() = LastroTheme(darkTheme = false) {
     LoginScreenContent(
         uiState = AuthUiState(isLoading = true),
         email = "gabriela@lastro.app",
@@ -290,7 +294,7 @@ private fun LoginScreenLoadingPreview() = LastroTheme {
 
 @Preview(name = "Login - Erro 401")
 @Composable
-private fun LoginScreenErrorPreview() = LastroTheme {
+private fun LoginScreenErrorPreview() = LastroTheme(darkTheme = false) {
     LoginScreenContent(
         uiState = AuthUiState(error = ApiException.Unauthorized.message),
         email = "gabriela@lastro.app",
