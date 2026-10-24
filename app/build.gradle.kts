@@ -24,6 +24,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(project(":core:common"))
     implementation(project(":core:domain"))
+    implementation(project(":core:ui"))
 
     testImplementation(libs.junit)
 
