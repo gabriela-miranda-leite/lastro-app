@@ -13,7 +13,6 @@ dependencies {
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
     compileOnly(libs.ktlint.gradlePlugin)
-    compileOnly(libs.kover.gradlePlugin)
 }
 
 gradlePlugin {

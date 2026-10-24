@@ -8,7 +8,6 @@ class LastroAndroidLibraryPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             pluginManager.apply("com.android.library")
-            pluginManager.apply("org.jetbrains.kotlinx.kover")
             extensions.configure<LibraryExtension> {
                 compileSdk = 35
                 defaultConfig {
@@ -18,6 +17,11 @@ class LastroAndroidLibraryPlugin : Plugin<Project> {
                 compileOptions {
                     sourceCompatibility = JavaVersion.VERSION_11
                     targetCompatibility = JavaVersion.VERSION_11
+                }
+                buildTypes {
+                    getByName("debug") {
+                        enableUnitTestCoverage = true
+                    }
                 }
             }
         }

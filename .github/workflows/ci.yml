@@ -98,7 +98,7 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Run tests and generate coverage reports
-        run: ./gradlew :core:common:koverXmlReport :core:domain:koverXmlReport :core:network:koverXmlReport :feature:auth:koverXmlReport :feature:transactions:koverXmlReport --continue
+        run: ./gradlew :core:common:createDebugUnitTestCoverageReport :core:domain:createDebugUnitTestCoverageReport :core:network:createDebugUnitTestCoverageReport :feature:auth:createDebugUnitTestCoverageReport :feature:transactions:createDebugUnitTestCoverageReport --continue
 
       - name: Comment coverage on PR
         uses: actions/github-script@v7
@@ -107,7 +107,7 @@ jobs:
             const fs = require('fs');
             const { execSync } = require('child_process');
 
-            const files = execSync('find . -path "*/build/reports/kover/report.xml"')
+            const files = execSync('find . -path "*/build/reports/coverage/test/debug/report.xml" -not -path "*/build-logic/*"')
               .toString().trim().split('\n').filter(Boolean);
 
             if (files.length === 0) {
@@ -115,45 +115,96 @@ jobs:
               return;
             }
 
-            const combined = files.map(f => fs.readFileSync(f, 'utf8')).join('\n');
-            const modules = files.map(f => f.replace(/^\.\//, '').replace(/\/build.*$/, ''));
-
-            function parseCoverage(type) {
-              const regex = new RegExp(`<counter type="${type}" missed="(\\d+)" covered="(\\d+)"`, 'g');
-              let missed = 0, covered = 0, match;
-              while ((match = regex.exec(combined)) !== null) {
-                missed += parseInt(match[1]);
-                covered += parseInt(match[2]);
+            function parseCounters(xml) {
+              const result = {};
+              const re = /<counter type="(\w+)" missed="(\d+)" covered="(\d+)"/g;
+              let m;
+              while ((m = re.exec(xml)) !== null) {
+                const t = m[1];
+                if (!result[t]) result[t] = { missed: 0, covered: 0 };
+                result[t].missed += parseInt(m[2]);
+                result[t].covered += parseInt(m[3]);
               }
-              const total = missed + covered;
-              const pct = total === 0 ? 0 : ((covered / total) * 100).toFixed(1);
-              return { covered, total, pct };
+              return result;
             }
 
-            const line = parseCoverage('LINE');
-            const branch = parseCoverage('BRANCH');
-            const instruction = parseCoverage('INSTRUCTION');
+            function pct(c) {
+              const total = c.missed + c.covered;
+              return total === 0 ? 0 : ((c.covered / total) * 100).toFixed(1);
+            }
 
-            function badge(pct) {
-              if (pct >= 80) return '🟢';
-              if (pct >= 60) return '🟡';
+            function badge(p) {
+              if (p >= 80) return '🟢';
+              if (p >= 60) return '🟡';
               return '🔴';
             }
 
-            const moduleList = modules.map(m => `\`${m}\``).join(' · ');
+            // Per-file breakdown
+            function parseFiles(xml, moduleName) {
+              const rows = [];
+              const pkgRe = /<package name="([^"]+)">([\s\S]*?)<\/package>/g;
+              let pkgMatch;
+              while ((pkgMatch = pkgRe.exec(xml)) !== null) {
+                const pkg = pkgMatch[1];
+                const pkgBody = pkgMatch[2];
+                const sfRe = /<sourcefile name="([^"]+)">([\s\S]*?)<\/sourcefile>/g;
+                let sfMatch;
+                while ((sfMatch = sfRe.exec(pkgBody)) !== null) {
+                  const fname = sfMatch[1];
+                  const sfBody = sfMatch[2];
+                  const lineRe = /<counter type="LINE" missed="(\d+)" covered="(\d+)"/;
+                  const lm = lineRe.exec(sfBody);
+                  if (!lm) continue;
+                  const missed = parseInt(lm[1]), covered = parseInt(lm[2]);
+                  const total = missed + covered;
+                  if (total === 0) continue;
+                  const p = parseFloat(((covered / total) * 100).toFixed(1));
+                  rows.push({ file: `${pkg}/${fname}`, p, covered, total });
+                }
+              }
+              return rows;
+            }
+
+            let totalCounters = {};
+            let allFiles = [];
+
+            for (const f of files) {
+              const xml = fs.readFileSync(f, 'utf8');
+              const module = f.replace(/^\.\//, '').replace(/\/build.*$/, '');
+              const counters = parseCounters(xml);
+              for (const [t, c] of Object.entries(counters)) {
+                if (!totalCounters[t]) totalCounters[t] = { missed: 0, covered: 0 };
+                totalCounters[t].missed += c.missed;
+                totalCounters[t].covered += c.covered;
+              }
+              allFiles.push(...parseFiles(xml, module));
+            }
+
+            const line = totalCounters['LINE'] || { missed: 0, covered: 0 };
+            const branch = totalCounters['BRANCH'] || { missed: 0, covered: 0 };
+            const instr = totalCounters['INSTRUCTION'] || { missed: 0, covered: 0 };
+            const linePct = pct(line), branchPct = pct(branch), instrPct = pct(instr);
+
+            allFiles.sort((a, b) => a.p - b.p);
+            const fileRows = allFiles.map(r => {
+              const shortName = r.file.split('/').slice(-2).join('/').replace('.kt', '');
+              return `| ${badge(r.p)} \`${shortName}\` | ${r.p}% | ${r.covered}/${r.total} |`;
+            });
 
             const body = [
               '## 📊 Cobertura de testes',
               '',
               '| Tipo | Cobertura | Linhas |',
               '|------|-----------|--------|',
-              `| ${badge(line.pct)} Linhas | ${line.pct}% | ${line.covered}/${line.total} |`,
-              `| ${badge(branch.pct)} Branches | ${branch.pct}% | ${branch.covered}/${branch.total} |`,
-              `| ${badge(instruction.pct)} Instruções | ${instruction.pct}% | ${instruction.covered}/${instruction.total} |`,
+              `| ${badge(linePct)} Linhas | ${linePct}% | ${line.covered}/${line.missed + line.covered} |`,
+              `| ${badge(branchPct)} Branches | ${branchPct}% | ${branch.covered}/${branch.missed + branch.covered} |`,
+              `| ${badge(instrPct)} Instruções | ${instrPct}% | ${instr.covered}/${instr.missed + instr.covered} |`,
               '',
-              `<details><summary>Módulos cobertos (${modules.length})</summary>`,
+              '<details><summary>Por arquivo</summary>',
               '',
-              moduleList,
+              '| Arquivo | Linhas | Cobertas |',
+              '|---------|--------|----------|',
+              ...fileRows,
               '</details>',
             ].join('\n');
 
