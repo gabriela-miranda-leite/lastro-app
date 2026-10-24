@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lastro.core.ui.components.ButtonVariant
@@ -31,7 +32,9 @@ import com.lastro.core.ui.components.LastroTextField
 import com.lastro.core.ui.components.LastroTopBar
 import com.lastro.core.ui.components.TextFieldType
 import com.lastro.core.ui.theme.LastroSpacing
+import com.lastro.core.ui.theme.LastroTheme
 import com.lastro.feature.auth.viewmodel.AuthEvent
+import com.lastro.feature.auth.viewmodel.AuthUiState
 import com.lastro.feature.auth.viewmodel.AuthViewModel
 
 @Composable
@@ -54,6 +57,31 @@ fun RegisterScreen(
         }
     }
 
+    RegisterScreenContent(
+        uiState = uiState,
+        name = name,
+        email = email,
+        password = password,
+        onNameChange = { name = it },
+        onEmailChange = { email = it },
+        onPasswordChange = { password = it },
+        onRegister = { viewModel.register(email, password, name) },
+        onBack = onBack,
+    )
+}
+
+@Composable
+internal fun RegisterScreenContent(
+    uiState: AuthUiState,
+    name: String,
+    email: String,
+    password: String,
+    onNameChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onRegister: () -> Unit,
+    onBack: () -> Unit,
+) {
     Scaffold(
         topBar = { LastroTopBar(title = "Criar conta", onNavigateBack = onBack) }
     ) { innerPadding ->
@@ -83,7 +111,7 @@ fun RegisterScreen(
 
             LastroTextField(
                 value = name,
-                onValueChange = { name = it },
+                onValueChange = onNameChange,
                 label = "Nome",
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
@@ -93,7 +121,7 @@ fun RegisterScreen(
 
             LastroTextField(
                 value = email,
-                onValueChange = { email = it },
+                onValueChange = onEmailChange,
                 label = "Email",
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(
@@ -106,7 +134,7 @@ fun RegisterScreen(
 
             LastroTextField(
                 value = password,
-                onValueChange = { password = it },
+                onValueChange = onPasswordChange,
                 label = "Senha",
                 modifier = Modifier.fillMaxWidth(),
                 type = TextFieldType.Password,
@@ -117,7 +145,7 @@ fun RegisterScreen(
 
             LastroButton(
                 text = "Cadastrar",
-                onClick = { viewModel.register(email, password, name) },
+                onClick = onRegister,
                 loading = uiState.isLoading,
                 enabled = name.isNotBlank() && email.isNotBlank() && password.isNotBlank(),
             )
@@ -133,4 +161,52 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(LastroSpacing.bottomSafe))
         }
     }
+}
+
+@Preview(name = "Register - Default")
+@Composable
+private fun RegisterScreenPreview() = LastroTheme {
+    RegisterScreenContent(
+        uiState = AuthUiState(),
+        name = "",
+        email = "",
+        password = "",
+        onNameChange = {},
+        onEmailChange = {},
+        onPasswordChange = {},
+        onRegister = {},
+        onBack = {},
+    )
+}
+
+@Preview(name = "Register - Preenchido")
+@Composable
+private fun RegisterScreenFilledPreview() = LastroTheme {
+    RegisterScreenContent(
+        uiState = AuthUiState(),
+        name = "Gabriela",
+        email = "gabriela@lastro.app",
+        password = "senha123",
+        onNameChange = {},
+        onEmailChange = {},
+        onPasswordChange = {},
+        onRegister = {},
+        onBack = {},
+    )
+}
+
+@Preview(name = "Register - Erro email duplicado")
+@Composable
+private fun RegisterScreenErrorPreview() = LastroTheme {
+    RegisterScreenContent(
+        uiState = AuthUiState(error = "email already in use"),
+        name = "Gabriela",
+        email = "gabriela@lastro.app",
+        password = "senha123",
+        onNameChange = {},
+        onEmailChange = {},
+        onPasswordChange = {},
+        onRegister = {},
+        onBack = {},
+    )
 }

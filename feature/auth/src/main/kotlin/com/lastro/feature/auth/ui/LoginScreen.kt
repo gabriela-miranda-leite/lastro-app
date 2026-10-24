@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lastro.core.network.exception.ApiException
@@ -34,7 +35,9 @@ import com.lastro.core.ui.components.LastroButton
 import com.lastro.core.ui.components.LastroTextField
 import com.lastro.core.ui.components.TextFieldType
 import com.lastro.core.ui.theme.LastroSpacing
+import com.lastro.core.ui.theme.LastroTheme
 import com.lastro.feature.auth.viewmodel.AuthEvent
+import com.lastro.feature.auth.viewmodel.AuthUiState
 import com.lastro.feature.auth.viewmodel.AuthViewModel
 
 @Composable
@@ -64,6 +67,29 @@ fun LoginScreen(
         }
     }
 
+    LoginScreenContent(
+        uiState = uiState,
+        email = email,
+        password = password,
+        onEmailChange = { email = it },
+        onPasswordChange = { password = it },
+        onLogin = { viewModel.login(email, password) },
+        onForgotPassword = onNavigateToForgotPassword,
+        onRegister = onNavigateToRegister,
+    )
+}
+
+@Composable
+internal fun LoginScreenContent(
+    uiState: AuthUiState,
+    email: String,
+    password: String,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onLogin: () -> Unit,
+    onForgotPassword: () -> Unit,
+    onRegister: () -> Unit,
+) {
     val errorMessage = when (uiState.error) {
         ApiException.Unauthorized.message -> "Email ou senha incorretos"
         ApiException.TooManyRequests.message -> "Muitas tentativas. Aguarde alguns minutos"
@@ -97,7 +123,7 @@ fun LoginScreen(
 
             LastroTextField(
                 value = email,
-                onValueChange = { email = it },
+                onValueChange = onEmailChange,
                 label = "Email",
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(
@@ -110,7 +136,7 @@ fun LoginScreen(
 
             LastroTextField(
                 value = password,
-                onValueChange = { password = it },
+                onValueChange = onPasswordChange,
                 label = "Senha",
                 modifier = Modifier.fillMaxWidth(),
                 type = TextFieldType.Password,
@@ -121,7 +147,7 @@ fun LoginScreen(
 
             LastroButton(
                 text = "Entrar",
-                onClick = { viewModel.login(email, password) },
+                onClick = onLogin,
                 loading = uiState.isLoading,
                 enabled = email.isNotBlank() && password.isNotBlank(),
             )
@@ -130,17 +156,77 @@ fun LoginScreen(
 
             LastroButton(
                 text = "Esqueci minha senha",
-                onClick = onNavigateToForgotPassword,
+                onClick = onForgotPassword,
                 variant = ButtonVariant.Ghost,
             )
 
             LastroButton(
                 text = "Criar conta",
-                onClick = onNavigateToRegister,
+                onClick = onRegister,
                 variant = ButtonVariant.Outlined,
             )
 
             Spacer(modifier = Modifier.height(LastroSpacing.bottomSafe))
         }
     }
+}
+
+@Preview(name = "Login - Default")
+@Composable
+private fun LoginScreenPreview() = LastroTheme {
+    LoginScreenContent(
+        uiState = AuthUiState(),
+        email = "",
+        password = "",
+        onEmailChange = {},
+        onPasswordChange = {},
+        onLogin = {},
+        onForgotPassword = {},
+        onRegister = {},
+    )
+}
+
+@Preview(name = "Login - Preenchido")
+@Composable
+private fun LoginScreenFilledPreview() = LastroTheme {
+    LoginScreenContent(
+        uiState = AuthUiState(),
+        email = "gabriela@lastro.app",
+        password = "senha123",
+        onEmailChange = {},
+        onPasswordChange = {},
+        onLogin = {},
+        onForgotPassword = {},
+        onRegister = {},
+    )
+}
+
+@Preview(name = "Login - Carregando")
+@Composable
+private fun LoginScreenLoadingPreview() = LastroTheme {
+    LoginScreenContent(
+        uiState = AuthUiState(isLoading = true),
+        email = "gabriela@lastro.app",
+        password = "senha123",
+        onEmailChange = {},
+        onPasswordChange = {},
+        onLogin = {},
+        onForgotPassword = {},
+        onRegister = {},
+    )
+}
+
+@Preview(name = "Login - Erro 401")
+@Composable
+private fun LoginScreenErrorPreview() = LastroTheme {
+    LoginScreenContent(
+        uiState = AuthUiState(error = ApiException.Unauthorized.message),
+        email = "gabriela@lastro.app",
+        password = "errada",
+        onEmailChange = {},
+        onPasswordChange = {},
+        onLogin = {},
+        onForgotPassword = {},
+        onRegister = {},
+    )
 }

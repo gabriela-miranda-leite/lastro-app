@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lastro.core.ui.components.ErrorBanner
@@ -31,6 +32,8 @@ import com.lastro.core.ui.components.LastroButton
 import com.lastro.core.ui.components.LastroTextField
 import com.lastro.core.ui.components.LastroTopBar
 import com.lastro.core.ui.theme.LastroSpacing
+import com.lastro.core.ui.theme.LastroTheme
+import com.lastro.feature.auth.viewmodel.ForgotPasswordUiState
 import com.lastro.feature.auth.viewmodel.ForgotPasswordViewModel
 
 @Composable
@@ -48,6 +51,23 @@ fun ForgotPasswordScreen(
         onDispose { window?.clearFlags(WindowManager.LayoutParams.FLAG_SECURE) }
     }
 
+    ForgotPasswordScreenContent(
+        uiState = uiState,
+        email = email,
+        onEmailChange = { email = it },
+        onSubmit = { viewModel.submit(email) },
+        onBack = onBack,
+    )
+}
+
+@Composable
+internal fun ForgotPasswordScreenContent(
+    uiState: ForgotPasswordUiState,
+    email: String,
+    onEmailChange: (String) -> Unit,
+    onSubmit: () -> Unit,
+    onBack: () -> Unit,
+) {
     Scaffold(
         topBar = { LastroTopBar(title = "Recuperar senha", onNavigateBack = onBack) }
     ) { innerPadding ->
@@ -85,7 +105,7 @@ fun ForgotPasswordScreen(
 
                 LastroTextField(
                     value = email,
-                    onValueChange = { email = it },
+                    onValueChange = onEmailChange,
                     label = "Email",
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(
@@ -98,7 +118,7 @@ fun ForgotPasswordScreen(
 
                 LastroButton(
                     text = "Enviar link",
-                    onClick = { viewModel.submit(email) },
+                    onClick = onSubmit,
                     loading = uiState.isLoading,
                     enabled = email.isNotBlank(),
                 )
@@ -107,4 +127,52 @@ fun ForgotPasswordScreen(
             Spacer(modifier = Modifier.height(LastroSpacing.bottomSafe))
         }
     }
+}
+
+@Preview(name = "ForgotPassword - Default")
+@Composable
+private fun ForgotPasswordPreview() = LastroTheme {
+    ForgotPasswordScreenContent(
+        uiState = ForgotPasswordUiState(),
+        email = "",
+        onEmailChange = {},
+        onSubmit = {},
+        onBack = {},
+    )
+}
+
+@Preview(name = "ForgotPassword - Carregando")
+@Composable
+private fun ForgotPasswordLoadingPreview() = LastroTheme {
+    ForgotPasswordScreenContent(
+        uiState = ForgotPasswordUiState(isLoading = true),
+        email = "gabriela@lastro.app",
+        onEmailChange = {},
+        onSubmit = {},
+        onBack = {},
+    )
+}
+
+@Preview(name = "ForgotPassword - Sucesso")
+@Composable
+private fun ForgotPasswordSuccessPreview() = LastroTheme {
+    ForgotPasswordScreenContent(
+        uiState = ForgotPasswordUiState(success = true),
+        email = "gabriela@lastro.app",
+        onEmailChange = {},
+        onSubmit = {},
+        onBack = {},
+    )
+}
+
+@Preview(name = "ForgotPassword - Erro")
+@Composable
+private fun ForgotPasswordErrorPreview() = LastroTheme {
+    ForgotPasswordScreenContent(
+        uiState = ForgotPasswordUiState(error = "Muitas tentativas. Aguarde alguns minutos"),
+        email = "gabriela@lastro.app",
+        onEmailChange = {},
+        onSubmit = {},
+        onBack = {},
+    )
 }
