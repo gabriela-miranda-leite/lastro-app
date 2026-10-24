@@ -4,18 +4,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Anchor
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.Image
+import com.lastro.core.ui.R
 import com.lastro.core.ui.theme.LastroColors
 import com.lastro.core.ui.theme.LastroTheme
 
@@ -36,23 +37,23 @@ fun LastroLogoMark(
             ),
         contentAlignment = Alignment.Center,
     ) {
-        Icon(
-            imageVector = Icons.Outlined.Anchor,
+        Image(
+            painter = painterResource(id = R.drawable.ic_logo_mark),
             contentDescription = "Lastro",
-            tint = Color.White,
             modifier = Modifier.size(iconSize),
+            colorFilter = ColorFilter.tint(Color.White),
         )
     }
-}
-
-@Preview(name = "LogoMark - Dark")
-@Composable
-private fun PreviewDark() = LastroTheme {
-    LastroLogoMark()
 }
 
 @Preview(name = "LogoMark - Light")
 @Composable
 private fun PreviewLight() = LastroTheme(darkTheme = false) {
+    LastroLogoMark()
+}
+
+@Preview(name = "LogoMark - Dark")
+@Composable
+private fun PreviewDark() = LastroTheme {
     LastroLogoMark()
 }
