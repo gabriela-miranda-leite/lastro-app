@@ -47,7 +47,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.res.painterResource
 import com.lastro.core.ui.R
-import com.lastro.core.ui.components.ErrorBanner
+import com.lastro.core.ui.components.LastroBanner
 import com.lastro.core.ui.components.LastroBackButton
 import com.lastro.core.ui.components.LastroButton
 import com.lastro.core.ui.components.LastroTextField
@@ -176,10 +176,7 @@ internal fun ForgotPasswordScreenContent(
                     }
                 }
             } else {
-                ErrorBanner(
-                    message = uiState.error ?: "",
-                    visible = uiState.error != null,
-                )
+                if (uiState.error != null) LastroBanner(message = uiState.error)
                 if (uiState.error != null) Spacer(modifier = Modifier.height(LastroSpacing.md))
 
                 LastroTextField(

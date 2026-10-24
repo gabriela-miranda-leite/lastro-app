@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lastro.core.network.exception.ApiException
-import com.lastro.core.ui.components.ErrorBanner
+import com.lastro.core.ui.components.LastroBanner
 import com.lastro.core.ui.components.LastroButton
 import com.lastro.core.ui.components.LastroLogoMark
 import com.lastro.core.ui.components.LastroTextField
@@ -134,12 +134,8 @@ internal fun LoginScreenContent(
 
             Spacer(modifier = Modifier.height(LastroSpacing.sectionTop))
 
-            ErrorBanner(
-                message = errorMessage ?: "",
-                visible = errorMessage != null,
-            )
+            if (errorMessage != null) LastroBanner(message = errorMessage)
             if (errorMessage != null) Spacer(modifier = Modifier.height(LastroSpacing.md))
-
             LastroTextField(
                 value = email,
                 onValueChange = onEmailChange,

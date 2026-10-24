@@ -6,10 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -18,8 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.lastro.core.ui.R
 import com.lastro.core.ui.theme.LastroColors
 import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
@@ -32,21 +31,21 @@ fun LastroBanner(
     modifier: Modifier = Modifier,
     type: BannerType = BannerType.Error,
 ) {
-    val (icon, tint, background, border) = when (type) {
+    val (iconPainter, tint, background, border) = when (type) {
         BannerType.Error -> BannerStyle(
-            icon = Icons.Outlined.Warning,
+            iconPainter = painterResource(R.drawable.ic_alert_triangle),
             tint = LastroColors.Negative,
             background = LastroColors.Negative.copy(alpha = 0.12f),
             border = LastroColors.Negative.copy(alpha = 0.3f),
         )
         BannerType.Success -> BannerStyle(
-            icon = Icons.Outlined.CheckCircle,
+            iconPainter = painterResource(R.drawable.ic_check_circle),
             tint = LastroColors.Positive,
             background = LastroColors.Positive.copy(alpha = 0.10f),
             border = LastroColors.Positive.copy(alpha = 0.3f),
         )
         BannerType.Info -> BannerStyle(
-            icon = Icons.Outlined.Info,
+            iconPainter = painterResource(R.drawable.ic_info_circle),
             tint = LastroColors.Accent,
             background = LastroColors.Accent.copy(alpha = 0.10f),
             border = LastroColors.Accent.copy(alpha = 0.3f),
@@ -64,7 +63,7 @@ fun LastroBanner(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                imageVector = icon,
+                painter = iconPainter,
                 contentDescription = null,
                 tint = tint,
                 modifier = Modifier.size(16.dp),
@@ -80,7 +79,7 @@ fun LastroBanner(
 }
 
 private data class BannerStyle(
-    val icon: androidx.compose.ui.graphics.vector.ImageVector,
+    val iconPainter: Painter,
     val tint: Color,
     val background: Color,
     val border: Color,
