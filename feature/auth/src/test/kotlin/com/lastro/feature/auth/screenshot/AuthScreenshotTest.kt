@@ -198,5 +198,60 @@ class AuthScreenshotTest {
         composeTestRule.onRoot().captureRoboImage(snap("forgot_error"))
     }
 
+    @Test
+    fun loginScreen_default_dark() {
+        composeTestRule.setContent {
+            LastroTheme(darkTheme = true) {
+                LoginScreenContent(
+                    uiState = AuthUiState(), email = "", password = "",
+                    onEmailChange = {}, onPasswordChange = {}, onLogin = {},
+                    onForgotPassword = {}, onRegister = {},
+                )
+            }
+        }
+        composeTestRule.onRoot().captureRoboImage(snap("login_default_dark"))
+    }
+
+    @Test
+    fun registerScreen_default_dark() {
+        composeTestRule.setContent {
+            LastroTheme(darkTheme = true) {
+                RegisterScreenContent(
+                    uiState = AuthUiState(),
+                    name = "", email = "", password = "", confirmPassword = "", termsAccepted = false,
+                    onNameChange = {}, onEmailChange = {}, onPasswordChange = {},
+                    onConfirmPasswordChange = {}, onTermsChange = {}, onRegister = {}, onBack = {},
+                )
+            }
+        }
+        composeTestRule.onRoot().captureRoboImage(snap("register_default_dark"))
+    }
+
+    @Test
+    fun forgotPasswordScreen_default_dark() {
+        composeTestRule.setContent {
+            LastroTheme(darkTheme = true) {
+                ForgotPasswordScreenContent(
+                    uiState = ForgotPasswordUiState(), email = "",
+                    onEmailChange = {}, onSubmit = {}, onBack = {},
+                )
+            }
+        }
+        composeTestRule.onRoot().captureRoboImage(snap("forgot_default_dark"))
+    }
+
+    @Test
+    fun forgotPasswordScreen_success_dark() {
+        composeTestRule.setContent {
+            LastroTheme(darkTheme = true) {
+                ForgotPasswordScreenContent(
+                    uiState = ForgotPasswordUiState(success = true), email = "gabriela@lastro.app",
+                    onEmailChange = {}, onSubmit = {}, onBack = {},
+                )
+            }
+        }
+        composeTestRule.onRoot().captureRoboImage(snap("forgot_success_dark"))
+    }
+
     private fun snap(name: String) = "src/test/snapshots/$name.png"
 }
