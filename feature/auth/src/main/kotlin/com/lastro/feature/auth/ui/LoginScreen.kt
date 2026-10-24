@@ -1,6 +1,7 @@
 package com.lastro.feature.auth.ui
 
 import android.view.WindowManager
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -31,9 +31,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -117,18 +117,18 @@ internal fun LoginScreenContent(
         ) {
             Spacer(modifier = Modifier.height(LastroSpacing.sectionTopLarge))
 
-            LastroLogoMark(size = 64.dp)
+            LastroLogoMark(size = 72.dp)
 
-            Spacer(modifier = Modifier.height(LastroSpacing.xl))
+            Spacer(modifier = Modifier.height(LastroSpacing.xxl))
 
             Text(
                 text = "Lastro",
                 style = MaterialTheme.typography.displayLarge,
             )
-
+            Spacer(modifier = Modifier.height(LastroSpacing.xs))
             Text(
                 text = "Controle financeiro pessoal",
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
@@ -138,7 +138,6 @@ internal fun LoginScreenContent(
                 message = errorMessage ?: "",
                 visible = errorMessage != null,
             )
-
             if (errorMessage != null) Spacer(modifier = Modifier.height(LastroSpacing.md))
 
             LastroTextField(
@@ -168,6 +167,7 @@ internal fun LoginScreenContent(
                     text = "Esqueci a senha",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Medium,
                     modifier = Modifier
                         .clickable(onClick = onForgotPassword)
                         .padding(vertical = LastroSpacing.sm),
@@ -193,23 +193,18 @@ internal fun LoginScreenContent(
                     modifier = Modifier
                         .weight(1f)
                         .height(1.dp)
-                        .padding(end = LastroSpacing.sm)
-                        .run {
-                            this.then(
-                                Modifier.fillMaxWidth()
-                                    .height(1.dp)
-                            )
-                        }
+                        .background(MaterialTheme.colorScheme.outline),
                 )
                 Text(
-                    text = "ou",
-                    style = MaterialTheme.typography.bodySmall,
+                    text = "  ou  ",
+                    style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Box(
                     modifier = Modifier
                         .weight(1f)
                         .height(1.dp)
+                        .background(MaterialTheme.colorScheme.outline),
                 )
             }
 
@@ -224,9 +219,12 @@ internal fun LoginScreenContent(
                 Text(
                     text = buildAnnotatedString {
                         append("Não tem conta? ")
-                        withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)) {
-                            append("Criar conta")
-                        }
+                        withStyle(
+                            SpanStyle(
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                        ) { append("Criar conta") }
                     },
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -251,14 +249,9 @@ internal fun LoginScreenContent(
 @Composable
 private fun LoginScreenPreview() = LastroTheme(darkTheme = false) {
     LoginScreenContent(
-        uiState = AuthUiState(),
-        email = "",
-        password = "",
-        onEmailChange = {},
-        onPasswordChange = {},
-        onLogin = {},
-        onForgotPassword = {},
-        onRegister = {},
+        uiState = AuthUiState(), email = "", password = "",
+        onEmailChange = {}, onPasswordChange = {}, onLogin = {},
+        onForgotPassword = {}, onRegister = {},
     )
 }
 
@@ -266,14 +259,9 @@ private fun LoginScreenPreview() = LastroTheme(darkTheme = false) {
 @Composable
 private fun LoginScreenFilledPreview() = LastroTheme(darkTheme = false) {
     LoginScreenContent(
-        uiState = AuthUiState(),
-        email = "gabriela@lastro.app",
-        password = "senha123",
-        onEmailChange = {},
-        onPasswordChange = {},
-        onLogin = {},
-        onForgotPassword = {},
-        onRegister = {},
+        uiState = AuthUiState(), email = "gabriela@lastro.app", password = "senha123",
+        onEmailChange = {}, onPasswordChange = {}, onLogin = {},
+        onForgotPassword = {}, onRegister = {},
     )
 }
 
@@ -281,14 +269,9 @@ private fun LoginScreenFilledPreview() = LastroTheme(darkTheme = false) {
 @Composable
 private fun LoginScreenLoadingPreview() = LastroTheme(darkTheme = false) {
     LoginScreenContent(
-        uiState = AuthUiState(isLoading = true),
-        email = "gabriela@lastro.app",
-        password = "senha123",
-        onEmailChange = {},
-        onPasswordChange = {},
-        onLogin = {},
-        onForgotPassword = {},
-        onRegister = {},
+        uiState = AuthUiState(isLoading = true), email = "gabriela@lastro.app", password = "senha123",
+        onEmailChange = {}, onPasswordChange = {}, onLogin = {},
+        onForgotPassword = {}, onRegister = {},
     )
 }
 
@@ -297,12 +280,8 @@ private fun LoginScreenLoadingPreview() = LastroTheme(darkTheme = false) {
 private fun LoginScreenErrorPreview() = LastroTheme(darkTheme = false) {
     LoginScreenContent(
         uiState = AuthUiState(error = ApiException.Unauthorized.message),
-        email = "gabriela@lastro.app",
-        password = "errada",
-        onEmailChange = {},
-        onPasswordChange = {},
-        onLogin = {},
-        onForgotPassword = {},
-        onRegister = {},
+        email = "gabriela@lastro.app", password = "errada",
+        onEmailChange = {}, onPasswordChange = {}, onLogin = {},
+        onForgotPassword = {}, onRegister = {},
     )
 }

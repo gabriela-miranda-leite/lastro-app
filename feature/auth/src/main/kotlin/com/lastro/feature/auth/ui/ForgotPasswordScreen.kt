@@ -2,9 +2,11 @@ package com.lastro.feature.auth.ui
 
 import android.view.WindowManager
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,10 +15,12 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -32,18 +36,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.lastro.core.ui.components.BannerType
 import com.lastro.core.ui.components.ErrorBanner
-import com.lastro.core.ui.components.LastroBanner
 import com.lastro.core.ui.components.LastroButton
 import com.lastro.core.ui.components.LastroTextField
-import com.lastro.core.ui.components.LastroTopBar
+import com.lastro.core.ui.components.TextFieldType
 import com.lastro.core.ui.theme.LastroColors
 import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
@@ -82,9 +88,7 @@ internal fun ForgotPasswordScreenContent(
     onSubmit: () -> Unit,
     onBack: () -> Unit,
 ) {
-    Scaffold(
-        topBar = { LastroTopBar(title = "Esqueci a senha", onNavigateBack = onBack) }
-    ) { innerPadding ->
+    Scaffold { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -92,15 +96,34 @@ internal fun ForgotPasswordScreenContent(
                 .padding(horizontal = LastroSpacing.screenHorizontal)
                 .verticalScroll(rememberScrollState())
                 .imePadding(),
-            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Spacer(modifier = Modifier.height(LastroSpacing.md))
+
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.surface)
+                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
+                    .clickable(onClick = onBack),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                    contentDescription = "Voltar",
+                    tint = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.size(20.dp),
+                )
+            }
+
             Spacer(modifier = Modifier.height(LastroSpacing.xxxl))
 
             Box(
                 modifier = Modifier
                     .size(64.dp)
-                    .clip(CircleShape)
-                    .background(LastroColors.Accent.copy(alpha = 0.12f)),
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(LastroColors.Accent.copy(alpha = 0.12f))
+                    .border(1.dp, LastroColors.Accent.copy(alpha = 0.25f), RoundedCornerShape(20.dp)),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
@@ -114,34 +137,62 @@ internal fun ForgotPasswordScreenContent(
             Spacer(modifier = Modifier.height(LastroSpacing.xxl))
 
             Text(
-                text = "Informe seu email cadastrado e enviaremos um link para redefinir sua senha.",
-                style = MaterialTheme.typography.bodyLarge,
+                text = "Esqueci a senha",
+                style = MaterialTheme.typography.titleLarge,
+            )
+            Spacer(modifier = Modifier.height(LastroSpacing.sm))
+            Text(
+                text = "Informe o email cadastrado e enviaremos um link para redefinir sua senha.",
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
             Spacer(modifier = Modifier.height(LastroSpacing.xxxl))
 
             if (uiState.success) {
-                LastroBanner(
-                    message = "Se o email existir, você receberá um link de recuperação em breve.",
-                    type = BannerType.Success,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-
-                Spacer(modifier = Modifier.height(LastroSpacing.xxl))
-
-                Text(
-                    text = "Lembrou a senha? Voltar ao login",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.clickable(onClick = onBack),
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(LastroColors.Positive.copy(alpha = 0.10f))
+                        .border(1.dp, LastroColors.Positive.copy(alpha = 0.25f), RoundedCornerShape(16.dp))
+                        .padding(LastroSpacing.xxl),
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+                        Box(
+                            modifier = Modifier
+                                .size(52.dp)
+                                .clip(RoundedCornerShape(26.dp))
+                                .background(LastroColors.Positive.copy(alpha = 0.15f)),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.CheckCircle,
+                                contentDescription = null,
+                                tint = LastroColors.Positive,
+                                modifier = Modifier.size(24.dp),
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(LastroSpacing.md))
+                        Text(
+                            text = "Email enviado",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = LastroColors.Positive,
+                        )
+                        Spacer(modifier = Modifier.height(LastroSpacing.xs))
+                        Text(
+                            text = "Se esse email estiver cadastrado, você receberá um link para redefinir sua senha em breve.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                        )
+                    }
+                }
             } else {
                 ErrorBanner(
                     message = uiState.error ?: "",
                     visible = uiState.error != null,
                 )
-
                 if (uiState.error != null) Spacer(modifier = Modifier.height(LastroSpacing.md))
 
                 LastroTextField(
@@ -149,6 +200,7 @@ internal fun ForgotPasswordScreenContent(
                     onValueChange = onEmailChange,
                     label = "Email",
                     modifier = Modifier.fillMaxWidth(),
+                    type = TextFieldType.Email,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Email,
                         imeAction = ImeAction.Done,
@@ -165,55 +217,62 @@ internal fun ForgotPasswordScreenContent(
                 )
             }
 
-            Spacer(modifier = Modifier.height(LastroSpacing.bottomSafe))
+            Spacer(modifier = Modifier.height(LastroSpacing.xxl))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
+            ) {
+                Text(
+                    text = buildAnnotatedString {
+                        append("Lembrou a senha? ")
+                        withStyle(
+                            SpanStyle(
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                        ) { append("Voltar ao login") }
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.clickable(onClick = onBack),
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Text(
+                text = "Seus dados são criptografados e protegidos",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = LastroSpacing.xxl),
+            )
         }
     }
 }
 
 @Preview(name = "ForgotPassword - Default")
 @Composable
-private fun ForgotPasswordPreview() = LastroTheme {
-    ForgotPasswordScreenContent(
-        uiState = ForgotPasswordUiState(),
-        email = "",
-        onEmailChange = {},
-        onSubmit = {},
-        onBack = {},
-    )
+private fun ForgotPasswordPreview() = LastroTheme(darkTheme = false) {
+    ForgotPasswordScreenContent(uiState = ForgotPasswordUiState(), email = "", onEmailChange = {}, onSubmit = {}, onBack = {})
 }
 
 @Preview(name = "ForgotPassword - Carregando")
 @Composable
-private fun ForgotPasswordLoadingPreview() = LastroTheme {
-    ForgotPasswordScreenContent(
-        uiState = ForgotPasswordUiState(isLoading = true),
-        email = "gabriela@lastro.app",
-        onEmailChange = {},
-        onSubmit = {},
-        onBack = {},
-    )
+private fun ForgotPasswordLoadingPreview() = LastroTheme(darkTheme = false) {
+    ForgotPasswordScreenContent(uiState = ForgotPasswordUiState(isLoading = true), email = "gabriela@lastro.app", onEmailChange = {}, onSubmit = {}, onBack = {})
 }
 
 @Preview(name = "ForgotPassword - Sucesso")
 @Composable
-private fun ForgotPasswordSuccessPreview() = LastroTheme {
-    ForgotPasswordScreenContent(
-        uiState = ForgotPasswordUiState(success = true),
-        email = "gabriela@lastro.app",
-        onEmailChange = {},
-        onSubmit = {},
-        onBack = {},
-    )
+private fun ForgotPasswordSuccessPreview() = LastroTheme(darkTheme = false) {
+    ForgotPasswordScreenContent(uiState = ForgotPasswordUiState(success = true), email = "gabriela@lastro.app", onEmailChange = {}, onSubmit = {}, onBack = {})
 }
 
 @Preview(name = "ForgotPassword - Erro")
 @Composable
-private fun ForgotPasswordErrorPreview() = LastroTheme {
-    ForgotPasswordScreenContent(
-        uiState = ForgotPasswordUiState(error = "Muitas tentativas. Aguarde alguns minutos"),
-        email = "gabriela@lastro.app",
-        onEmailChange = {},
-        onSubmit = {},
-        onBack = {},
-    )
+private fun ForgotPasswordErrorPreview() = LastroTheme(darkTheme = false) {
+    ForgotPasswordScreenContent(uiState = ForgotPasswordUiState(error = "Muitas tentativas. Aguarde alguns minutos"), email = "gabriela@lastro.app", onEmailChange = {}, onSubmit = {}, onBack = {})
 }
