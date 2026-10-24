@@ -4,6 +4,7 @@ import android.view.WindowManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,9 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -46,7 +45,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.res.painterResource
+import com.lastro.core.ui.R
 import com.lastro.core.ui.components.ErrorBanner
+import com.lastro.core.ui.components.LastroBackButton
 import com.lastro.core.ui.components.LastroButton
 import com.lastro.core.ui.components.LastroTextField
 import com.lastro.core.ui.components.TextFieldType
@@ -99,22 +101,7 @@ internal fun ForgotPasswordScreenContent(
         ) {
             Spacer(modifier = Modifier.height(LastroSpacing.md))
 
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(MaterialTheme.colorScheme.surface)
-                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
-                    .clickable(onClick = onBack),
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-                    contentDescription = "Voltar",
-                    tint = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.size(20.dp),
-                )
-            }
+            LastroBackButton(onClick = onBack)
 
             Spacer(modifier = Modifier.height(LastroSpacing.xxxl))
 
@@ -127,7 +114,7 @@ internal fun ForgotPasswordScreenContent(
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.Lock,
+                    painter = painterResource(id = R.drawable.ic_lock),
                     contentDescription = null,
                     tint = LastroColors.Accent,
                     modifier = Modifier.size(28.dp),
@@ -221,7 +208,7 @@ internal fun ForgotPasswordScreenContent(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
+                horizontalArrangement = Arrangement.Center,
             ) {
                 Text(
                     text = buildAnnotatedString {
