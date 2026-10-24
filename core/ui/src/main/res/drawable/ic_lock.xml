@@ -5,28 +5,30 @@
     android:viewportWidth="24"
     android:viewportHeight="24">
 
+    <!-- body: rounded rect x=5,y=11,w=14,h=10,rx=2 -->
     <path
         android:fillColor="#00000000"
-        android:pathData="M8,11 L8,7 A4,4,0,0,1,16,7 L16,11"
+        android:pathData="M7,11 L17,11 A2,2,0,0,1,19,13 L19,19 A2,2,0,0,1,17,21 L7,21 A2,2,0,0,1,5,19 L5,13 A2,2,0,0,1,7,11 Z"
         android:strokeColor="#000000"
         android:strokeLineCap="round"
         android:strokeLineJoin="round"
-        android:strokeWidth="2" />
+        android:strokeWidth="1.8" />
 
+    <!-- shackle: cubic bezier arch upward -->
     <path
         android:fillColor="#00000000"
-        android:pathData="M5,13 A2,2,0,0,0,7,15 L17,15 A2,2,0,0,0,19,13 L19,9 A2,2,0,0,0,17,7 L7,7 A2,2,0,0,0,5,9 Z"
+        android:pathData="M8,11 L8,7 C8,3,16,3,16,7 L16,11"
         android:strokeColor="#000000"
         android:strokeLineCap="round"
         android:strokeLineJoin="round"
-        android:strokeWidth="2" />
+        android:strokeWidth="1.8" />
 
+    <!-- keyhole line -->
     <path
         android:fillColor="#00000000"
-        android:pathData="M11,17 L11,18 A1,1,0,0,0,13,18 L13,17"
+        android:pathData="M12,15 L12,17"
         android:strokeColor="#000000"
         android:strokeLineCap="round"
-        android:strokeLineJoin="round"
-        android:strokeWidth="2" />
+        android:strokeWidth="1.8" />
 
 </vector>
