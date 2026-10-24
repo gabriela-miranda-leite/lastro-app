@@ -1,6 +1,5 @@
 plugins {
     id("lastro.android.feature")
-    alias(libs.plugins.roborazzi)
 }
 
 android {
@@ -9,11 +8,17 @@ android {
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
+            all {
+                if (project.hasProperty("roborazzi.record")) {
+                    it.systemProperty("roborazzi.test.record", "true")
+                }
+            }
         }
     }
 }
 
 dependencies {
+    implementation(project(":core:network"))
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)

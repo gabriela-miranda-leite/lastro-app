@@ -1,6 +1,7 @@
 package com.lastro.feature.auth.screenshot
 
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onRoot
 import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.lastro.core.network.exception.ApiException
@@ -19,7 +20,7 @@ import org.robolectric.annotation.GraphicsMode
 
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(qualifiers = RobolectricDeviceQualifiers.Pixel6)
+@Config(sdk = [34], qualifiers = RobolectricDeviceQualifiers.Pixel6)
 class AuthScreenshotTest {
 
     @get:Rule
@@ -27,7 +28,7 @@ class AuthScreenshotTest {
 
     @Test
     fun loginScreen_default() {
-        composeTestRule.captureRoboImage {
+        composeTestRule.setContent {
             LastroTheme {
                 LoginScreenContent(
                     uiState = AuthUiState(),
@@ -41,11 +42,12 @@ class AuthScreenshotTest {
                 )
             }
         }
+        composeTestRule.onRoot().captureRoboImage(snap("login_default"))
     }
 
     @Test
     fun loginScreen_filled() {
-        composeTestRule.captureRoboImage {
+        composeTestRule.setContent {
             LastroTheme {
                 LoginScreenContent(
                     uiState = AuthUiState(),
@@ -59,11 +61,12 @@ class AuthScreenshotTest {
                 )
             }
         }
+        composeTestRule.onRoot().captureRoboImage(snap("login_filled"))
     }
 
     @Test
     fun loginScreen_error_401() {
-        composeTestRule.captureRoboImage {
+        composeTestRule.setContent {
             LastroTheme {
                 LoginScreenContent(
                     uiState = AuthUiState(error = ApiException.Unauthorized.message),
@@ -77,11 +80,12 @@ class AuthScreenshotTest {
                 )
             }
         }
+        composeTestRule.onRoot().captureRoboImage(snap("login_error_401"))
     }
 
     @Test
     fun loginScreen_loading() {
-        composeTestRule.captureRoboImage {
+        composeTestRule.setContent {
             LastroTheme {
                 LoginScreenContent(
                     uiState = AuthUiState(isLoading = true),
@@ -95,11 +99,12 @@ class AuthScreenshotTest {
                 )
             }
         }
+        composeTestRule.onRoot().captureRoboImage(snap("login_loading"))
     }
 
     @Test
     fun registerScreen_default() {
-        composeTestRule.captureRoboImage {
+        composeTestRule.setContent {
             LastroTheme {
                 RegisterScreenContent(
                     uiState = AuthUiState(),
@@ -114,11 +119,12 @@ class AuthScreenshotTest {
                 )
             }
         }
+        composeTestRule.onRoot().captureRoboImage(snap("register_default"))
     }
 
     @Test
     fun registerScreen_error() {
-        composeTestRule.captureRoboImage {
+        composeTestRule.setContent {
             LastroTheme {
                 RegisterScreenContent(
                     uiState = AuthUiState(error = "email already in use"),
@@ -133,11 +139,12 @@ class AuthScreenshotTest {
                 )
             }
         }
+        composeTestRule.onRoot().captureRoboImage(snap("register_error"))
     }
 
     @Test
     fun forgotPasswordScreen_default() {
-        composeTestRule.captureRoboImage {
+        composeTestRule.setContent {
             LastroTheme {
                 ForgotPasswordScreenContent(
                     uiState = ForgotPasswordUiState(),
@@ -148,11 +155,12 @@ class AuthScreenshotTest {
                 )
             }
         }
+        composeTestRule.onRoot().captureRoboImage(snap("forgot_default"))
     }
 
     @Test
     fun forgotPasswordScreen_success() {
-        composeTestRule.captureRoboImage {
+        composeTestRule.setContent {
             LastroTheme {
                 ForgotPasswordScreenContent(
                     uiState = ForgotPasswordUiState(success = true),
@@ -163,11 +171,12 @@ class AuthScreenshotTest {
                 )
             }
         }
+        composeTestRule.onRoot().captureRoboImage(snap("forgot_success"))
     }
 
     @Test
     fun forgotPasswordScreen_error() {
-        composeTestRule.captureRoboImage {
+        composeTestRule.setContent {
             LastroTheme {
                 ForgotPasswordScreenContent(
                     uiState = ForgotPasswordUiState(error = "Muitas tentativas. Aguarde alguns minutos"),
@@ -178,5 +187,8 @@ class AuthScreenshotTest {
                 )
             }
         }
+        composeTestRule.onRoot().captureRoboImage(snap("forgot_error"))
     }
+
+    private fun snap(name: String) = "src/test/snapshots/$name.png"
 }
