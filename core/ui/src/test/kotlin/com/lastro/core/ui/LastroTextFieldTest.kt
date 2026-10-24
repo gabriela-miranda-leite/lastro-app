@@ -54,7 +54,7 @@ class LastroTextFieldTest {
                 )
             }
         }
-        composeRule.onNodeWithText("Valor").assertIsDisplayed()
+        composeRule.onNodeWithText("VALOR").assertIsDisplayed()
     }
 
     @Test
@@ -69,7 +69,7 @@ class LastroTextFieldTest {
                 )
             }
         }
-        composeRule.onNodeWithText("Senha").assertIsDisplayed()
+        composeRule.onNodeWithText("SENHA").assertIsDisplayed()
     }
 
     @Test
