@@ -1,8 +1,10 @@
 package com.lastro.core.network.service
 
 import com.lastro.core.network.dto.auth.AuthResponse
+import com.lastro.core.network.dto.auth.ForgotPasswordRequest
 import com.lastro.core.network.dto.auth.LoginRequest
 import com.lastro.core.network.dto.auth.LogoutRequest
+import com.lastro.core.network.dto.auth.MessageResponse
 import com.lastro.core.network.dto.auth.RefreshRequest
 import com.lastro.core.network.dto.auth.RegisterRequest
 import retrofit2.http.Body
@@ -23,4 +25,7 @@ interface AuthApiService {
 
     @POST("auth/logout/all")
     suspend fun logoutAll(@Body body: LogoutRequest)
+
+    @POST("auth/forgot-password")
+    suspend fun forgotPassword(@Body body: ForgotPasswordRequest): MessageResponse
 }

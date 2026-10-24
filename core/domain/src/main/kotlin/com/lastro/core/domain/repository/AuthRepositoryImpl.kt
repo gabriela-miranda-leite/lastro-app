@@ -3,6 +3,7 @@ package com.lastro.core.domain.repository
 import com.lastro.core.common.Result
 import com.lastro.core.common.mapSuccess
 import com.lastro.core.network.auth.TokenStore
+import com.lastro.core.network.dto.auth.ForgotPasswordRequest
 import com.lastro.core.network.dto.auth.LoginRequest
 import com.lastro.core.network.dto.auth.LogoutRequest
 import com.lastro.core.network.dto.auth.RefreshRequest
@@ -40,7 +41,10 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun isLoggedIn(): Boolean = tokenStore.getAccessToken() != null
 
-    suspend fun refresh(): Result<Unit> {
+    override suspend fun forgotPassword(email: String): Result<Unit> =
+        safeApiCall { api.forgotPassword(ForgotPasswordRequest(email)) }.mapSuccess { Unit }
+
+    override suspend fun refresh(): Result<Unit> {
         val refreshToken = tokenStore.getRefreshToken()
             ?: return Result.Error(IllegalStateException("No refresh token"))
         val result = safeApiCall { api.refresh(RefreshRequest(refreshToken)) }

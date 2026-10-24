@@ -8,6 +8,8 @@ class FakeAuthRepository @Inject constructor() : AuthRepository {
 
     var loginResult: Result<Unit> = Result.Success(Unit)
     var registerResult: Result<Unit> = Result.Success(Unit)
+    var forgotPasswordResult: Result<Unit> = Result.Success(Unit)
+    var refreshResult: Result<Unit> = Result.Success(Unit)
     var loggedIn: Boolean = false
 
     override suspend fun login(email: String, password: String): Result<Unit> = loginResult
@@ -20,4 +22,8 @@ class FakeAuthRepository @Inject constructor() : AuthRepository {
     }
 
     override suspend fun isLoggedIn(): Boolean = loggedIn
+
+    override suspend fun forgotPassword(email: String): Result<Unit> = forgotPasswordResult
+
+    override suspend fun refresh(): Result<Unit> = refreshResult
 }
