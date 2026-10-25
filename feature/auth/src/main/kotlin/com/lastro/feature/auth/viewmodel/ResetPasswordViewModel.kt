@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lastro.core.common.Result
 import com.lastro.core.domain.repository.AuthRepository
+import com.lastro.core.ui.UiText
+import com.lastro.feature.auth.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +16,7 @@ import javax.inject.Inject
 
 data class ResetPasswordUiState(
     val isLoading: Boolean = false,
-    val error: String? = null,
+    val error: UiText? = null,
 )
 
 sealed interface ResetPasswordEvent {
@@ -35,10 +37,10 @@ class ResetPasswordViewModel @Inject constructor(
     fun submit(token: String, newPassword: String) {
         viewModelScope.launch {
             _uiState.value = ResetPasswordUiState(isLoading = true)
-            when (val result = authRepository.resetPassword(token, newPassword)) {
+            when (authRepository.resetPassword(token, newPassword)) {
                 is Result.Success -> _events.emit(ResetPasswordEvent.Success)
                 is Result.Error -> _uiState.value = ResetPasswordUiState(
-                    error = "Link inválido ou expirado. Solicite um novo link."
+                    error = UiText.Res(R.string.reset_password_error_link)
                 )
                 is Result.Loading -> Unit
             }

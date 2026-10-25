@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lastro.core.common.Result
 import com.lastro.core.domain.usecase.UpdateUserProfileUseCase
+import com.lastro.core.ui.UiText
+import com.lastro.feature.auth.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +17,7 @@ import javax.inject.Inject
 
 data class OnboardingIncomeUiState(
     val isLoading: Boolean = false,
-    val error: String? = null,
+    val error: UiText? = null,
 )
 
 sealed interface OnboardingIncomeEvent {
@@ -35,7 +37,7 @@ class OnboardingIncomeViewModel @Inject constructor(
 
     fun submit(income: BigDecimal, savingGoalPct: Double) {
         if (income <= BigDecimal.ZERO) {
-            _uiState.value = OnboardingIncomeUiState(error = "Não foi possível salvar. Tente novamente")
+            _uiState.value = OnboardingIncomeUiState(error = UiText.Res(R.string.onboarding_income_error_save))
             return
         }
         viewModelScope.launch {
@@ -43,7 +45,7 @@ class OnboardingIncomeViewModel @Inject constructor(
             when (updateUserProfile(monthlyIncome = income, name = null, savingGoalPct = savingGoalPct)) {
                 is Result.Success -> _events.emit(OnboardingIncomeEvent.Success)
                 is Result.Error -> _uiState.value = OnboardingIncomeUiState(
-                    error = "Não foi possível salvar. Tente novamente"
+                    error = UiText.Res(R.string.onboarding_income_error_save)
                 )
                 is Result.Loading -> Unit
             }

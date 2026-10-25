@@ -3,8 +3,9 @@ package com.lastro.feature.auth.screenshot
 import app.cash.paparazzi.DeviceConfig
 import app.cash.paparazzi.Paparazzi
 import com.android.ide.common.rendering.api.SessionParams
-import com.lastro.core.network.exception.ApiException
+import com.lastro.core.ui.UiText
 import com.lastro.core.ui.theme.LastroTheme
+import com.lastro.feature.auth.R
 import com.lastro.feature.auth.ui.ForgotPasswordScreenContent
 import com.lastro.feature.auth.ui.LoginScreenContent
 import com.lastro.feature.auth.ui.OnboardingIncomeScreenContent
@@ -32,7 +33,7 @@ class LoginScreenshotTest {
 
     @Test fun loading() = paparazzi.snapshot { LastroTheme(darkTheme = false) { LoginScreenContent(uiState = AuthUiState(isLoading = true), email = "gabriela@lastro.app", password = "senha123", onEmailChange = {}, onPasswordChange = {}, onLogin = {}, onForgotPassword = {}, onRegister = {}) } }
 
-    @Test fun error_401() = paparazzi.snapshot { LastroTheme(darkTheme = false) { LoginScreenContent(uiState = AuthUiState(error = ApiException.Unauthorized.message), email = "gabriela@lastro.app", password = "errada", onEmailChange = {}, onPasswordChange = {}, onLogin = {}, onForgotPassword = {}, onRegister = {}) } }
+    @Test fun error_401() = paparazzi.snapshot { LastroTheme(darkTheme = false) { LoginScreenContent(uiState = AuthUiState(error = UiText.Res(R.string.login_error_unauthorized)), email = "gabriela@lastro.app", password = "errada", onEmailChange = {}, onPasswordChange = {}, onLogin = {}, onForgotPassword = {}, onRegister = {}) } }
 
     @Test fun default_dark() = paparazzi.snapshot { LastroTheme(darkTheme = true) { LoginScreenContent(uiState = AuthUiState(), email = "", password = "", onEmailChange = {}, onPasswordChange = {}, onLogin = {}, onForgotPassword = {}, onRegister = {}) } }
 }
@@ -48,7 +49,7 @@ class RegisterScreenshotTest {
 
     @Test fun default() = paparazzi.snapshot { LastroTheme(darkTheme = false) { RegisterScreenContent(uiState = AuthUiState(), name = "", email = "", password = "", confirmPassword = "", termsAccepted = false, onNameChange = {}, onEmailChange = {}, onPasswordChange = {}, onConfirmPasswordChange = {}, onTermsChange = {}, onRegister = {}, onBack = {}) } }
 
-    @Test fun error() = paparazzi.snapshot { LastroTheme(darkTheme = false) { RegisterScreenContent(uiState = AuthUiState(error = "Email já cadastrado"), name = "Gabriela", email = "gabriela@lastro.app", password = "Senha123!", confirmPassword = "Senha123!", termsAccepted = true, onNameChange = {}, onEmailChange = {}, onPasswordChange = {}, onConfirmPasswordChange = {}, onTermsChange = {}, onRegister = {}, onBack = {}) } }
+    @Test fun error() = paparazzi.snapshot { LastroTheme(darkTheme = false) { RegisterScreenContent(uiState = AuthUiState(error = UiText.Literal("Email já cadastrado")), name = "Gabriela", email = "gabriela@lastro.app", password = "Senha123!", confirmPassword = "Senha123!", termsAccepted = true, onNameChange = {}, onEmailChange = {}, onPasswordChange = {}, onConfirmPasswordChange = {}, onTermsChange = {}, onRegister = {}, onBack = {}) } }
 
     @Test fun default_dark() = paparazzi.snapshot { LastroTheme(darkTheme = true) { RegisterScreenContent(uiState = AuthUiState(), name = "", email = "", password = "", confirmPassword = "", termsAccepted = false, onNameChange = {}, onEmailChange = {}, onPasswordChange = {}, onConfirmPasswordChange = {}, onTermsChange = {}, onRegister = {}, onBack = {}) } }
 }
@@ -66,7 +67,7 @@ class ForgotPasswordScreenshotTest {
 
     @Test fun success() = paparazzi.snapshot { LastroTheme(darkTheme = false) { ForgotPasswordScreenContent(uiState = ForgotPasswordUiState(success = true), email = "gabriela@lastro.app", onEmailChange = {}, onSubmit = {}, onBack = {}) } }
 
-    @Test fun error() = paparazzi.snapshot { LastroTheme(darkTheme = false) { ForgotPasswordScreenContent(uiState = ForgotPasswordUiState(error = "Muitas tentativas. Aguarde alguns minutos"), email = "gabriela@lastro.app", onEmailChange = {}, onSubmit = {}, onBack = {}) } }
+    @Test fun error() = paparazzi.snapshot { LastroTheme(darkTheme = false) { ForgotPasswordScreenContent(uiState = ForgotPasswordUiState(error = UiText.Res(R.string.forgot_password_error_too_many)), email = "gabriela@lastro.app", onEmailChange = {}, onSubmit = {}, onBack = {}) } }
 
     @Test fun default_dark() = paparazzi.snapshot { LastroTheme(darkTheme = true) { ForgotPasswordScreenContent(uiState = ForgotPasswordUiState(), email = "", onEmailChange = {}, onSubmit = {}, onBack = {}) } }
 
@@ -86,7 +87,7 @@ class OnboardingIncomeScreenshotTest {
 
     @Test fun filled() = paparazzi.snapshot { LastroTheme(darkTheme = false) { OnboardingIncomeScreenContent(uiState = OnboardingIncomeUiState(), income = "5000", savingGoalPct = 0.20f, onIncomeChange = {}, onSavingGoalChange = {}, onSubmit = {}, onSkip = {}) } }
 
-    @Test fun error() = paparazzi.snapshot { LastroTheme(darkTheme = false) { OnboardingIncomeScreenContent(uiState = OnboardingIncomeUiState(error = "Não foi possível salvar. Tente novamente"), income = "5000", savingGoalPct = 0.20f, onIncomeChange = {}, onSavingGoalChange = {}, onSubmit = {}, onSkip = {}) } }
+    @Test fun error() = paparazzi.snapshot { LastroTheme(darkTheme = false) { OnboardingIncomeScreenContent(uiState = OnboardingIncomeUiState(error = UiText.Res(R.string.onboarding_income_error_save)), income = "5000", savingGoalPct = 0.20f, onIncomeChange = {}, onSavingGoalChange = {}, onSubmit = {}, onSkip = {}) } }
 
     @Test fun default_dark() = paparazzi.snapshot { LastroTheme(darkTheme = true) { OnboardingIncomeScreenContent(uiState = OnboardingIncomeUiState(), income = "", savingGoalPct = 0.20f, onIncomeChange = {}, onSavingGoalChange = {}, onSubmit = {}, onSkip = {}) } }
 }
@@ -104,7 +105,7 @@ class ResetPasswordScreenshotTest {
 
     @Test fun filled() = paparazzi.snapshot { LastroTheme(darkTheme = false) { ResetPasswordScreenContent(uiState = ResetPasswordUiState(), newPassword = "Senha123!", confirmPassword = "Senha123!", onNewPasswordChange = {}, onConfirmPasswordChange = {}, onSubmit = {}, onBack = {}) } }
 
-    @Test fun error() = paparazzi.snapshot { LastroTheme(darkTheme = false) { ResetPasswordScreenContent(uiState = ResetPasswordUiState(error = "Link inválido ou expirado. Solicite um novo link."), newPassword = "Senha123!", confirmPassword = "Senha123!", onNewPasswordChange = {}, onConfirmPasswordChange = {}, onSubmit = {}, onBack = {}) } }
+    @Test fun error() = paparazzi.snapshot { LastroTheme(darkTheme = false) { ResetPasswordScreenContent(uiState = ResetPasswordUiState(error = UiText.Res(R.string.reset_password_error_link)), newPassword = "Senha123!", confirmPassword = "Senha123!", onNewPasswordChange = {}, onConfirmPasswordChange = {}, onSubmit = {}, onBack = {}) } }
 
     @Test fun default_dark() = paparazzi.snapshot { LastroTheme(darkTheme = true) { ResetPasswordScreenContent(uiState = ResetPasswordUiState(), newPassword = "", confirmPassword = "", onNewPasswordChange = {}, onConfirmPasswordChange = {}, onSubmit = {}, onBack = {}) } }
 }

@@ -27,7 +27,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.lastro.core.ui.UiText
 import com.lastro.core.ui.components.LastroBanner
+import com.lastro.core.ui.resolve
+import com.lastro.feature.auth.R
 import com.lastro.core.ui.components.LastroBackButton
 import com.lastro.core.ui.components.LastroButton
 import com.lastro.core.ui.components.LastroTextField
@@ -119,7 +122,7 @@ internal fun ResetPasswordScreenContent(
 
             Spacer(modifier = Modifier.height(LastroSpacing.xxxl))
 
-            if (uiState.error != null) LastroBanner(message = uiState.error)
+            if (uiState.error != null) LastroBanner(message = uiState.error!!.resolve())
             if (uiState.error != null) Spacer(modifier = Modifier.height(LastroSpacing.md))
 
             LastroTextField(
@@ -180,7 +183,7 @@ private fun ResetPasswordPreview() = LastroTheme(darkTheme = false) {
 @Composable
 private fun ResetPasswordErrorPreview() = LastroTheme(darkTheme = false) {
     ResetPasswordScreenContent(
-        uiState = ResetPasswordUiState(error = "Link inválido ou expirado. Solicite um novo link."),
+        uiState = ResetPasswordUiState(error = UiText.Res(R.string.reset_password_error_link)),
         newPassword = "Senha123!",
         confirmPassword = "Senha123!",
         onNewPasswordChange = {},

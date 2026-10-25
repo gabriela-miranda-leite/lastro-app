@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lastro.core.common.Result
 import com.lastro.core.domain.repository.AuthRepository
+import com.lastro.core.network.exception.ApiException
+import com.lastro.core.ui.UiText
+import com.lastro.feature.auth.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +33,12 @@ class AuthViewModel @Inject constructor(
                 is Result.Success -> _events.emit(AuthEvent.LoginSuccess)
                 is Result.Error -> _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    error = result.message ?: "Erro ao fazer login"
+                    error = when (result.exception) {
+                        is ApiException.Unauthorized -> UiText.Res(R.string.login_error_unauthorized)
+                        is ApiException.TooManyRequests -> UiText.Res(R.string.forgot_password_error_too_many)
+                        else -> result.message?.let { UiText.Literal(it) }
+                            ?: UiText.Res(R.string.login_error_generic)
+                    },
                 )
                 is Result.Loading -> Unit
             }
@@ -44,7 +52,8 @@ class AuthViewModel @Inject constructor(
                 is Result.Success -> _events.emit(AuthEvent.RegisterSuccess)
                 is Result.Error -> _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    error = result.message ?: "Erro ao criar conta"
+                    error = result.message?.let { UiText.Literal(it) }
+                        ?: UiText.Res(R.string.register_error_generic),
                 )
                 is Result.Loading -> Unit
             }

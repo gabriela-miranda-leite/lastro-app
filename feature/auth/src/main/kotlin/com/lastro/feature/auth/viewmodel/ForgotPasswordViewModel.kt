@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.lastro.core.common.Result
 import com.lastro.core.domain.repository.AuthRepository
 import com.lastro.core.network.exception.ApiException
+import com.lastro.core.ui.UiText
+import com.lastro.feature.auth.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,8 +28,10 @@ class ForgotPasswordViewModel @Inject constructor(
                 is Result.Success -> _uiState.value = ForgotPasswordUiState(success = true)
                 is Result.Error -> _uiState.value = ForgotPasswordUiState(
                     error = when (result.message) {
-                        ApiException.TooManyRequests.message -> "Muitas tentativas. Aguarde alguns minutos"
-                        else -> "Não foi possível enviar o link. Tente novamente"
+                        ApiException.TooManyRequests.message ->
+                            UiText.Res(R.string.forgot_password_error_too_many)
+                        else ->
+                            UiText.Res(R.string.forgot_password_error_generic)
                     }
                 )
                 is Result.Loading -> Unit

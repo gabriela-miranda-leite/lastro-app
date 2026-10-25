@@ -50,7 +50,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lastro.core.ui.R
+import com.lastro.core.common.centsStringToReais
+import com.lastro.core.common.toBRL
+import com.lastro.core.ui.UiText
 import com.lastro.core.ui.components.LastroBanner
+import com.lastro.core.ui.resolve
+import com.lastro.feature.auth.R as AuthR
 import com.lastro.core.ui.components.ButtonVariant
 import com.lastro.core.ui.components.LastroButton
 import com.lastro.core.ui.components.LastroStepIndicator
@@ -63,9 +68,6 @@ import com.lastro.feature.auth.viewmodel.OnboardingIncomeEvent
 import com.lastro.feature.auth.viewmodel.OnboardingIncomeUiState
 import com.lastro.feature.auth.viewmodel.OnboardingIncomeViewModel
 import java.math.BigDecimal
-import java.math.RoundingMode
-import java.text.NumberFormat
-import java.util.Locale
 
 @Composable
 fun OnboardingIncomeScreen(
@@ -98,8 +100,7 @@ fun OnboardingIncomeScreen(
         onIncomeChange = { income = it },
         onSavingGoalChange = { savingGoalPct = it },
         onSubmit = {
-            val cents = income.toBigDecimalOrNull() ?: BigDecimal.ZERO
-            viewModel.submit(cents.divide(BigDecimal(100), 2, RoundingMode.HALF_UP), savingGoalPct.toDouble())
+            viewModel.submit(income.centsStringToReais(), savingGoalPct.toDouble())
         },
         onSkip = { viewModel.skip() },
     )
@@ -116,14 +117,10 @@ internal fun OnboardingIncomeScreenContent(
     onSubmit: () -> Unit,
     onSkip: () -> Unit,
 ) {
-    val parsedIncome = (income.toBigDecimalOrNull() ?: BigDecimal.ZERO)
-        .divide(BigDecimal(100), 2, RoundingMode.HALF_UP)
+    val parsedIncome = income.centsStringToReais()
     val canSubmit = parsedIncome > BigDecimal.ZERO
     val goalAmount = parsedIncome.multiply(BigDecimal.valueOf(savingGoalPct.toDouble()))
-    val goalFormatted = NumberFormat.getNumberInstance(Locale("pt", "BR")).apply {
-        minimumFractionDigits = 0
-        maximumFractionDigits = 0
-    }.format(goalAmount)
+    val goalFormatted = goalAmount.toBRL()
     val goalPctInt = (savingGoalPct * 100).toInt()
 
     Scaffold(
@@ -207,7 +204,7 @@ internal fun OnboardingIncomeScreenContent(
 
             Spacer(modifier = Modifier.height(LastroSpacing.xxxl))
 
-            if (uiState.error != null) LastroBanner(message = uiState.error)
+            if (uiState.error != null) LastroBanner(message = uiState.error!!.resolve())
             if (uiState.error != null) Spacer(modifier = Modifier.height(LastroSpacing.md))
 
             LastroTextField(
@@ -249,7 +246,7 @@ internal fun OnboardingIncomeScreenContent(
                 )
                 Column(horizontalAlignment = Alignment.End) {
                     Text(
-                        text = "R$ $goalFormatted",
+                        text = goalFormatted,
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold,
                     )
@@ -370,7 +367,7 @@ private fun OnboardingIncomeFilledPreview() = LastroTheme(darkTheme = false) {
 @Composable
 private fun OnboardingIncomeErrorPreview() = LastroTheme(darkTheme = false) {
     OnboardingIncomeScreenContent(
-        uiState = OnboardingIncomeUiState(error = "Não foi possível salvar. Tente novamente"),
+        uiState = OnboardingIncomeUiState(error = UiText.Res(AuthR.string.onboarding_income_error_save)),
         income = "5000",
         savingGoalPct = 0.20f,
         onIncomeChange = {},

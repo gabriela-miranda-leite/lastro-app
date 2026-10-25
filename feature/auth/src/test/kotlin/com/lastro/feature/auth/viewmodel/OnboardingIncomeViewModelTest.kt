@@ -3,6 +3,8 @@ package com.lastro.feature.auth.viewmodel
 import com.lastro.core.common.Result
 import com.lastro.core.domain.usecase.UpdateUserProfileUseCase
 import com.lastro.core.testing.repository.FakeUserRepository
+import com.lastro.core.ui.UiText
+import com.lastro.feature.auth.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.toList
@@ -68,7 +70,7 @@ class OnboardingIncomeViewModelTest {
 
         val state = viewModel.uiState.value
         assertFalse(state.isLoading)
-        assertEquals("Não foi possível salvar. Tente novamente", state.error)
+        assertEquals(UiText.Res(R.string.onboarding_income_error_save), state.error)
     }
 
     @Test
@@ -77,6 +79,6 @@ class OnboardingIncomeViewModelTest {
 
         val state = viewModel.uiState.value
         assertFalse(state.isLoading)
-        assertEquals("Não foi possível salvar. Tente novamente", state.error)
+        assertEquals(UiText.Res(R.string.onboarding_income_error_save), state.error)
     }
 }

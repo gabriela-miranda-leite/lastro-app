@@ -2,6 +2,8 @@ package com.lastro.feature.auth.viewmodel
 
 import com.lastro.core.common.Result
 import com.lastro.core.testing.repository.FakeAuthRepository
+import com.lastro.core.ui.UiText
+import com.lastro.feature.auth.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.toList
@@ -66,7 +68,7 @@ class ResetPasswordViewModelTest {
 
         val state = viewModel.uiState.value
         assertFalse(state.isLoading)
-        assertEquals("Link inválido ou expirado. Solicite um novo link.", state.error)
+        assertEquals(UiText.Res(R.string.reset_password_error_link), state.error)
     }
 
     @Test

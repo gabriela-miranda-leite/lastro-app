@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Login -->
+    <string name="login_title">Lastro</string>
+    <string name="login_subtitle">Controle financeiro pessoal</string>
+    <string name="login_field_email">Email</string>
+    <string name="login_field_password">Senha</string>
+    <string name="login_action_forgot_password">Esqueci a senha</string>
+    <string name="login_action_submit">Entrar</string>
+    <string name="login_action_register_prefix">Não tem conta? </string>
+    <string name="login_action_register">Criar conta</string>
+    <string name="login_security_note">Seus dados são criptografados e protegidos</string>
+    <string name="login_error_unauthorized">Email ou senha incorretos</string>
+    <string name="login_error_generic">Erro ao fazer login</string>
+
+    <!-- Register -->
+    <string name="register_field_name">Nome</string>
+    <string name="register_field_email">Email</string>
+    <string name="register_field_password">Senha</string>
+    <string name="register_field_confirm_password">Confirmar senha</string>
+    <string name="register_error_generic">Erro ao criar conta</string>
+
+    <!-- Forgot password -->
+    <string name="forgot_password_field_email">Email</string>
+    <string name="forgot_password_error_too_many">Muitas tentativas. Aguarde alguns minutos</string>
+    <string name="forgot_password_error_generic">Não foi possível enviar o link. Tente novamente</string>
+
+    <!-- Reset password -->
+    <string name="reset_password_field_new">Nova senha</string>
+    <string name="reset_password_field_confirm">Confirmar nova senha</string>
+    <string name="reset_password_error_link">Link inválido ou expirado. Solicite um novo link.</string>
+
+    <!-- Onboarding income -->
+    <string name="onboarding_income_step_label">PASSO 3 DE 3</string>
+    <string name="onboarding_income_title">Configure seu perfil financeiro</string>
+    <string name="onboarding_income_subtitle">Essas informações ajudam o Lastro a calcular seus limites de gasto e meta de poupança.</string>
+    <string name="onboarding_income_field_renda">RENDA MENSAL LÍQUIDA</string>
+    <string name="onboarding_income_field_meta">META DE POUPANÇA</string>
+    <string name="onboarding_income_per_month">por mês</string>
+    <string name="onboarding_income_slider_min">0%%</string>
+    <string name="onboarding_income_slider_max">50%%</string>
+    <string name="onboarding_income_tip_bold">Regra 50/30/20</string>
+    <string name="onboarding_income_tip_rest"> — sugerimos guardar pelo menos 20%% da renda: 50%% para necessidades, 30%% para lazer.</string>
+    <string name="onboarding_income_error_save">Não foi possível salvar. Tente novamente</string>
+</resources>
