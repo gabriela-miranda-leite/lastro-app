@@ -37,8 +37,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -181,15 +185,16 @@ internal fun OnboardingIncomeScreenContent(
             Spacer(modifier = Modifier.height(LastroSpacing.xxl))
 
             Text(
-                text = "Passo 3 de 3",
-                style = MaterialTheme.typography.labelSmall,
+                text = "PASSO 3 DE 3",
+                style = MaterialTheme.typography.labelMedium,
                 color = LastroColors.Accent,
-                fontWeight = FontWeight.SemiBold,
+                letterSpacing = 0.8.sp,
             )
             Spacer(modifier = Modifier.height(LastroSpacing.xs))
             Text(
                 text = "Configure seu perfil financeiro",
                 style = MaterialTheme.typography.titleLarge,
+                fontSize = 26.sp,
             )
             Spacer(modifier = Modifier.height(LastroSpacing.xs))
             Text(
@@ -206,7 +211,7 @@ internal fun OnboardingIncomeScreenContent(
             LastroTextField(
                 value = income,
                 onValueChange = onIncomeChange,
-                label = "Renda mensal líquida",
+                label = "RENDA MENSAL LÍQUIDA",
                 modifier = Modifier.fillMaxWidth(),
                 type = TextFieldType.Money,
                 keyboardOptions = KeyboardOptions(
@@ -218,10 +223,10 @@ internal fun OnboardingIncomeScreenContent(
             Spacer(modifier = Modifier.height(LastroSpacing.xxl))
 
             Text(
-                text = "Meta de poupança",
+                text = "META DE POUPANÇA",
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontWeight = FontWeight.SemiBold,
+                letterSpacing = 0.5.sp,
             )
             Spacer(modifier = Modifier.height(LastroSpacing.sm))
 
@@ -236,7 +241,7 @@ internal fun OnboardingIncomeScreenContent(
             ) {
                 Text(
                     text = "$goalPctInt%",
-                    style = MaterialTheme.typography.headlineMedium,
+                    style = MaterialTheme.typography.headlineLarge,
                     color = LastroColors.Accent,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.weight(1f),
@@ -244,12 +249,12 @@ internal fun OnboardingIncomeScreenContent(
                 Column(horizontalAlignment = Alignment.End) {
                     Text(
                         text = "R$ $goalFormatted",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold,
                     )
                     Text(
                         text = "por mês",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
@@ -300,9 +305,16 @@ internal fun OnboardingIncomeScreenContent(
                 )
                 Spacer(modifier = Modifier.size(LastroSpacing.sm))
                 Text(
-                    text = "Regra 50/30/20 — sugerimos guardar pelo menos 20% da renda: 50% para necessidades, 30% para lazer.",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    text = buildAnnotatedString {
+                        withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)) {
+                            append("Regra 50/30/20")
+                        }
+                        withStyle(SpanStyle(color = MaterialTheme.colorScheme.onSurfaceVariant)) {
+                            append(" — sugerimos guardar pelo menos 20% da renda: 50% para necessidades, 30% para lazer.")
+                        }
+                    },
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Normal,
                 )
             }
 
