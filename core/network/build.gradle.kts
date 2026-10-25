@@ -15,7 +15,7 @@ val localProperties =
 val apiBaseUrl: String =
     localProperties.getProperty("API_BASE_URL")
         ?: System.getenv("API_BASE_URL")
-        ?: "http://10.0.2.2:8080/"
+        ?: "http://10.0.2.2:8080/v1/"
 
 android {
     namespace = "com.lastro.core.network"

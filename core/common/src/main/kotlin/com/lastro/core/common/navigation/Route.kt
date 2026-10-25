@@ -2,9 +2,12 @@ package com.lastro.core.common.navigation
 
 sealed class Route(val path: String) {
 
+    data object Splash : Route("splash")
+
     sealed class Auth(path: String) : Route(path) {
         data object Login : Auth("auth/login")
         data object Register : Auth("auth/register")
+        data object ForgotPassword : Auth("auth/forgot-password")
     }
 
     data object Dashboard : Route("dashboard")

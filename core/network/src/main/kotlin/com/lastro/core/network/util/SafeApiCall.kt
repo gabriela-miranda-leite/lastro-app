@@ -11,6 +11,7 @@ suspend fun <T> safeApiCall(call: suspend () -> T): Result<T> = try {
     when (e.code()) {
         401 -> Result.Error(ApiException.Unauthorized)
         404 -> Result.Error(ApiException.NotFound)
+        429 -> Result.Error(ApiException.TooManyRequests)
         else -> Result.Error(ApiException.ServerError(e.code()))
     }
 } catch (e: IOException) {
