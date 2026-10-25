@@ -134,6 +134,7 @@ internal fun WelcomeScreenContent(
                     append(stringResource(R.string.welcome_title_1))
                     append("\n")
                     append(stringResource(R.string.welcome_title_2))
+                    append(" ")
                     withStyle(SpanStyle(color = LastroColors.Accent)) {
                         append(stringResource(R.string.welcome_title_accent))
                     }
