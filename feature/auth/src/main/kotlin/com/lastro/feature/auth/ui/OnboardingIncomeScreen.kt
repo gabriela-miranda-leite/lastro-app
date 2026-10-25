@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,6 +46,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lastro.core.ui.R
 import com.lastro.core.ui.components.LastroBanner
+import com.lastro.core.ui.components.ButtonVariant
 import com.lastro.core.ui.components.LastroButton
 import com.lastro.core.ui.components.LastroStepIndicator
 import com.lastro.core.ui.components.LastroTextField
@@ -137,6 +139,7 @@ internal fun OnboardingIncomeScreenContent(
                     text = "Pular por agora",
                     onClick = onSkip,
                     enabled = !uiState.isLoading,
+                    variant = ButtonVariant.Outlined,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
@@ -164,12 +167,11 @@ internal fun OnboardingIncomeScreenContent(
                 modifier = Modifier
                     .size(72.dp)
                     .clip(RoundedCornerShape(22.dp))
-                    .background(LastroColors.Accent.copy(alpha = 0.12f))
-                    .border(1.dp, LastroColors.Accent.copy(alpha = 0.25f), RoundedCornerShape(22.dp)),
+                    .background(LastroColors.Accent.copy(alpha = 0.12f)),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_info_circle),
+                    painter = painterResource(id = R.drawable.ic_chart_growth),
                     contentDescription = null,
                     tint = LastroColors.Accent,
                     modifier = Modifier.size(32.dp),
@@ -261,8 +263,24 @@ internal fun OnboardingIncomeScreenContent(
                 colors = SliderDefaults.colors(
                     thumbColor = LastroColors.Accent,
                     activeTrackColor = LastroColors.Accent,
+                    inactiveTrackColor = LastroColors.Accent.copy(alpha = 0.24f),
                 ),
             )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(
+                    text = "0%",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Text(
+                    text = "50%",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
 
             Spacer(modifier = Modifier.height(LastroSpacing.md))
 
