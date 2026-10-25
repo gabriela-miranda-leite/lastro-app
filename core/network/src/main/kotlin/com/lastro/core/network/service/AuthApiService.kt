@@ -25,7 +25,7 @@ interface AuthApiService {
     suspend fun logout(@Body body: LogoutRequest)
 
     @POST("auth/logout/all")
-    suspend fun logoutAll(@Body body: LogoutRequest)
+    suspend fun logoutAll()
 
     @POST("auth/forgot-password")
     suspend fun forgotPassword(@Body body: ForgotPasswordRequest): MessageResponse
