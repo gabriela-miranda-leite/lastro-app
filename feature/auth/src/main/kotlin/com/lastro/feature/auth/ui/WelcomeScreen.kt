@@ -172,8 +172,8 @@ internal fun WelcomeScreenContent(
                 )
                 WelcomeFeatureCard(
                     iconRes = CoreR.drawable.ic_clock,
-                    iconTint = Color(0xFFFFD06B),
-                    iconBackground = Color(0xFFFFD06B).copy(alpha = 0.15f),
+                    iconTint = LastroColors.Warning,
+                    iconBackground = LastroColors.Warning.copy(alpha = 0.15f),
                     title = stringResource(R.string.welcome_feature3_title),
                     description = stringResource(R.string.welcome_feature3_desc),
                 )
