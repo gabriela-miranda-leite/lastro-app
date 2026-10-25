@@ -3,6 +3,7 @@ package com.lastro.core.ui.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.ui.draw.shadow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -17,6 +18,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.lastro.core.ui.theme.LastroColors
 import com.lastro.core.ui.theme.LastroTheme
 
 enum class ButtonVariant { Primary, Outlined, Ghost }
@@ -37,7 +39,12 @@ fun LastroButton(
     when (variant) {
         ButtonVariant.Primary -> Button(
             onClick = onClick,
-            modifier = baseModifier,
+            modifier = baseModifier.shadow(
+                elevation = 8.dp,
+                shape = MaterialTheme.shapes.large,
+                ambientColor = LastroColors.Accent.copy(alpha = 0.35f),
+                spotColor = LastroColors.Accent.copy(alpha = 0.35f),
+            ),
             enabled = enabled && !loading,
             shape = MaterialTheme.shapes.large,
         ) {

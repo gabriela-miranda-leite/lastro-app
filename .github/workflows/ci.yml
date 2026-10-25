@@ -53,7 +53,12 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Run unit tests with coverage
-        run: ./gradlew testDebugUnitTest createDebugUnitTestCoverageReport
+        run: ./gradlew testDebugUnitTest
+          :core:common:createDebugUnitTestCoverageReport
+          :core:domain:createDebugUnitTestCoverageReport
+          :core:network:createDebugUnitTestCoverageReport
+          :core:ui:createDebugUnitTestCoverageReport
+          :feature:auth:createDebugUnitTestCoverageReport
 
       - name: Upload test results
         if: always()
@@ -88,7 +93,12 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Generate coverage reports
-        run: ./gradlew testDebugUnitTest createDebugUnitTestCoverageReport
+        run: ./gradlew testDebugUnitTest
+          :core:common:createDebugUnitTestCoverageReport
+          :core:domain:createDebugUnitTestCoverageReport
+          :core:network:createDebugUnitTestCoverageReport
+          :core:ui:createDebugUnitTestCoverageReport
+          :feature:auth:createDebugUnitTestCoverageReport
 
       - name: Comment coverage on PR
         env:
