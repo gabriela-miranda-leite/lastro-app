@@ -2,6 +2,8 @@ package com.lastro.feature.auth.viewmodel
 
 import com.lastro.core.common.Result
 import com.lastro.core.testing.repository.FakeAuthRepository
+import com.lastro.core.ui.UiText
+import com.lastro.feature.auth.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.toList
@@ -59,7 +61,7 @@ class AuthViewModelTest {
 
         val state = viewModel.uiState.value
         assertFalse(state.isLoading)
-        assertEquals("invalid credentials", state.error)
+        assertEquals(UiText.Literal("invalid credentials"), state.error)
     }
 
     @Test
@@ -68,7 +70,7 @@ class AuthViewModelTest {
 
         viewModel.login("email@test.com", "wrong")
 
-        assertEquals("Erro ao fazer login", viewModel.uiState.value.error)
+        assertEquals(UiText.Res(R.string.login_error_generic), viewModel.uiState.value.error)
     }
 
     @Test
@@ -92,7 +94,7 @@ class AuthViewModelTest {
 
         val state = viewModel.uiState.value
         assertFalse(state.isLoading)
-        assertEquals("email taken", state.error)
+        assertEquals(UiText.Literal("email taken"), state.error)
     }
 
     @Test

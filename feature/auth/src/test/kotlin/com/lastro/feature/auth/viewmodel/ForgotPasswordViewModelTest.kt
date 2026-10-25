@@ -3,6 +3,8 @@ package com.lastro.feature.auth.viewmodel
 import com.lastro.core.common.Result
 import com.lastro.core.network.exception.ApiException
 import com.lastro.core.testing.repository.FakeAuthRepository
+import com.lastro.core.ui.UiText
+import com.lastro.feature.auth.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -65,7 +67,7 @@ class ForgotPasswordViewModelTest {
         viewModel.submit("gabriela@lastro.app")
 
         assertEquals(
-            "Muitas tentativas. Aguarde alguns minutos",
+            UiText.Res(R.string.forgot_password_error_too_many),
             viewModel.uiState.value.error,
         )
     }
@@ -77,7 +79,7 @@ class ForgotPasswordViewModelTest {
         viewModel.submit("gabriela@lastro.app")
 
         assertEquals(
-            "Não foi possível enviar o link. Tente novamente",
+            UiText.Res(R.string.forgot_password_error_generic),
             viewModel.uiState.value.error,
         )
     }

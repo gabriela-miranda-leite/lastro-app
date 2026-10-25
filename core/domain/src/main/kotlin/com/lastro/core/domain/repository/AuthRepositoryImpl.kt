@@ -4,6 +4,7 @@ import com.lastro.core.common.Result
 import com.lastro.core.common.mapSuccess
 import com.lastro.core.network.auth.TokenStore
 import com.lastro.core.network.dto.auth.ForgotPasswordRequest
+import com.lastro.core.network.dto.auth.ResetPasswordRequest
 import com.lastro.core.network.dto.auth.LoginRequest
 import com.lastro.core.network.dto.auth.LogoutRequest
 import com.lastro.core.network.dto.auth.RefreshRequest
@@ -43,6 +44,9 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun forgotPassword(email: String): Result<Unit> =
         safeApiCall { api.forgotPassword(ForgotPasswordRequest(email)) }.mapSuccess { Unit }
+
+    override suspend fun resetPassword(token: String, newPassword: String): Result<Unit> =
+        safeApiCall { api.resetPassword(ResetPasswordRequest(token, newPassword)) }.mapSuccess { Unit }
 
     override suspend fun refresh(): Result<Unit> {
         val refreshToken = tokenStore.getRefreshToken()

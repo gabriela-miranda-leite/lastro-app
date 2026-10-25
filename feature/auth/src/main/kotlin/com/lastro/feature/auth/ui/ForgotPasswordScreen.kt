@@ -46,8 +46,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.res.painterResource
-import com.lastro.core.ui.R
+import com.lastro.core.ui.R as CoreR
+import com.lastro.core.ui.UiText
 import com.lastro.core.ui.components.LastroBanner
+import com.lastro.core.ui.resolve
+import com.lastro.feature.auth.R
 import com.lastro.core.ui.components.LastroBackButton
 import com.lastro.core.ui.components.LastroButton
 import com.lastro.core.ui.components.LastroTextField
@@ -114,7 +117,7 @@ internal fun ForgotPasswordScreenContent(
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_lock),
+                    painter = painterResource(id = CoreR.drawable.ic_lock),
                     contentDescription = null,
                     tint = LastroColors.Accent,
                     modifier = Modifier.size(28.dp),
@@ -176,7 +179,7 @@ internal fun ForgotPasswordScreenContent(
                     }
                 }
             } else {
-                if (uiState.error != null) LastroBanner(message = uiState.error)
+                if (uiState.error != null) LastroBanner(message = uiState.error!!.resolve())
                 if (uiState.error != null) Spacer(modifier = Modifier.height(LastroSpacing.md))
 
                 LastroTextField(
@@ -258,5 +261,5 @@ private fun ForgotPasswordSuccessPreview() = LastroTheme(darkTheme = false) {
 @Preview(name = "ForgotPassword - Erro")
 @Composable
 private fun ForgotPasswordErrorPreview() = LastroTheme(darkTheme = false) {
-    ForgotPasswordScreenContent(uiState = ForgotPasswordUiState(error = "Muitas tentativas. Aguarde alguns minutos"), email = "gabriela@lastro.app", onEmailChange = {}, onSubmit = {}, onBack = {})
+    ForgotPasswordScreenContent(uiState = ForgotPasswordUiState(error = UiText.Res(R.string.forgot_password_error_too_many)), email = "gabriela@lastro.app", onEmailChange = {}, onSubmit = {}, onBack = {})
 }

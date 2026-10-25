@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_continue">Continuar</string>
+    <string name="action_skip_for_now">Pular por agora</string>
+    <string name="action_save">Salvar</string>
+    <string name="action_back">Voltar</string>
+    <string name="error_generic">Algo deu errado. Tente novamente</string>
+</resources>

@@ -1,0 +1,60 @@
+package com.lastro.feature.auth.viewmodel
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.lastro.core.common.Result
+import com.lastro.core.domain.usecase.UpdateUserProfileUseCase
+import com.lastro.core.ui.UiText
+import com.lastro.feature.auth.R
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import java.math.BigDecimal
+import javax.inject.Inject
+
+data class OnboardingIncomeUiState(
+    val isLoading: Boolean = false,
+    val error: UiText? = null,
+)
+
+sealed interface OnboardingIncomeEvent {
+    data object Success : OnboardingIncomeEvent
+}
+
+@HiltViewModel
+class OnboardingIncomeViewModel @Inject constructor(
+    private val updateUserProfile: UpdateUserProfileUseCase,
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow(OnboardingIncomeUiState())
+    val uiState = _uiState.asStateFlow()
+
+    private val _events = MutableSharedFlow<OnboardingIncomeEvent>()
+    val events = _events.asSharedFlow()
+
+    fun submit(income: BigDecimal, savingGoalPct: Double) {
+        if (income <= BigDecimal.ZERO) {
+            _uiState.value = OnboardingIncomeUiState(error = UiText.Res(R.string.onboarding_income_error_save))
+            return
+        }
+        viewModelScope.launch {
+            _uiState.value = OnboardingIncomeUiState(isLoading = true)
+            when (updateUserProfile(monthlyIncome = income, name = null, savingGoalPct = savingGoalPct)) {
+                is Result.Success -> _events.emit(OnboardingIncomeEvent.Success)
+                is Result.Error -> _uiState.value = OnboardingIncomeUiState(
+                    error = UiText.Res(R.string.onboarding_income_error_save)
+                )
+                is Result.Loading -> Unit
+            }
+        }
+    }
+
+    fun skip() {
+        viewModelScope.launch {
+            _events.emit(OnboardingIncomeEvent.Success)
+        }
+    }
+}

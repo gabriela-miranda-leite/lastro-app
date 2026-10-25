@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import com.lastro.core.ui.R
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
@@ -86,15 +87,21 @@ fun LastroTextField(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Spacer(modifier = Modifier.height(6.dp))
+        val inputTextStyle = if (type == TextFieldType.Money)
+            MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold)
+        else
+            MaterialTheme.typography.bodyLarge
+
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier.fillMaxWidth(),
+            textStyle = inputTextStyle,
             label = null,
             placeholder = {
                 Text(
-                    text = label,
-                    style = MaterialTheme.typography.bodyLarge,
+                    text = if (type == TextFieldType.Money) "R$ 0,00" else label,
+                    style = inputTextStyle,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             },
