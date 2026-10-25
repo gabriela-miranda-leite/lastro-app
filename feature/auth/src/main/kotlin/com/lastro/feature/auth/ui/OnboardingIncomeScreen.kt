@@ -15,9 +15,11 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -61,6 +63,7 @@ import com.lastro.feature.auth.viewmodel.OnboardingIncomeEvent
 import com.lastro.feature.auth.viewmodel.OnboardingIncomeUiState
 import com.lastro.feature.auth.viewmodel.OnboardingIncomeViewModel
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -95,13 +98,14 @@ fun OnboardingIncomeScreen(
         onIncomeChange = { income = it },
         onSavingGoalChange = { savingGoalPct = it },
         onSubmit = {
-            val parsed = income.replace(",", ".").toBigDecimalOrNull()
-            if (parsed != null) viewModel.submit(parsed, savingGoalPct.toDouble())
+            val cents = income.toBigDecimalOrNull() ?: BigDecimal.ZERO
+            viewModel.submit(cents.divide(BigDecimal(100), 2, RoundingMode.HALF_UP), savingGoalPct.toDouble())
         },
         onSkip = { viewModel.skip() },
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun OnboardingIncomeScreenContent(
     uiState: OnboardingIncomeUiState,
@@ -112,9 +116,10 @@ internal fun OnboardingIncomeScreenContent(
     onSubmit: () -> Unit,
     onSkip: () -> Unit,
 ) {
-    val parsedIncome = income.replace(",", ".").toBigDecimalOrNull() ?: BigDecimal.ZERO
+    val parsedIncome = (income.toBigDecimalOrNull() ?: BigDecimal.ZERO)
+        .divide(BigDecimal(100), 2, RoundingMode.HALF_UP)
     val canSubmit = parsedIncome > BigDecimal.ZERO
-    val goalAmount = parsedIncome.multiply(BigDecimal(savingGoalPct.toDouble()))
+    val goalAmount = parsedIncome.multiply(BigDecimal.valueOf(savingGoalPct.toDouble()))
     val goalFormatted = NumberFormat.getNumberInstance(Locale("pt", "BR")).apply {
         minimumFractionDigits = 0
         maximumFractionDigits = 0
@@ -261,11 +266,25 @@ internal fun OnboardingIncomeScreenContent(
                 onValueChange = onSavingGoalChange,
                 valueRange = 0f..0.5f,
                 modifier = Modifier.fillMaxWidth(),
-                colors = SliderDefaults.colors(
-                    thumbColor = LastroColors.Accent,
-                    activeTrackColor = LastroColors.Accent,
-                    inactiveTrackColor = LastroColors.Accent.copy(alpha = 0.24f),
-                ),
+                thumb = {
+                    Box(
+                        modifier = Modifier
+                            .size(22.dp)
+                            .clip(CircleShape)
+                            .background(LastroColors.Accent),
+                    )
+                },
+                track = { sliderState ->
+                    SliderDefaults.Track(
+                        sliderState = sliderState,
+                        thumbTrackGapSize = 0.dp,
+                        drawStopIndicator = null,
+                        colors = SliderDefaults.colors(
+                            activeTrackColor = LastroColors.Accent,
+                            inactiveTrackColor = LastroColors.Accent.copy(alpha = 0.24f),
+                        ),
+                    )
+                },
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),

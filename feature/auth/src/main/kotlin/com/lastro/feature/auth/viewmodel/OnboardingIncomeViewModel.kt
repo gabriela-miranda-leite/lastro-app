@@ -34,6 +34,10 @@ class OnboardingIncomeViewModel @Inject constructor(
     val events = _events.asSharedFlow()
 
     fun submit(income: BigDecimal, savingGoalPct: Double) {
+        if (income <= BigDecimal.ZERO) {
+            _uiState.value = OnboardingIncomeUiState(error = "Não foi possível salvar. Tente novamente")
+            return
+        }
         viewModelScope.launch {
             _uiState.value = OnboardingIncomeUiState(isLoading = true)
             when (updateUserProfile(monthlyIncome = income, name = null, savingGoalPct = savingGoalPct)) {
