@@ -7,6 +7,7 @@ import com.lastro.core.network.dto.auth.LogoutRequest
 import com.lastro.core.network.dto.auth.MessageResponse
 import com.lastro.core.network.dto.auth.RefreshRequest
 import com.lastro.core.network.dto.auth.RegisterRequest
+import com.lastro.core.network.dto.auth.ResetPasswordRequest
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -28,4 +29,7 @@ interface AuthApiService {
 
     @POST("auth/forgot-password")
     suspend fun forgotPassword(@Body body: ForgotPasswordRequest): MessageResponse
+
+    @POST("auth/reset-password")
+    suspend fun resetPassword(@Body body: ResetPasswordRequest): MessageResponse
 }

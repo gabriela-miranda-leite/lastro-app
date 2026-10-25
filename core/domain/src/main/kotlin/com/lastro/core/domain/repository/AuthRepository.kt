@@ -8,5 +8,6 @@ interface AuthRepository {
     suspend fun logout()
     suspend fun isLoggedIn(): Boolean
     suspend fun forgotPassword(email: String): Result<Unit>
+    suspend fun resetPassword(token: String, newPassword: String): Result<Unit>
     suspend fun refresh(): Result<Unit>
 }

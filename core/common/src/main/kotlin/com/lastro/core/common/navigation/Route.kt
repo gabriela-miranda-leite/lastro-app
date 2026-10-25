@@ -8,6 +8,8 @@ sealed class Route(val path: String) {
         data object Login : Auth("auth/login")
         data object Register : Auth("auth/register")
         data object ForgotPassword : Auth("auth/forgot-password")
+        data class ResetPassword(val token: String = "{token}") : Auth("auth/reset-password/${token}")
+        data object OnboardingIncome : Auth("auth/onboarding/income")
     }
 
     data object Dashboard : Route("dashboard")
