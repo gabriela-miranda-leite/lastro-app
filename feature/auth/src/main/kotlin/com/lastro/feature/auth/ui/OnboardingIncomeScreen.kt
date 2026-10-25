@@ -42,7 +42,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -188,13 +187,11 @@ internal fun OnboardingIncomeScreenContent(
                 text = "PASSO 3 DE 3",
                 style = MaterialTheme.typography.labelMedium,
                 color = LastroColors.Accent,
-                letterSpacing = 0.8.sp,
             )
             Spacer(modifier = Modifier.height(LastroSpacing.xs))
             Text(
                 text = "Configure seu perfil financeiro",
                 style = MaterialTheme.typography.titleLarge,
-                fontSize = 26.sp,
             )
             Spacer(modifier = Modifier.height(LastroSpacing.xs))
             Text(
@@ -226,7 +223,6 @@ internal fun OnboardingIncomeScreenContent(
                 text = "META DE POUPANÇA",
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                letterSpacing = 0.5.sp,
             )
             Spacer(modifier = Modifier.height(LastroSpacing.sm))
 

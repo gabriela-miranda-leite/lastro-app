@@ -19,7 +19,7 @@ val LastroTypography = Typography(
     titleLarge = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 20.sp,
+        fontSize = 26.sp,
     ),
     titleMedium = TextStyle(
         fontFamily = InterFontFamily,
