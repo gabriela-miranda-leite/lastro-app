@@ -234,7 +234,7 @@ internal fun OnboardingIncomeScreenContent(
                     .clip(RoundedCornerShape(14.dp))
                     .background(MaterialTheme.colorScheme.surface)
                     .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(14.dp))
-                    .padding(horizontal = LastroSpacing.md, vertical = LastroSpacing.sm),
+                    .padding(horizontal = LastroSpacing.xl, vertical = LastroSpacing.xl),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
