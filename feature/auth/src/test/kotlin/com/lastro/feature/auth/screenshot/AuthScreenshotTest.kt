@@ -82,13 +82,13 @@ class OnboardingIncomeScreenshotTest {
         showSystemUi = false,
     )
 
-    @Test fun default() = paparazzi.snapshot { LastroTheme(darkTheme = false) { OnboardingIncomeScreenContent(uiState = OnboardingIncomeUiState(), income = "", onIncomeChange = {}, onSubmit = {}) } }
+    @Test fun default() = paparazzi.snapshot { LastroTheme(darkTheme = false) { OnboardingIncomeScreenContent(uiState = OnboardingIncomeUiState(), income = "", savingGoalPct = 0.20f, onIncomeChange = {}, onSavingGoalChange = {}, onSubmit = {}, onSkip = {}) } }
 
-    @Test fun filled() = paparazzi.snapshot { LastroTheme(darkTheme = false) { OnboardingIncomeScreenContent(uiState = OnboardingIncomeUiState(), income = "5000", onIncomeChange = {}, onSubmit = {}) } }
+    @Test fun filled() = paparazzi.snapshot { LastroTheme(darkTheme = false) { OnboardingIncomeScreenContent(uiState = OnboardingIncomeUiState(), income = "5000", savingGoalPct = 0.20f, onIncomeChange = {}, onSavingGoalChange = {}, onSubmit = {}, onSkip = {}) } }
 
-    @Test fun error() = paparazzi.snapshot { LastroTheme(darkTheme = false) { OnboardingIncomeScreenContent(uiState = OnboardingIncomeUiState(error = "Não foi possível salvar a renda. Tente novamente"), income = "5000", onIncomeChange = {}, onSubmit = {}) } }
+    @Test fun error() = paparazzi.snapshot { LastroTheme(darkTheme = false) { OnboardingIncomeScreenContent(uiState = OnboardingIncomeUiState(error = "Não foi possível salvar. Tente novamente"), income = "5000", savingGoalPct = 0.20f, onIncomeChange = {}, onSavingGoalChange = {}, onSubmit = {}, onSkip = {}) } }
 
-    @Test fun default_dark() = paparazzi.snapshot { LastroTheme(darkTheme = true) { OnboardingIncomeScreenContent(uiState = OnboardingIncomeUiState(), income = "", onIncomeChange = {}, onSubmit = {}) } }
+    @Test fun default_dark() = paparazzi.snapshot { LastroTheme(darkTheme = true) { OnboardingIncomeScreenContent(uiState = OnboardingIncomeUiState(), income = "", savingGoalPct = 0.20f, onIncomeChange = {}, onSavingGoalChange = {}, onSubmit = {}, onSkip = {}) } }
 }
 
 class ResetPasswordScreenshotTest {

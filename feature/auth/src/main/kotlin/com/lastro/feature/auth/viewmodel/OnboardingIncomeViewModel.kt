@@ -33,16 +33,22 @@ class OnboardingIncomeViewModel @Inject constructor(
     private val _events = MutableSharedFlow<OnboardingIncomeEvent>()
     val events = _events.asSharedFlow()
 
-    fun submit(income: BigDecimal) {
+    fun submit(income: BigDecimal, savingGoalPct: Double) {
         viewModelScope.launch {
             _uiState.value = OnboardingIncomeUiState(isLoading = true)
-            when (val result = updateUserProfile(monthlyIncome = income, name = null, savingGoalPct = null)) {
+            when (updateUserProfile(monthlyIncome = income, name = null, savingGoalPct = savingGoalPct)) {
                 is Result.Success -> _events.emit(OnboardingIncomeEvent.Success)
                 is Result.Error -> _uiState.value = OnboardingIncomeUiState(
-                    error = "Não foi possível salvar a renda. Tente novamente"
+                    error = "Não foi possível salvar. Tente novamente"
                 )
                 is Result.Loading -> Unit
             }
+        }
+    }
+
+    fun skip() {
+        viewModelScope.launch {
+            _events.emit(OnboardingIncomeEvent.Success)
         }
     }
 }

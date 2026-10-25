@@ -54,7 +54,7 @@ class OnboardingIncomeViewModelTest {
         val events = mutableListOf<OnboardingIncomeEvent>()
         val job = launch(testDispatcher) { viewModel.events.toList(events) }
 
-        viewModel.submit(BigDecimal("5000"))
+        viewModel.submit(BigDecimal("5000"), 0.20)
 
         assertTrue(events.contains(OnboardingIncomeEvent.Success))
         job.cancel()
@@ -64,19 +64,19 @@ class OnboardingIncomeViewModelTest {
     fun `submit error populates uiState error`() = runTest {
         repository.updateMeResult = Result.Error(RuntimeException("server error"), "server error")
 
-        viewModel.submit(BigDecimal("5000"))
+        viewModel.submit(BigDecimal("5000"), 0.20)
 
         val state = viewModel.uiState.value
         assertFalse(state.isLoading)
-        assertEquals("Não foi possível salvar a renda. Tente novamente", state.error)
+        assertEquals("Não foi possível salvar. Tente novamente", state.error)
     }
 
     @Test
     fun `submit zero income returns validation error before calling repository`() = runTest {
-        viewModel.submit(BigDecimal.ZERO)
+        viewModel.submit(BigDecimal.ZERO, 0.20)
 
         val state = viewModel.uiState.value
         assertFalse(state.isLoading)
-        assertEquals("Não foi possível salvar a renda. Tente novamente", state.error)
+        assertEquals("Não foi possível salvar. Tente novamente", state.error)
     }
 }
