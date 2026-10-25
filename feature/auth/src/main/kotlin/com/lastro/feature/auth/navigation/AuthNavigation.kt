@@ -12,6 +12,7 @@ import com.lastro.feature.auth.ui.OnboardingIncomeScreen
 import com.lastro.feature.auth.ui.RegisterScreen
 import com.lastro.feature.auth.ui.ResetPasswordScreen
 import com.lastro.feature.auth.ui.SplashScreen
+import com.lastro.feature.auth.ui.WelcomeScreen
 
 fun NavGraphBuilder.authGraph(navController: NavController) {
     composable(Route.Splash.path) {
@@ -22,9 +23,20 @@ fun NavGraphBuilder.authGraph(navController: NavController) {
                 }
             },
             onNavigateToLogin = {
-                navController.navigate(Route.Auth.Login.path) {
+                navController.navigate(Route.Auth.Welcome.path) {
                     popUpTo(Route.Splash.path) { inclusive = true }
                 }
+            },
+        )
+    }
+
+    composable(Route.Auth.Welcome.path) {
+        WelcomeScreen(
+            onNavigateToRegister = {
+                navController.navigate(Route.Auth.Register.path)
+            },
+            onNavigateToLogin = {
+                navController.navigate(Route.Auth.Login.path)
             },
         )
     }

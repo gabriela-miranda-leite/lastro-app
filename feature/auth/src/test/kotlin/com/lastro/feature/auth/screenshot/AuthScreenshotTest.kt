@@ -7,6 +7,7 @@ import com.lastro.core.ui.UiText
 import com.lastro.core.ui.theme.LastroTheme
 import com.lastro.feature.auth.R
 import com.lastro.feature.auth.ui.ForgotPasswordScreenContent
+import com.lastro.feature.auth.ui.WelcomeScreenContent
 import com.lastro.feature.auth.ui.LoginScreenContent
 import com.lastro.feature.auth.ui.OnboardingIncomeScreenContent
 import com.lastro.feature.auth.ui.RegisterScreenContent
@@ -17,6 +18,18 @@ import com.lastro.feature.auth.viewmodel.OnboardingIncomeUiState
 import com.lastro.feature.auth.viewmodel.ResetPasswordUiState
 import org.junit.Rule
 import org.junit.Test
+
+class WelcomeScreenshotTest {
+
+    @get:Rule
+    val paparazzi = Paparazzi(
+        deviceConfig = DeviceConfig.PIXEL_6,
+        renderingMode = SessionParams.RenderingMode.NORMAL,
+        showSystemUi = false,
+    )
+
+    @Test fun default() = paparazzi.snapshot { LastroTheme(darkTheme = true) { WelcomeScreenContent(onNavigateToRegister = {}, onNavigateToLogin = {}) } }
+}
 
 class LoginScreenshotTest {
 

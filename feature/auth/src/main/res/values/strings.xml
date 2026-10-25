@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Welcome -->
+    <string name="welcome_title_1">Organize suas</string>
+    <string name="welcome_title_2">finanças com </string>
+    <string name="welcome_title_accent">clareza</string>
+    <string name="welcome_subtitle">Controle gastos, defina metas e cuide do dinheiro junto com quem você ama.</string>
+    <string name="welcome_feature1_title">Controle de gastos</string>
+    <string name="welcome_feature1_desc">Registre despesas e receitas, acompanhe por categoria e saiba exatamente para onde vai cada real.</string>
+    <string name="welcome_feature2_title">Modo casal</string>
+    <string name="welcome_feature2_desc">Unifique as finanças com seu parceiro. Veja os gastos juntos e separem responsabilidades com transparência.</string>
+    <string name="welcome_feature3_title">Metas de poupança</string>
+    <string name="welcome_feature3_desc">Defina quanto quer guardar por mês e acompanhe o progresso rumo aos seus objetivos.</string>
+    <string name="welcome_action_register">Criar conta</string>
+    <string name="welcome_action_login_prefix">Já tenho conta — </string>
+    <string name="welcome_action_login">Entrar</string>
+
     <!-- Login -->
     <string name="login_title">Lastro</string>
     <string name="login_subtitle">Controle financeiro pessoal</string>
