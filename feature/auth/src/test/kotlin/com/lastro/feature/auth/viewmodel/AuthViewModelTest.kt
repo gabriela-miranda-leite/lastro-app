@@ -1,6 +1,7 @@
 package com.lastro.feature.auth.viewmodel
 
 import com.lastro.core.common.Result
+import com.lastro.core.network.exception.ApiException
 import com.lastro.core.testing.repository.FakeAuthRepository
 import com.lastro.core.ui.UiText
 import com.lastro.feature.auth.R
@@ -102,5 +103,23 @@ class AuthViewModelTest {
         val state = viewModel.uiState.value
         assertNull(state.error)
         assertFalse(state.isLoading)
+    }
+
+    @Test
+    fun `login 401 shows unauthorized message`() = runTest {
+        repository.loginResult = Result.Error(ApiException.Unauthorized, ApiException.Unauthorized.message)
+
+        viewModel.login("email@test.com", "wrong")
+
+        assertEquals(UiText.Res(R.string.login_error_unauthorized), viewModel.uiState.value.error)
+    }
+
+    @Test
+    fun `register error uses fallback message when exception has no message`() = runTest {
+        repository.registerResult = Result.Error(RuntimeException(), null)
+
+        viewModel.register("email@test.com", "password", "Name")
+
+        assertEquals(UiText.Res(R.string.register_error_generic), viewModel.uiState.value.error)
     }
 }

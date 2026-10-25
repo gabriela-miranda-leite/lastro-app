@@ -1,5 +1,6 @@
 package com.lastro.core.common
 
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.math.BigDecimal
@@ -34,5 +35,40 @@ class CurrencyFormatterTest {
     fun `Double toBRL formats number`() {
         val result = 50.0.toBRL()
         assertTrue(result.contains("50"))
+    }
+
+    @Test
+    fun `centsStringToReais converts valid string`() {
+        assertEquals(java.math.BigDecimal("2.50"), "250".centsStringToReais())
+    }
+
+    @Test
+    fun `centsStringToReais null returns zero`() {
+        assertEquals(java.math.BigDecimal("0.00"), null.centsStringToReais())
+    }
+
+    @Test
+    fun `centsStringToReais empty string returns zero`() {
+        assertEquals(java.math.BigDecimal("0.00"), "".centsStringToReais())
+    }
+
+    @Test
+    fun `centsStringToReais zero returns zero`() {
+        assertEquals(java.math.BigDecimal("0.00"), "0".centsStringToReais())
+    }
+
+    @Test
+    fun `centsStringToReais negative value divides correctly`() {
+        assertEquals(java.math.BigDecimal("-1.00"), "-100".centsStringToReais())
+    }
+
+    @Test
+    fun `centsStringToReais large value divides correctly`() {
+        assertEquals(java.math.BigDecimal("1000.00"), "100000".centsStringToReais())
+    }
+
+    @Test
+    fun `centsStringToReais non-numeric string returns zero`() {
+        assertEquals(java.math.BigDecimal("0.00"), "abc".centsStringToReais())
     }
 }

@@ -6,8 +6,14 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.lastro.core.ui.R
 
-private val InterFontFamily = FontFamily.Default
+private val InterFontFamily = FontFamily(
+    Font(R.font.inter_regular, FontWeight.Normal),
+    Font(R.font.inter_medium, FontWeight.Medium),
+    Font(R.font.inter_semibold, FontWeight.SemiBold),
+    Font(R.font.inter_bold, FontWeight.Bold),
+)
 
 val LastroTypography = Typography(
     displayLarge = TextStyle(
@@ -20,6 +26,12 @@ val LastroTypography = Typography(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 26.sp,
+        letterSpacing = (-0.5).sp,
+    ),
+    headlineSmall = TextStyle(
+        fontFamily = InterFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp,
     ),
     titleMedium = TextStyle(
         fontFamily = InterFontFamily,
@@ -28,12 +40,12 @@ val LastroTypography = Typography(
     ),
     bodyLarge = TextStyle(
         fontFamily = InterFontFamily,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.Medium,
         fontSize = 15.sp,
     ),
     bodyMedium = TextStyle(
         fontFamily = InterFontFamily,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
     ),
     bodySmall = TextStyle(
@@ -54,7 +66,8 @@ val LastroTypography = Typography(
     ),
     labelSmall = TextStyle(
         fontFamily = InterFontFamily,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 11.sp,
+        letterSpacing = 0.8.sp,
     ),
 )

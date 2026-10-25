@@ -48,6 +48,11 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun resetPassword(token: String, newPassword: String): Result<Unit> =
         safeApiCall { api.resetPassword(ResetPasswordRequest(token, newPassword)) }.mapSuccess { Unit }
 
+    override suspend fun logoutAll() {
+        safeApiCall { api.logoutAll() }
+        tokenStore.clearTokens()
+    }
+
     override suspend fun refresh(): Result<Unit> {
         val refreshToken = tokenStore.getRefreshToken()
             ?: return Result.Error(IllegalStateException("No refresh token"))
