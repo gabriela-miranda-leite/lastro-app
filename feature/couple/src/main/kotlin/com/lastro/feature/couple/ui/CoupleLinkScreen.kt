@@ -19,6 +19,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -191,74 +192,90 @@ private fun InviteTab(
     onSendInvite: () -> Unit,
     onSkip: () -> Unit,
 ) {
-    LastroTextField(
-        value = email,
-        onValueChange = onEmailChange,
-        label = "Email do parceiro",
-        type = TextFieldType.Email,
-        error = error,
-    )
+    val inviteSent = generatedInvite != null
 
-    Spacer(Modifier.height(20.dp))
+    if (inviteSent) {
+        InviteSentCard()
+        Spacer(Modifier.height(32.dp))
+        LastroButton(text = "Ir para o dashboard", onClick = onSkip)
+    } else {
+        LastroTextField(
+            value = email,
+            onValueChange = onEmailChange,
+            label = "Email do parceiro",
+            type = TextFieldType.Email,
+            error = error,
+        )
 
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        InviteStep(number = 1, text = "Insira o email do seu parceiro acima.")
-        InviteStep(number = 2, text = "Ele receberá um link de convite por email.")
-        InviteStep(
-            number = 3,
-            text = "Após aceitar, vocês passam a ver despesas compartilhadas e o saldo do casal.",
-            highlight = "Após aceitar",
+        Spacer(Modifier.height(20.dp))
+
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            InviteStep(number = 1, text = "Insira o email do seu parceiro acima.")
+            InviteStep(number = 2, text = "Ele receberá um link de convite por email.")
+            InviteStep(
+                number = 3,
+                text = "Após aceitar, vocês passam a ver despesas compartilhadas e o saldo do casal.",
+                highlight = "Após aceitar",
+            )
+        }
+
+        Spacer(Modifier.height(32.dp))
+
+        LastroButton(
+            text = "Enviar convite",
+            onClick = onSendInvite,
+            loading = isLoading,
+            enabled = email.isNotBlank(),
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        LastroButton(
+            text = "Pular por agora",
+            onClick = onSkip,
+            variant = ButtonVariant.Ghost,
         )
     }
+}
 
-    if (generatedInvite != null) {
-        Spacer(Modifier.height(16.dp))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    MaterialTheme.colorScheme.surfaceVariant,
-                    MaterialTheme.shapes.medium,
-                )
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
+@Composable
+private fun InviteSentCard() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                MaterialTheme.colorScheme.tertiary.copy(alpha = 0.1f),
+                MaterialTheme.shapes.medium,
+            )
+            .border(
+                1.dp,
+                MaterialTheme.colorScheme.tertiary.copy(alpha = 0.3f),
+                MaterialTheme.shapes.medium,
+            )
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalAlignment = Alignment.Top,
+    ) {
+        Icon(
+            imageVector = Icons.Default.Check,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.tertiary,
+            modifier = Modifier.size(20.dp),
+        )
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
-                text = "Código gerado: ",
+                text = "Convite enviado!",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.tertiary,
             )
             Text(
-                text = generatedInvite.code,
+                text = "Seu parceiro receberá um email com instruções para entrar. O vínculo é ativado quando ele aceitar.",
                 style = MaterialTheme.typography.bodySmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.weight(1f),
-            )
-            Text(
-                text = "Expira em 24h",
-                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }
-
-    Spacer(Modifier.height(32.dp))
-
-    LastroButton(
-        text = "Enviar convite",
-        onClick = onSendInvite,
-        loading = isLoading,
-        enabled = email.isNotBlank(),
-    )
-
-    Spacer(Modifier.height(8.dp))
-
-    LastroButton(
-        text = "Pular por agora",
-        onClick = onSkip,
-        variant = ButtonVariant.Ghost,
-    )
 }
 
 @Composable
@@ -365,23 +382,32 @@ private fun InviteStep(
 
 @Composable
 private fun CoupleAvatarHero(modifier: Modifier = Modifier) {
-    val diagonal = Offset(0f, 0f) to Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
+    val diagonalStart = Offset(0f, 0f)
+    val diagonalEnd = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
     val brushG = Brush.linearGradient(
         colors = listOf(LastroColors.Accent, LastroColors.Positive),
-        start = diagonal.first, end = diagonal.second,
+        start = diagonalStart, end = diagonalEnd,
     )
     val brushM = Brush.linearGradient(
         colors = listOf(Color(0xFFFF7C6B), Color(0xFFFFD06B)),
-        start = diagonal.first, end = diagonal.second,
+        start = diagonalStart, end = diagonalEnd,
     )
-    // Layout matches design: G(64) | badge(32, overlaps G by 6dp) | M(64, overlaps badge by 18dp)
-    // Box width = 136dp, height = 64dp
-    // Drawing order: G (back) → badge (middle) → M (front)
-    Box(modifier = modifier.size(width = 136.dp, height = 64.dp)) {
-        LastroAvatar(initial = "G", size = 64.dp, brush = brushG)
+    val bg = MaterialTheme.colorScheme.background
+    // Box 150×70dp. Drawing order: G (back) → badge → M wrapper (front)
+    // G: x=0 (0-64), centered vertically at y=3
+    // Badge: x=56,y=19 (56-88), overlaps G 8dp, badge visible area = 24dp
+    // M wrapper 70dp: x=80 (80-150), bg-colored ring creates visual break from badge
+    //   M gradient 64dp centered inside wrapper: visual left = 83
+    Box(modifier = modifier.size(width = 150.dp, height = 70.dp)) {
+        LastroAvatar(
+            initial = "G",
+            size = 64.dp,
+            brush = brushG,
+            modifier = Modifier.offset(y = 3.dp),
+        )
         Box(
             modifier = Modifier
-                .offset(x = 58.dp, y = 16.dp)
+                .offset(x = 56.dp, y = 19.dp)
                 .size(32.dp)
                 .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape)
                 .border(2.dp, MaterialTheme.colorScheme.outline, CircleShape),
@@ -394,7 +420,15 @@ private fun CoupleAvatarHero(modifier: Modifier = Modifier) {
                 modifier = Modifier.size(16.dp),
             )
         }
-        LastroAvatar(initial = "M", size = 64.dp, brush = brushM, modifier = Modifier.offset(x = 72.dp))
+        Box(
+            modifier = Modifier
+                .offset(x = 80.dp)
+                .size(70.dp)
+                .background(bg, CircleShape),
+            contentAlignment = Alignment.Center,
+        ) {
+            LastroAvatar(initial = "M", size = 64.dp, brush = brushM)
+        }
     }
 }
 
@@ -403,6 +437,21 @@ private fun CoupleAvatarHero(modifier: Modifier = Modifier) {
 private fun PreviewInviteDark() = LastroTheme {
     CoupleLinkContent(
         uiState = CoupleLinkUiState(selectedTab = 0),
+        onBack = {}, onSkip = {}, onTabSelected = {},
+        onPartnerEmailChange = {}, onInviteCodeChange = {},
+        onSendInvite = {}, onJoinCouple = {},
+    )
+}
+
+@Preview(name = "CoupleLinkScreen — Convite enviado — Dark")
+@Composable
+private fun PreviewInviteSentDark() = LastroTheme {
+    CoupleLinkContent(
+        uiState = CoupleLinkUiState(
+            selectedTab = 0,
+            partnerEmail = "marlon@email.com",
+            generatedInvite = CoupleInvite(code = "LASTRO-A3F8", expiresAt = "2026-10-27T20:00:00Z"),
+        ),
         onBack = {}, onSkip = {}, onTabSelected = {},
         onPartnerEmailChange = {}, onInviteCodeChange = {},
         onSendInvite = {}, onJoinCouple = {},
