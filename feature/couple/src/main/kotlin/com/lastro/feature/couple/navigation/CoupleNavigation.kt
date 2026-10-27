@@ -4,22 +4,15 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.lastro.core.common.navigation.Route
-import com.lastro.feature.couple.ui.CoupleHomeScreen
-import com.lastro.feature.couple.ui.CoupleInviteScreen
+import com.lastro.feature.couple.ui.CoupleLinkScreen
 
 fun NavGraphBuilder.coupleGraph(navController: NavController) {
     composable(Route.Couple.Home.path) {
-        CoupleHomeScreen(
-            onNavigateToInvite = {
-                navController.navigate(Route.Couple.Invite.path)
-            },
-            onBack = { navController.popBackStack() }
-        )
-    }
-
-    composable(Route.Couple.Invite.path) {
-        CoupleInviteScreen(
-            onBack = { navController.popBackStack() }
+        CoupleLinkScreen(
+            onBack = { navController.popBackStack() },
+            onLinked = { navController.navigate(Route.Dashboard.path) {
+                popUpTo(Route.Couple.Home.path) { inclusive = true }
+            }},
         )
     }
 }
