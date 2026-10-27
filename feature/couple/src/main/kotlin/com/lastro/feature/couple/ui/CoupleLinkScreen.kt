@@ -392,13 +392,10 @@ private fun CoupleAvatarHero(modifier: Modifier = Modifier) {
         colors = listOf(Color(0xFFFF7C6B), Color(0xFFFFD06B)),
         start = diagonalStart, end = diagonalEnd,
     )
-    val bg = MaterialTheme.colorScheme.background
-    // Box 150×70dp. Drawing order: G (back) → badge → M wrapper (front)
-    // G: x=0 (0-64), centered vertically at y=3
-    // Badge: x=56,y=19 (56-88), overlaps G 8dp, badge visible area = 24dp
-    // M wrapper 70dp: x=80 (80-150), bg-colored ring creates visual break from badge
-    //   M gradient 64dp centered inside wrapper: visual left = 83
-    Box(modifier = modifier.size(width = 150.dp, height = 70.dp)) {
+    // Box 144×67dp. Drawing order: G (back) → badge → M (front)
+    // G: x=0,y=3 (0-64), badge: x=56,y=19 (56-88), M: x=80,y=3 (80-144)
+    // Badge visible area = 56-80 = 24dp; M overlaps badge right edge by 8dp
+    Box(modifier = modifier.size(width = 144.dp, height = 67.dp)) {
         LastroAvatar(
             initial = "G",
             size = 64.dp,
@@ -420,15 +417,12 @@ private fun CoupleAvatarHero(modifier: Modifier = Modifier) {
                 modifier = Modifier.size(16.dp),
             )
         }
-        Box(
-            modifier = Modifier
-                .offset(x = 80.dp)
-                .size(70.dp)
-                .background(bg, CircleShape),
-            contentAlignment = Alignment.Center,
-        ) {
-            LastroAvatar(initial = "M", size = 64.dp, brush = brushM)
-        }
+        LastroAvatar(
+            initial = "M",
+            size = 64.dp,
+            brush = brushM,
+            modifier = Modifier.offset(x = 80.dp, y = 3.dp),
+        )
     }
 }
 
