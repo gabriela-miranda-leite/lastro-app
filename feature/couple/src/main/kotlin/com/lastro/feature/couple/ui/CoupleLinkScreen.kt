@@ -42,6 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lastro.core.domain.model.CoupleInvite
@@ -409,6 +410,7 @@ private fun CoupleAvatarHero(modifier: Modifier = Modifier) {
         )
         Box(
             modifier = Modifier
+                .zIndex(1f)
                 .offset(x = 56.dp, y = 19.dp)
                 .size(32.dp)
                 .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape)
