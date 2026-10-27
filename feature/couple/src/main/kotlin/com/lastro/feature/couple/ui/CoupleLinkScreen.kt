@@ -392,15 +392,20 @@ private fun CoupleAvatarHero(modifier: Modifier = Modifier) {
         colors = listOf(Color(0xFFFF7C6B), Color(0xFFFFD06B)),
         start = diagonalStart, end = diagonalEnd,
     )
-    // Box 144×67dp. Drawing order: G (back) → badge → M (front)
-    // G: x=0,y=3 (0-64), badge: x=56,y=19 (56-88), M: x=80,y=3 (80-144)
-    // Badge visible area = 56-80 = 24dp; M overlaps badge right edge by 8dp
+    // Box 144×67dp. Drawing order: G (back) → M → badge (front, z-index:1 no design)
+    // G: x=0,y=3 | M: x=80,y=3 | badge: x=56,y=19 — badge na frente de ambos
     Box(modifier = modifier.size(width = 144.dp, height = 67.dp)) {
         LastroAvatar(
             initial = "G",
             size = 64.dp,
             brush = brushG,
             modifier = Modifier.offset(y = 3.dp),
+        )
+        LastroAvatar(
+            initial = "M",
+            size = 64.dp,
+            brush = brushM,
+            modifier = Modifier.offset(x = 80.dp, y = 3.dp),
         )
         Box(
             modifier = Modifier
@@ -417,12 +422,6 @@ private fun CoupleAvatarHero(modifier: Modifier = Modifier) {
                 modifier = Modifier.size(16.dp),
             )
         }
-        LastroAvatar(
-            initial = "M",
-            size = 64.dp,
-            brush = brushM,
-            modifier = Modifier.offset(x = 80.dp, y = 3.dp),
-        )
     }
 }
 
