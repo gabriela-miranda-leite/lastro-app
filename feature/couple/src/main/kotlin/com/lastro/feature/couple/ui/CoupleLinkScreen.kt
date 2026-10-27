@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -27,8 +29,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -313,6 +317,7 @@ private fun InviteStep(
     highlight: String? = null,
 ) {
     Row(
+        modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.spacedBy(14.dp),
     ) {
@@ -360,33 +365,36 @@ private fun InviteStep(
 
 @Composable
 private fun CoupleAvatarHero(modifier: Modifier = Modifier) {
-    val brushG = Brush.linearGradient(listOf(LastroColors.Accent, LastroColors.Positive))
-    val brushM = Brush.linearGradient(listOf(Color(0xFFFF7C6B), Color(0xFFFFD06B)))
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center,
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            LastroAvatar(initial = "G", size = 64.dp, brush = brushG)
-            LastroAvatar(initial = "M", size = 64.dp, brush = brushM)
-        }
+    val diagonal = Offset(0f, 0f) to Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
+    val brushG = Brush.linearGradient(
+        colors = listOf(LastroColors.Accent, LastroColors.Positive),
+        start = diagonal.first, end = diagonal.second,
+    )
+    val brushM = Brush.linearGradient(
+        colors = listOf(Color(0xFFFF7C6B), Color(0xFFFFD06B)),
+        start = diagonal.first, end = diagonal.second,
+    )
+    // Layout matches design: G(64) | badge(32, overlaps G by 6dp) | M(64, overlaps badge by 18dp)
+    // Box width = 136dp, height = 64dp
+    // Drawing order: G (back) → badge (middle) → M (front)
+    Box(modifier = modifier.size(width = 136.dp, height = 64.dp)) {
+        LastroAvatar(initial = "G", size = 64.dp, brush = brushG)
         Box(
             modifier = Modifier
+                .offset(x = 58.dp, y = 16.dp)
                 .size(32.dp)
-                .border(3.dp, MaterialTheme.colorScheme.background, CircleShape)
-                .background(MaterialTheme.colorScheme.surface, CircleShape),
+                .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape)
+                .border(2.dp, MaterialTheme.colorScheme.outline, CircleShape),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
                 imageVector = Icons.Default.Link,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(18.dp),
+                modifier = Modifier.size(16.dp),
             )
         }
+        LastroAvatar(initial = "M", size = 64.dp, brush = brushM, modifier = Modifier.offset(x = 72.dp))
     }
 }
 
