@@ -1,6 +1,8 @@
 package com.lastro.feature.couple.ui
 
+import android.content.Intent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +16,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Link
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -22,26 +27,31 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lastro.core.domain.model.CoupleInvite
 import com.lastro.core.ui.components.ButtonVariant
-import com.lastro.core.ui.components.LastroAvatarOverlap
+import com.lastro.core.ui.components.LastroAvatar
 import com.lastro.core.ui.components.LastroButton
 import com.lastro.core.ui.components.LastroSegmentedControl
 import com.lastro.core.ui.components.LastroTextField
 import com.lastro.core.ui.components.LastroTopBar
 import com.lastro.core.ui.components.TextFieldType
+import com.lastro.core.ui.theme.LastroColors
 import com.lastro.core.ui.theme.LastroTheme
 import com.lastro.feature.couple.viewmodel.CoupleLinkEvent
 import com.lastro.feature.couple.viewmodel.CoupleLinkUiState
 import com.lastro.feature.couple.viewmodel.CoupleLinkViewModel
-import android.content.Intent
 
 @Composable
 fun CoupleLinkScreen(
@@ -112,10 +122,7 @@ internal fun CoupleLinkContent(
         ) {
             Spacer(Modifier.height(24.dp))
 
-            LastroAvatarOverlap(
-                initials = listOf("G", "M"),
-                size = 52.dp,
-            )
+            CoupleAvatarHero()
 
             Spacer(Modifier.height(20.dp))
 
@@ -307,12 +314,12 @@ private fun InviteStep(
 ) {
     Row(
         verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         Box(
             modifier = Modifier
-                .size(24.dp)
-                .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape),
+                .size(28.dp)
+                .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape),
             contentAlignment = Alignment.Center,
         ) {
             Text(
@@ -323,30 +330,61 @@ private fun InviteStep(
             )
         }
 
-        if (highlight != null) {
-            val parts = text.split(highlight, limit = 2)
-            Row {
-                if (parts.isNotEmpty()) {
-                    Text(
-                        text = highlight,
-                        style = MaterialTheme.typography.bodySmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
+        val onSurface = MaterialTheme.colorScheme.onSurfaceVariant
+        val onBg = MaterialTheme.colorScheme.onBackground
+        val annotated = buildAnnotatedString {
+            if (highlight != null) {
+                val parts = text.split(highlight, limit = 2)
+                withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = onBg)) {
+                    append(highlight)
                 }
                 if (parts.size > 1) {
-                    Text(
-                        text = parts[1],
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
+                    withStyle(SpanStyle(color = onSurface)) {
+                        append(parts[1])
+                    }
+                }
+            } else {
+                withStyle(SpanStyle(color = onSurface)) {
+                    append(text)
                 }
             }
-        } else {
-            Text(
-                text = text,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+        }
+
+        Text(
+            text = annotated,
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.weight(1f),
+        )
+    }
+}
+
+@Composable
+private fun CoupleAvatarHero(modifier: Modifier = Modifier) {
+    val brushG = Brush.linearGradient(listOf(LastroColors.Accent, LastroColors.Positive))
+    val brushM = Brush.linearGradient(listOf(Color(0xFFFF7C6B), Color(0xFFFFD06B)))
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center,
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            LastroAvatar(initial = "G", size = 64.dp, brush = brushG)
+            LastroAvatar(initial = "M", size = 64.dp, brush = brushM)
+        }
+        Box(
+            modifier = Modifier
+                .size(32.dp)
+                .border(3.dp, MaterialTheme.colorScheme.background, CircleShape)
+                .background(MaterialTheme.colorScheme.surface, CircleShape),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                imageVector = Icons.Default.Link,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(18.dp),
             )
         }
     }
