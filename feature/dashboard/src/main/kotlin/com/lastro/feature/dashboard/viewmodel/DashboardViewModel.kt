@@ -3,8 +3,12 @@ package com.lastro.feature.dashboard.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lastro.core.common.Result
+import com.lastro.core.domain.model.TransactionType
+import com.lastro.core.domain.usecase.CalculateBudgetBreakdownUseCase
+import com.lastro.core.domain.usecase.GetTransactionsUseCase
 import com.lastro.core.domain.usecase.GetUserProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -18,6 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
     private val getUserProfile: GetUserProfileUseCase,
+    private val getTransactions: GetTransactionsUseCase,
+    private val calculateBudgetBreakdown: CalculateBudgetBreakdownUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DashboardUiState())
@@ -33,14 +39,59 @@ class DashboardViewModel @Inject constructor(
     fun load() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
-            when (val result = getUserProfile()) {
-                is Result.Success -> _uiState.update {
-                    it.copy(isLoading = false, userName = result.data.name.firstName())
-                }
-                is Result.Error -> _uiState.update {
-                    it.copy(isLoading = false, error = result.message)
-                }
-                is Result.Loading -> Unit
+
+            val month = _uiState.value.currentMonth
+            val userDeferred = async { getUserProfile() }
+            val txDeferred = async { getTransactions(month.year, month.monthValue) }
+
+            val userResult = userDeferred.await()
+            val txResult = txDeferred.await()
+
+            val userName = when (userResult) {
+                is Result.Success -> userResult.data.name.firstName()
+                else -> ""
+            }
+            val hasPartner = when (userResult) {
+                is Result.Success -> userResult.data.partner != null
+                else -> false
+            }
+            val income = when (userResult) {
+                is Result.Success -> userResult.data.monthlyIncome ?: BigDecimal.ZERO
+                else -> BigDecimal.ZERO
+            }
+
+            val transactions = when (txResult) {
+                is Result.Success -> txResult.data
+                else -> emptyList()
+            }
+
+            val totalIncome = transactions
+                .filter { it.direction == TransactionType.INCOME }
+                .fold(BigDecimal.ZERO) { acc, tx -> acc + tx.amount }
+            val totalExpense = transactions
+                .filter { it.direction == TransactionType.EXPENSE }
+                .fold(BigDecimal.ZERO) { acc, tx -> acc + tx.amount }
+
+            val breakdown = calculateBudgetBreakdown(income, transactions)
+
+            val error = when {
+                userResult is Result.Error -> userResult.message
+                txResult is Result.Error -> txResult.message
+                else -> null
+            }
+
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    userName = userName,
+                    hasPartner = hasPartner,
+                    totalIncome = totalIncome,
+                    totalExpense = totalExpense,
+                    balance = totalIncome - totalExpense,
+                    budgetBreakdown = breakdown,
+                    recentTransactions = transactions.sortedByDescending { tx -> tx.date }.take(4),
+                    error = error,
+                )
             }
         }
     }
