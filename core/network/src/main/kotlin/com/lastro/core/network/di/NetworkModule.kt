@@ -4,8 +4,13 @@ import com.lastro.core.network.BuildConfig
 import com.lastro.core.network.auth.AuthInterceptor
 import com.lastro.core.network.auth.TokenStore
 import com.lastro.core.network.auth.TokenStoreImpl
+import com.google.gson.Gson
 import com.lastro.core.network.service.AuthApiService
+import com.lastro.core.network.service.CategoryApiService
 import com.lastro.core.network.service.CoupleApiService
+import com.lastro.core.network.service.DashboardApiService
+import com.lastro.core.network.service.GoalApiService
+import com.lastro.core.network.service.RecurringApiService
 import com.lastro.core.network.service.TransactionApiService
 import com.lastro.core.network.service.UserApiService
 import dagger.Binds
@@ -57,11 +62,15 @@ abstract class NetworkModule {
 
         @Provides
         @Singleton
-        fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
+        fun provideGson(): Gson = Gson()
+
+        @Provides
+        @Singleton
+        fun provideRetrofit(okHttpClient: OkHttpClient, gson: Gson): Retrofit =
             Retrofit.Builder()
                 .baseUrl(BuildConfig.API_BASE_URL)
                 .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
 
         @Provides
@@ -83,5 +92,25 @@ abstract class NetworkModule {
         @Singleton
         fun provideCoupleApiService(retrofit: Retrofit): CoupleApiService =
             retrofit.create(CoupleApiService::class.java)
+
+        @Provides
+        @Singleton
+        fun provideCategoryApiService(retrofit: Retrofit): CategoryApiService =
+            retrofit.create(CategoryApiService::class.java)
+
+        @Provides
+        @Singleton
+        fun provideGoalApiService(retrofit: Retrofit): GoalApiService =
+            retrofit.create(GoalApiService::class.java)
+
+        @Provides
+        @Singleton
+        fun provideRecurringApiService(retrofit: Retrofit): RecurringApiService =
+            retrofit.create(RecurringApiService::class.java)
+
+        @Provides
+        @Singleton
+        fun provideDashboardApiService(retrofit: Retrofit): DashboardApiService =
+            retrofit.create(DashboardApiService::class.java)
     }
 }
