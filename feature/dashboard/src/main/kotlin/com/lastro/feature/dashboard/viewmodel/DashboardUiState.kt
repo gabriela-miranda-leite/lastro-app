@@ -8,6 +8,9 @@ import java.time.YearMonth
 data class DashboardUiState(
     val isLoading: Boolean = false,
     val userName: String = "",
+    val currentUserId: String = "",
+    val currentUserInitial: String = "",
+    val partnerInitial: String? = null,
     val hasPartner: Boolean = false,
     val currentMonth: YearMonth = YearMonth.now(),
     val totalIncome: BigDecimal = BigDecimal.ZERO,

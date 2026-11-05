@@ -47,18 +47,13 @@ class DashboardViewModel @Inject constructor(
             val userResult = userDeferred.await()
             val txResult = txDeferred.await()
 
-            val userName = when (userResult) {
-                is Result.Success -> userResult.data.name.firstName()
-                else -> ""
-            }
-            val hasPartner = when (userResult) {
-                is Result.Success -> userResult.data.partner != null
-                else -> false
-            }
-            val income = when (userResult) {
-                is Result.Success -> userResult.data.monthlyIncome ?: BigDecimal.ZERO
-                else -> BigDecimal.ZERO
-            }
+            val user = (userResult as? Result.Success)?.data
+            val userName = user?.name?.firstName() ?: ""
+            val hasPartner = user?.partner != null
+            val income = user?.monthlyIncome ?: BigDecimal.ZERO
+            val currentUserId = user?.id ?: ""
+            val currentUserInitial = userName.firstOrNull()?.uppercase() ?: ""
+            val partnerInitial = user?.partner?.name?.firstName()?.firstOrNull()?.uppercase()
 
             val transactions = when (txResult) {
                 is Result.Success -> txResult.data
@@ -84,6 +79,9 @@ class DashboardViewModel @Inject constructor(
                 it.copy(
                     isLoading = false,
                     userName = userName,
+                    currentUserId = currentUserId,
+                    currentUserInitial = currentUserInitial,
+                    partnerInitial = partnerInitial,
                     hasPartner = hasPartner,
                     totalIncome = totalIncome,
                     totalExpense = totalExpense,

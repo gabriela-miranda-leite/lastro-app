@@ -2,12 +2,12 @@ package com.lastro.feature.dashboard.ui
 
 import android.view.WindowManager
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.GridView
@@ -30,12 +32,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
@@ -47,6 +51,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -62,8 +67,6 @@ import com.lastro.core.ui.components.LastroAvatar
 import com.lastro.core.ui.components.LastroBottomNavigation
 import com.lastro.core.ui.components.LastroCard
 import com.lastro.core.ui.components.LastroFab
-import com.lastro.core.ui.components.LastroIconWrap
-import com.lastro.core.ui.components.IconWrapVariant
 import com.lastro.core.ui.theme.LastroColors
 import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
@@ -100,9 +103,7 @@ fun DashboardScreen(
     DisposableEffect(Unit) {
         val window = view.context.findActivity()?.window
         window?.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
-        onDispose {
-            window?.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
-        }
+        onDispose { window?.clearFlags(WindowManager.LayoutParams.FLAG_SECURE) }
     }
 
     LaunchedEffect(Unit) {
@@ -116,16 +117,15 @@ fun DashboardScreen(
 
     DashboardScreenContent(
         uiState = uiState,
-        selectedNavIndex = 0,
+        onToggleBalanceVisibility = viewModel::toggleBalanceVisibility,
+        onNewTransaction = viewModel::onNewTransaction,
+        onAllTransactions = viewModel::onAllTransactions,
         onNavSelected = { index ->
             when (index) {
                 1 -> onNavigateToTransactions()
                 3 -> onNavigateToProfile()
             }
         },
-        onToggleBalanceVisibility = viewModel::toggleBalanceVisibility,
-        onNewTransaction = viewModel::onNewTransaction,
-        onAllTransactions = viewModel::onAllTransactions,
     )
 }
 
@@ -147,10 +147,7 @@ fun DashboardScreenContent(
             )
         },
         floatingActionButton = {
-            LastroFab(
-                onClick = onNewTransaction,
-                contentDescription = "Nova transação",
-            )
+            LastroFab(onClick = onNewTransaction, contentDescription = "Nova transação")
         },
     ) { padding ->
         Column(
@@ -159,11 +156,9 @@ fun DashboardScreenContent(
                 .padding(padding)
                 .verticalScroll(rememberScrollState()),
         ) {
-            DashboardHeader(
-                userName = uiState.userName,
-                currentMonth = uiState.currentMonth,
-            )
-            Spacer(modifier = Modifier.height(LastroSpacing.xl))
+            DashboardHeader(userName = uiState.userName, currentMonth = uiState.currentMonth)
+            Spacer(Modifier.height(LastroSpacing.xl))
+
             BalanceCard(
                 balance = uiState.balance,
                 totalIncome = uiState.totalIncome,
@@ -175,8 +170,9 @@ fun DashboardScreenContent(
                     .fillMaxWidth()
                     .padding(horizontal = LastroSpacing.screenHorizontal),
             )
+
             if (uiState.budgetBreakdown.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(LastroSpacing.xl))
+                Spacer(Modifier.height(LastroSpacing.xl))
                 CategoryBreakdownCard(
                     breakdown = uiState.budgetBreakdown,
                     modifier = Modifier
@@ -184,7 +180,8 @@ fun DashboardScreenContent(
                         .padding(horizontal = LastroSpacing.screenHorizontal),
                 )
             }
-            Spacer(modifier = Modifier.height(LastroSpacing.xl))
+
+            Spacer(Modifier.height(LastroSpacing.xl))
             DailyBalanceCard(
                 transactions = uiState.recentTransactions,
                 currentMonth = uiState.currentMonth,
@@ -192,26 +189,27 @@ fun DashboardScreenContent(
                     .fillMaxWidth()
                     .padding(horizontal = LastroSpacing.screenHorizontal),
             )
+
             if (uiState.recentTransactions.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(LastroSpacing.xl))
+                Spacer(Modifier.height(LastroSpacing.xl))
                 RecentTransactionsSection(
                     transactions = uiState.recentTransactions,
                     isVisible = uiState.isBalanceVisible,
+                    currentUserId = uiState.currentUserId,
+                    currentUserInitial = uiState.currentUserInitial,
+                    partnerInitial = uiState.partnerInitial,
                     onSeeAll = onAllTransactions,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
-            Spacer(modifier = Modifier.height(LastroSpacing.xxxl))
+
+            Spacer(Modifier.height(LastroSpacing.xxxl))
         }
     }
 }
 
 @Composable
-private fun DashboardHeader(
-    userName: String,
-    currentMonth: YearMonth,
-    modifier: Modifier = Modifier,
-) {
+private fun DashboardHeader(userName: String, currentMonth: YearMonth, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -229,6 +227,7 @@ private fun DashboardHeader(
             Text(
                 text = currentMonth.format(monthFormatter).replaceFirstChar { it.uppercase() },
                 style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground,
             )
         }
@@ -248,7 +247,6 @@ private fun BalanceCard(
     onToggleVisibility: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val balanceLabel = if (isVisible) balance.toBRL() else "R\$ ••••"
     val a11yBalance = if (isVisible) "Saldo: ${balance.toBRL()}" else "Saldo oculto"
 
     LastroCard(modifier = modifier) {
@@ -271,22 +269,28 @@ private fun BalanceCard(
             }
         }
         Text(
-            text = balanceLabel,
-            style = MaterialTheme.typography.displayLarge,
-            color = MaterialTheme.colorScheme.onSurface,
+            text = if (isVisible) balance.toBRL() else "R\$ ••••",
+            style = MaterialTheme.typography.displayMedium,
+            color = LastroColors.Positive,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.semantics { contentDescription = a11yBalance },
         )
-        Spacer(modifier = Modifier.height(LastroSpacing.xl))
+        Spacer(Modifier.height(LastroSpacing.xl))
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-        Spacer(modifier = Modifier.height(LastroSpacing.xl))
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Spacer(Modifier.height(LastroSpacing.xl))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp),
+        ) {
             BalanceStat(
                 label = "RECEITAS",
                 value = if (isVisible) totalIncome.toBRL() else "R\$ ••••",
                 color = LastroColors.Positive,
                 modifier = Modifier.weight(1f),
             )
+            VerticalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            Spacer(Modifier.width(LastroSpacing.xl))
             BalanceStat(
                 label = "DESPESAS",
                 value = if (isVisible) totalExpense.toBRL() else "R\$ ••••",
@@ -298,19 +302,14 @@ private fun BalanceCard(
 }
 
 @Composable
-private fun BalanceStat(
-    label: String,
-    value: String,
-    color: Color,
-    modifier: Modifier = Modifier,
-) {
+private fun BalanceStat(label: String, value: String, color: Color, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        Spacer(modifier = Modifier.height(LastroSpacing.xs))
+        Spacer(Modifier.height(LastroSpacing.xs))
         Text(
             text = value,
             style = MaterialTheme.typography.titleMedium,
@@ -320,36 +319,32 @@ private fun BalanceStat(
     }
 }
 
-private data class BreakdownSlice(
-    val label: String,
-    val color: Color,
-    val percentage: Float,
-    val amount: BigDecimal,
-)
+// ─── Gastos por categoria ────────────────────────────────────────────────────
 
-private fun BudgetType.toSliceLabel() = when (this) {
+private data class BreakdownSlice(val label: String, val color: Color, val pct: Float, val amount: BigDecimal)
+
+private fun BudgetType.label() = when (this) {
     BudgetType.NEEDS -> "Necessidade"
     BudgetType.WANTS -> "Lazer"
-    BudgetType.SAVINGS -> "Poupança"
+    BudgetType.INVESTMENTS -> "Investimentos"
+    BudgetType.SAVINGS -> "Meta"
 }
 
-private fun BudgetType.toSliceColor() = when (this) {
+private fun BudgetType.sliceColor() = when (this) {
     BudgetType.NEEDS -> Color(0xFF6B7CFF)
-    BudgetType.WANTS -> Color(0xFFFF8C6B)
-    BudgetType.SAVINGS -> Color(0xFFFFD06B)
+    BudgetType.WANTS -> Color(0xFFFF8060)
+    BudgetType.INVESTMENTS -> Color(0xFFFFD06B)
+    BudgetType.SAVINGS -> Color(0xFF4ECBA8)
 }
 
 @Composable
-private fun CategoryBreakdownCard(
-    breakdown: List<BudgetBreakdown>,
-    modifier: Modifier = Modifier,
-) {
+private fun CategoryBreakdownCard(breakdown: List<BudgetBreakdown>, modifier: Modifier = Modifier) {
     val total = breakdown.fold(BigDecimal.ZERO) { acc, b -> acc + b.amount }
     val slices = breakdown.map { b ->
         BreakdownSlice(
-            label = b.type.toSliceLabel(),
-            color = b.type.toSliceColor(),
-            percentage = if (total > BigDecimal.ZERO)
+            label = b.type.label(),
+            color = b.type.sliceColor(),
+            pct = if (total > BigDecimal.ZERO)
                 b.amount.divide(total, 4, RoundingMode.HALF_UP).toFloat()
             else 0f,
             amount = b.amount,
@@ -360,21 +355,12 @@ private fun CategoryBreakdownCard(
         Text(
             text = "Gastos por categoria",
             style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.SemiBold,
         )
-        Spacer(modifier = Modifier.height(LastroSpacing.xl))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(
-                modifier = Modifier.size(100.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                DonutChart(
-                    slices = slices,
-                    modifier = Modifier.fillMaxSize(),
-                )
+        Spacer(Modifier.height(LastroSpacing.xl))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(modifier = Modifier.size(100.dp), contentAlignment = Alignment.Center) {
+                DonutChart(slices = slices, modifier = Modifier.fillMaxSize())
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         text = "total",
@@ -382,66 +368,59 @@ private fun CategoryBreakdownCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     Text(
-                        text = total.toBRL(compact = true),
+                        text = total.toCompactBRL(),
                         style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold,
                     )
                 }
             }
-            Spacer(modifier = Modifier.width(LastroSpacing.xl))
-            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                slices.forEach { slice ->
-                    DonutLegendRow(slice = slice)
-                }
+            Spacer(Modifier.width(LastroSpacing.xl))
+            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                slices.forEach { LegendRow(it) }
             }
         }
     }
 }
 
 @Composable
-private fun DonutChart(
-    slices: List<BreakdownSlice>,
-    modifier: Modifier = Modifier,
-) {
+private fun DonutChart(slices: List<BreakdownSlice>, modifier: Modifier = Modifier) {
     Canvas(modifier = modifier) {
-        val strokeWidth = size.minDimension * 0.18f
-        val radius = (size.minDimension - strokeWidth) / 2f
-        val center = Offset(size.width / 2f, size.height / 2f)
-        val topLeft = Offset(center.x - radius, center.y - radius)
-        val arcSize = Size(radius * 2f, radius * 2f)
-
-        var startAngle = -90f
-        val gapDeg = 3f
-
+        val stroke = size.minDimension * 0.17f
+        val r = (size.minDimension - stroke) / 2f
+        val tl = Offset(size.width / 2f - r, size.height / 2f - r)
+        val arcSize = Size(r * 2f, r * 2f)
+        var start = -90f
         slices.forEach { slice ->
-            val sweep = slice.percentage * 360f - gapDeg
+            val sweep = (slice.pct * 360f - 2f).coerceAtLeast(0f)
             drawArc(
                 color = slice.color,
-                startAngle = startAngle,
-                sweepAngle = sweep.coerceAtLeast(0f),
+                startAngle = start,
+                sweepAngle = sweep,
                 useCenter = false,
-                topLeft = topLeft,
+                topLeft = tl,
                 size = arcSize,
-                style = Stroke(width = strokeWidth, cap = StrokeCap.Round),
+                style = Stroke(width = stroke, cap = StrokeCap.Round),
             )
-            startAngle += slice.percentage * 360f
+            start += slice.pct * 360f
         }
     }
 }
 
 @Composable
-private fun DonutLegendRow(slice: BreakdownSlice) {
+private fun LegendRow(slice: BreakdownSlice) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth(),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Canvas(modifier = Modifier.size(8.dp)) {
-                drawCircle(color = slice.color)
-            }
-            Spacer(modifier = Modifier.width(6.dp))
+            Box(
+                modifier = Modifier
+                    .size(10.dp)
+                    .clip(RoundedCornerShape(2.dp))
+                    .background(slice.color),
+            )
+            Spacer(Modifier.width(6.dp))
             Text(
                 text = slice.label,
                 style = MaterialTheme.typography.bodySmall,
@@ -449,13 +428,15 @@ private fun DonutLegendRow(slice: BreakdownSlice) {
             )
         }
         Text(
-            text = "${(slice.percentage * 100).toInt()}%",
+            text = "${(slice.pct * 100).toInt()}%",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontWeight = FontWeight.Medium,
         )
     }
 }
+
+// ─── Saldo diário ────────────────────────────────────────────────────────────
 
 @Composable
 private fun DailyBalanceCard(
@@ -464,85 +445,67 @@ private fun DailyBalanceCard(
     modifier: Modifier = Modifier,
 ) {
     val lineColor = LastroColors.Accent
-
-    val dailyPoints = buildDailyBalancePoints(transactions, currentMonth)
+    val points = buildDailyPoints(transactions, currentMonth)
 
     LastroCard(modifier = modifier) {
         Text(
             text = "Saldo diário",
             style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.SemiBold,
         )
-        Spacer(modifier = Modifier.height(LastroSpacing.xl))
+        Spacer(Modifier.height(LastroSpacing.xl))
         Canvas(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(80.dp),
+                .height(90.dp),
         ) {
-            if (dailyPoints.size < 2) return@Canvas
+            if (points.size < 2) return@Canvas
 
-            val minVal = dailyPoints.minOf { it.second }
-            val maxVal = dailyPoints.maxOf { it.second }
-            val range = (maxVal - minVal).coerceAtLeast(1.0)
+            val minV = points.minOf { it.second }
+            val maxV = points.maxOf { it.second }
+            val range = (maxV - minV).coerceAtLeast(1.0)
+            val padV = size.height * 0.12f
 
-            fun xOf(i: Int) = i.toFloat() / (dailyPoints.size - 1) * size.width
-            fun yOf(v: Double) = size.height - ((v - minVal) / range * size.height * 0.8f + size.height * 0.1f).toFloat()
+            fun xOf(i: Int) = i.toFloat() / (points.size - 1) * size.width
+            fun yOf(v: Double) = (size.height - padV) - ((v - minV) / range * (size.height - padV * 2)).toFloat()
 
-            val path = Path()
-            path.moveTo(xOf(0), yOf(dailyPoints[0].second))
-            for (i in 1 until dailyPoints.size) {
-                val x0 = xOf(i - 1); val y0 = yOf(dailyPoints[i - 1].second)
-                val x1 = xOf(i); val y1 = yOf(dailyPoints[i].second)
-                val cx = (x0 + x1) / 2f
-                path.cubicTo(cx, y0, cx, y1, x1, y1)
+            val path = Path().apply {
+                moveTo(xOf(0), yOf(points[0].second))
+                for (i in 1 until points.size) {
+                    val cx = (xOf(i - 1) + xOf(i)) / 2f
+                    cubicTo(cx, yOf(points[i - 1].second), cx, yOf(points[i].second), xOf(i), yOf(points[i].second))
+                }
             }
 
             val fillPath = Path().apply {
                 addPath(path)
-                lineTo(xOf(dailyPoints.size - 1), size.height)
-                lineTo(xOf(0), size.height)
+                lineTo(xOf(points.size - 1), size.height)
+                lineTo(0f, size.height)
                 close()
             }
 
             drawPath(
                 path = fillPath,
                 brush = Brush.verticalGradient(
-                    colors = listOf(lineColor.copy(alpha = 0.3f), lineColor.copy(alpha = 0f)),
+                    colors = listOf(lineColor.copy(alpha = 0.35f), lineColor.copy(alpha = 0f)),
                 ),
             )
-            drawPath(
-                path = path,
-                color = lineColor,
-                style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round),
-            )
+            drawPath(path = path, color = lineColor, style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round))
         }
-        Spacer(modifier = Modifier.height(LastroSpacing.sm))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            listOf("1", "8", "15", "22", currentMonth.lengthOfMonth().toString()).forEach { label ->
-                Text(
-                    text = label,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+        Spacer(Modifier.height(LastroSpacing.sm))
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            listOf("1", "8", "15", "22", currentMonth.lengthOfMonth().toString()).forEach { d ->
+                Text(text = d, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }
 }
 
-private fun buildDailyBalancePoints(
-    transactions: List<Transaction>,
-    month: YearMonth,
-): List<Pair<Int, Double>> {
-    val days = month.lengthOfMonth()
+private fun buildDailyPoints(transactions: List<Transaction>, month: YearMonth): List<Pair<Int, Double>> {
     val byDay = transactions.groupBy { it.date.dayOfMonth }
     var running = 0.0
-    return (1..days).map { day ->
-        val dayTxs = byDay[day] ?: emptyList()
-        dayTxs.forEach { tx ->
+    return (1..month.lengthOfMonth()).map { day ->
+        (byDay[day] ?: emptyList()).forEach { tx ->
             if (tx.direction == TransactionType.INCOME) running += tx.amount.toDouble()
             else running -= tx.amount.toDouble()
         }
@@ -550,10 +513,15 @@ private fun buildDailyBalancePoints(
     }
 }
 
+// ─── Recentes ────────────────────────────────────────────────────────────────
+
 @Composable
 private fun RecentTransactionsSection(
     transactions: List<Transaction>,
     isVisible: Boolean,
+    currentUserId: String,
+    currentUserInitial: String,
+    partnerInitial: String?,
     onSeeAll: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -568,21 +536,19 @@ private fun RecentTransactionsSection(
             Text(
                 text = "Recentes",
                 style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold,
             )
             TextButton(onClick = onSeeAll) {
-                Text(
-                    text = "Ver todas",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = LastroColors.Accent,
-                )
+                Text(text = "Ver todas", style = MaterialTheme.typography.labelMedium, color = LastroColors.Accent)
             }
         }
         transactions.forEachIndexed { index, tx ->
             TransactionListItem(
                 transaction = tx,
                 isVisible = isVisible,
+                currentUserId = currentUserId,
+                currentUserInitial = currentUserInitial,
+                partnerInitial = partnerInitial,
             )
             if (index < transactions.lastIndex) {
                 HorizontalDivider(
@@ -598,6 +564,9 @@ private fun RecentTransactionsSection(
 private fun TransactionListItem(
     transaction: Transaction,
     isVisible: Boolean,
+    currentUserId: String,
+    currentUserInitial: String,
+    partnerInitial: String?,
 ) {
     val isIncome = transaction.direction == TransactionType.INCOME
     val amountColor = if (isIncome) LastroColors.Positive else LastroColors.Negative
@@ -611,30 +580,46 @@ private fun TransactionListItem(
         else -> transaction.date.format(shortDateFormatter)
     }
 
+    val categoryName = transaction.category?.name ?: if (isIncome) "Receita" else "Despesa"
+    val subtitle = "$categoryName · $dateLabel"
+
+    val userBadge = when {
+        transaction.isShared && partnerInitial != null -> "$currentUserInitial+$partnerInitial"
+        transaction.userId == currentUserId -> currentUserInitial
+        else -> partnerInitial ?: currentUserInitial
+    }
+
+    val iconEmoji = transaction.category?.icon
+    val iconBgColor = transaction.category?.color?.parseHexColor()
+        ?: if (isIncome) LastroColors.Positive.copy(alpha = 0.15f) else LastroColors.Negative.copy(alpha = 0.15f)
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = LastroSpacing.screenHorizontal, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        LastroIconWrap(
-            icon = if (isIncome) Icons.Outlined.SwapVert else Icons.Outlined.SwapVert,
-            contentDescription = null,
-            variant = if (isIncome) IconWrapVariant.Positive else IconWrapVariant.Negative,
-        )
-        Spacer(modifier = Modifier.width(12.dp))
+        CategoryIconBox(emoji = iconEmoji, bgColor = iconBgColor)
+        Spacer(Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = transaction.description ?: categoryName,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f, fill = false),
+                )
+                UserBadge(label = userBadge)
+            }
             Text(
-                text = transaction.description ?: transaction.category?.name ?: "Transação",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            Text(
-                text = "${transaction.category?.name ?: if (isIncome) "Receita" else "Despesa"} · $dateLabel",
+                text = subtitle,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
+        Spacer(Modifier.width(12.dp))
         Text(
             text = amountText,
             style = MaterialTheme.typography.bodyMedium,
@@ -642,6 +627,59 @@ private fun TransactionListItem(
             fontWeight = FontWeight.SemiBold,
         )
     }
+}
+
+@Composable
+private fun CategoryIconBox(emoji: String?, bgColor: Color) {
+    Box(
+        modifier = Modifier
+            .size(40.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(bgColor),
+        contentAlignment = Alignment.Center,
+    ) {
+        if (emoji != null) {
+            Text(text = emoji, fontSize = 18.sp)
+        } else {
+            Icon(
+                imageVector = Icons.Outlined.SwapVert,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(20.dp),
+            )
+        }
+    }
+}
+
+@Composable
+private fun UserBadge(label: String) {
+    Box(
+        modifier = Modifier
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.outlineVariant),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.padding(horizontal = 5.dp, vertical = 1.dp),
+        )
+    }
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+private fun String.parseHexColor(): Color? = try {
+    Color(android.graphics.Color.parseColor(this))
+} catch (_: Exception) {
+    null
+}
+
+private fun BigDecimal.toCompactBRL(): String {
+    val thousands = this.divide(BigDecimal("1000"), 1, RoundingMode.HALF_UP)
+    return if (this >= BigDecimal("1000")) "R\$${thousands}k" else toBRL()
 }
 
 private fun android.content.Context.findActivity(): android.app.Activity? {
@@ -653,35 +691,25 @@ private fun android.content.Context.findActivity(): android.app.Activity? {
     return null
 }
 
-private fun BigDecimal.toBRL(compact: Boolean = false): String {
-    if (!compact) return toBRL()
-    return when {
-        this >= BigDecimal("1000") -> "R\$${(this / BigDecimal("1000")).setScale(1, RoundingMode.HALF_UP)}k"
-        else -> toBRL()
-    }
-}
+// ─── Previews ────────────────────────────────────────────────────────────────
 
 @Preview(name = "Dashboard - Dark")
 @Composable
-private fun PreviewDark() = LastroTheme {
-    DashboardScreenContent(uiState = previewFilledState())
-}
+private fun PreviewDark() = LastroTheme { DashboardScreenContent(uiState = previewState()) }
 
 @Preview(name = "Dashboard - Light")
 @Composable
-private fun PreviewLight() = LastroTheme(darkTheme = false) {
-    DashboardScreenContent(uiState = previewFilledState())
-}
+private fun PreviewLight() = LastroTheme(darkTheme = false) { DashboardScreenContent(uiState = previewState()) }
 
 @Preview(name = "Dashboard - Saldo oculto")
 @Composable
-private fun PreviewHidden() = LastroTheme {
-    DashboardScreenContent(uiState = previewFilledState().copy(isBalanceVisible = false))
-}
+private fun PreviewHidden() = LastroTheme { DashboardScreenContent(uiState = previewState().copy(isBalanceVisible = false)) }
 
-private fun previewFilledState() = DashboardUiState(
+private fun previewState() = DashboardUiState(
     userName = "Gabi",
     hasPartner = true,
+    currentUserInitial = "G",
+    partnerInitial = "M",
     totalIncome = BigDecimal("12200"),
     totalExpense = BigDecimal("5325"),
     balance = BigDecimal("6875"),
