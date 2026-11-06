@@ -68,6 +68,7 @@ import com.lastro.core.ui.components.LastroBottomNavigation
 import com.lastro.core.ui.components.LastroCard
 import com.lastro.core.ui.components.LastroFab
 import com.lastro.core.ui.theme.LastroColors
+import com.lastro.core.ui.theme.LastroSize
 import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
 import com.lastro.feature.dashboard.viewmodel.DashboardEvent
@@ -82,6 +83,13 @@ import java.util.Locale
 
 private val monthFormatter = DateTimeFormatter.ofPattern("MMMM yyyy", Locale("pt", "BR"))
 private val shortDateFormatter = DateTimeFormatter.ofPattern("d MMM", Locale("pt", "BR"))
+
+private val DonutChartSize = 100.dp
+private val ChartHeight = 90.dp
+private val ChartStrokeWidth = 2.dp
+private val BalanceRowHeight = 48.dp
+private val BadgePaddingH = 5.dp
+private val BadgePaddingV = 1.dp
 
 private val bottomNavItems = listOf(
     BottomNavItem("Dashboard", Icons.Outlined.GridView, "Dashboard"),
@@ -203,7 +211,7 @@ fun DashboardScreenContent(
                 )
             }
 
-            Spacer(Modifier.height(LastroSpacing.bottomSafe + 56.dp))
+            Spacer(Modifier.height(LastroSpacing.bottomSafe + LastroSize.fab))
         }
     }
 }
@@ -281,7 +289,7 @@ private fun BalanceCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp),
+                .height(BalanceRowHeight),
         ) {
             BalanceStat(
                 label = "RECEITAS",
@@ -359,7 +367,7 @@ private fun CategoryBreakdownCard(breakdown: List<BudgetBreakdown>, modifier: Mo
         )
         Spacer(Modifier.height(LastroSpacing.xl))
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(modifier = Modifier.size(100.dp), contentAlignment = Alignment.Center) {
+            Box(modifier = Modifier.size(DonutChartSize), contentAlignment = Alignment.Center) {
                 DonutChart(slices = slices, modifier = Modifier.fillMaxSize())
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
@@ -375,7 +383,7 @@ private fun CategoryBreakdownCard(breakdown: List<BudgetBreakdown>, modifier: Mo
                 }
             }
             Spacer(Modifier.width(LastroSpacing.xl))
-            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(LastroSpacing.xxl / 2)) {
                 slices.forEach { LegendRow(it) }
             }
         }
@@ -416,11 +424,11 @@ private fun LegendRow(slice: BreakdownSlice) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
                 modifier = Modifier
-                    .size(10.dp)
-                    .clip(RoundedCornerShape(2.dp))
+                    .size(LastroSize.legendDot)
+                    .clip(MaterialTheme.shapes.extraSmall)
                     .background(slice.color),
             )
-            Spacer(Modifier.width(6.dp))
+            Spacer(Modifier.width(LastroSpacing.sm))
             Text(
                 text = slice.label,
                 style = MaterialTheme.typography.bodySmall,
@@ -457,7 +465,7 @@ private fun DailyBalanceCard(
         Canvas(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(90.dp),
+                .height(ChartHeight),
         ) {
             if (points.size < 2) return@Canvas
 
@@ -490,7 +498,7 @@ private fun DailyBalanceCard(
                     colors = listOf(lineColor.copy(alpha = 0.35f), lineColor.copy(alpha = 0f)),
                 ),
             )
-            drawPath(path = path, color = lineColor, style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round))
+            drawPath(path = path, color = lineColor, style = Stroke(width = ChartStrokeWidth.toPx(), cap = StrokeCap.Round))
         }
         Spacer(Modifier.height(LastroSpacing.sm))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -597,13 +605,13 @@ private fun TransactionListItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = LastroSpacing.screenHorizontal, vertical = 12.dp),
+            .padding(horizontal = LastroSpacing.screenHorizontal, vertical = LastroSpacing.md),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         CategoryIconBox(emoji = iconEmoji, bgColor = iconBgColor)
-        Spacer(Modifier.width(12.dp))
+        Spacer(Modifier.width(LastroSpacing.md))
         Column(modifier = Modifier.weight(1f)) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(LastroSpacing.xs)) {
                 Text(
                     text = transaction.description ?: categoryName,
                     style = MaterialTheme.typography.bodyMedium,
@@ -620,7 +628,7 @@ private fun TransactionListItem(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        Spacer(Modifier.width(12.dp))
+        Spacer(Modifier.width(LastroSpacing.md))
         Text(
             text = amountText,
             style = MaterialTheme.typography.bodyMedium,
@@ -634,19 +642,19 @@ private fun TransactionListItem(
 private fun CategoryIconBox(emoji: String?, bgColor: Color) {
     Box(
         modifier = Modifier
-            .size(40.dp)
-            .clip(RoundedCornerShape(12.dp))
+            .size(LastroSize.listIcon)
+            .clip(MaterialTheme.shapes.small)
             .background(bgColor),
         contentAlignment = Alignment.Center,
     ) {
         if (emoji != null) {
-            Text(text = emoji, fontSize = 18.sp)
+            Text(text = emoji, style = MaterialTheme.typography.titleMedium)
         } else {
             Icon(
                 imageVector = Icons.Outlined.SwapVert,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(LastroSize.listIconInner),
             )
         }
     }
@@ -665,7 +673,7 @@ private fun UserBadge(label: String) {
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontWeight = FontWeight.Medium,
-            modifier = Modifier.padding(horizontal = 5.dp, vertical = 1.dp),
+            modifier = Modifier.padding(horizontal = BadgePaddingH, vertical = BadgePaddingV),
         )
     }
 }
