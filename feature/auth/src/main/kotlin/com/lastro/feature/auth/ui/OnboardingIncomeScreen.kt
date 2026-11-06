@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lastro.core.ui.R
+import com.lastro.core.ui.icon.LastroIcons
 import com.lastro.core.common.centsStringToReais
 import com.lastro.core.common.toBRL
 import com.lastro.core.ui.UiText
@@ -176,7 +177,7 @@ internal fun OnboardingIncomeScreenContent(
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_chart_growth),
+                    painter = painterResource(id = LastroIcons.TrendingUp),
                     contentDescription = null,
                     tint = LastroColors.Accent,
                     modifier = Modifier.size(32.dp),

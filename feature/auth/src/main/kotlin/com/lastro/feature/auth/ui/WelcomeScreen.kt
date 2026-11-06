@@ -172,7 +172,7 @@ internal fun WelcomeScreenContent(
                     description = stringResource(R.string.welcome_feature2_desc),
                 )
                 WelcomeFeatureCard(
-                    iconRes = CoreR.drawable.ic_clock,
+                    iconRes = CoreR.drawable.ic_calendar,
                     iconTint = LastroColors.Warning,
                     iconBackground = LastroColors.Warning.copy(alpha = 0.15f),
                     title = stringResource(R.string.welcome_feature3_title),

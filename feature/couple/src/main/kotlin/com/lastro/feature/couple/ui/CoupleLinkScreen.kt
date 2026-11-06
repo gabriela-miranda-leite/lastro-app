@@ -18,11 +18,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.ui.res.painterResource
-import com.lastro.feature.couple.R
-import androidx.compose.material.icons.filled.Link
+import com.lastro.core.ui.icon.LastroIcons
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -260,7 +257,7 @@ private fun InviteSentCard() {
         verticalAlignment = Alignment.Top,
     ) {
         Icon(
-            imageVector = Icons.Default.Check,
+            painter = painterResource(LastroIcons.Check),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.tertiary,
             modifier = Modifier.size(20.dp),
@@ -420,7 +417,7 @@ private fun CoupleAvatarHero(modifier: Modifier = Modifier) {
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_link),
+                painter = painterResource(LastroIcons.Link),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(16.dp),
