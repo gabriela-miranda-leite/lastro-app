@@ -203,7 +203,7 @@ fun DashboardScreenContent(
                 )
             }
 
-            Spacer(Modifier.height(LastroSpacing.xxxl))
+            Spacer(Modifier.height(LastroSpacing.bottomSafe + 56.dp))
         }
     }
 }
@@ -331,10 +331,10 @@ private fun BudgetType.label() = when (this) {
 }
 
 private fun BudgetType.sliceColor() = when (this) {
-    BudgetType.NEEDS -> Color(0xFF6B7CFF)
-    BudgetType.WANTS -> Color(0xFFFF8060)
-    BudgetType.INVESTMENTS -> Color(0xFFFFD06B)
-    BudgetType.SAVINGS -> Color(0xFF4ECBA8)
+    BudgetType.NEEDS -> LastroColors.Accent
+    BudgetType.WANTS -> LastroColors.Negative
+    BudgetType.INVESTMENTS -> LastroColors.Warning
+    BudgetType.SAVINGS -> LastroColors.Positive
 }
 
 @Composable
@@ -590,8 +590,9 @@ private fun TransactionListItem(
     }
 
     val iconEmoji = transaction.category?.icon
-    val iconBgColor = transaction.category?.color?.parseHexColor()
-        ?: if (isIncome) LastroColors.Positive.copy(alpha = 0.15f) else LastroColors.Negative.copy(alpha = 0.15f)
+    val fallbackColor = if (isIncome) LastroColors.Positive else LastroColors.Negative
+    val iconBgColor = transaction.category?.color?.parseHexColor()?.copy(alpha = 0.15f)
+        ?: fallbackColor.copy(alpha = 0.15f)
 
     Row(
         modifier = Modifier
