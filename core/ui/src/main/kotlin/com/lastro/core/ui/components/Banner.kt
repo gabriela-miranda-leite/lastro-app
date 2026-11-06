@@ -14,12 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.lastro.core.ui.R
-import com.lastro.core.ui.theme.LastroColors
+import com.lastro.core.ui.icon.LastroIcons
 import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
 
@@ -31,24 +29,24 @@ fun LastroBanner(
     modifier: Modifier = Modifier,
     type: BannerType = BannerType.Error,
 ) {
-    val (iconPainter, tint, background, border) = when (type) {
+    val (iconRes, tint, background, border) = when (type) {
         BannerType.Error -> BannerStyle(
-            iconPainter = painterResource(R.drawable.ic_alert_triangle),
-            tint = LastroColors.Negative,
-            background = LastroColors.Negative.copy(alpha = 0.12f),
-            border = LastroColors.Negative.copy(alpha = 0.3f),
+            iconRes = LastroIcons.AlertCircle,
+            tint = MaterialTheme.colorScheme.error,
+            background = MaterialTheme.colorScheme.error.copy(alpha = 0.12f),
+            border = MaterialTheme.colorScheme.error.copy(alpha = 0.3f),
         )
         BannerType.Success -> BannerStyle(
-            iconPainter = painterResource(R.drawable.ic_check_circle),
-            tint = LastroColors.Positive,
-            background = LastroColors.Positive.copy(alpha = 0.10f),
-            border = LastroColors.Positive.copy(alpha = 0.3f),
+            iconRes = LastroIcons.CheckCircle,
+            tint = MaterialTheme.colorScheme.tertiary,
+            background = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.10f),
+            border = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.3f),
         )
         BannerType.Info -> BannerStyle(
-            iconPainter = painterResource(R.drawable.ic_info_circle),
-            tint = LastroColors.Accent,
-            background = LastroColors.Accent.copy(alpha = 0.10f),
-            border = LastroColors.Accent.copy(alpha = 0.3f),
+            iconRes = LastroIcons.InfoCircle,
+            tint = MaterialTheme.colorScheme.primary,
+            background = MaterialTheme.colorScheme.primary.copy(alpha = 0.10f),
+            border = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
         )
     }
 
@@ -63,7 +61,7 @@ fun LastroBanner(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                painter = iconPainter,
+                painter = painterResource(iconRes),
                 contentDescription = null,
                 tint = tint,
                 modifier = Modifier.size(16.dp),
@@ -79,7 +77,7 @@ fun LastroBanner(
 }
 
 private data class BannerStyle(
-    val iconPainter: Painter,
+    val iconRes: Int,
     val tint: Color,
     val background: Color,
     val border: Color,

@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.lastro.core.ui.R
+import com.lastro.core.ui.icon.LastroIcons
 import com.lastro.core.ui.theme.LastroTheme
 
 @Composable
@@ -34,7 +34,7 @@ fun LastroBackButton(
         contentAlignment = Alignment.Center,
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.ic_arrow_back),
+            painter = painterResource(id = LastroIcons.ArrowLeft),
             contentDescription = "Voltar",
             tint = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.size(20.dp),

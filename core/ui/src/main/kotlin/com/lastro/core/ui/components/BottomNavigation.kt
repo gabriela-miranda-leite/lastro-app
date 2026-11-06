@@ -1,5 +1,6 @@
 package com.lastro.core.ui.components
 
+import androidx.annotation.DrawableRes
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -7,18 +8,14 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Dashboard
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.SwapHoriz
-import androidx.compose.material.icons.outlined.Timer
+import com.lastro.core.ui.icon.LastroIcons
 import com.lastro.core.ui.theme.LastroTheme
 
 data class BottomNavItem(
     val label: String,
-    val icon: ImageVector,
+    @DrawableRes val iconRes: Int,
     val contentDescription: String,
 )
 
@@ -38,7 +35,7 @@ fun LastroBottomNavigation(
                 onClick = { onItemSelected(index) },
                 icon = {
                     Icon(
-                        imageVector = item.icon,
+                        painter = painterResource(item.iconRes),
                         contentDescription = item.contentDescription,
                     )
                 },
@@ -56,10 +53,9 @@ fun LastroBottomNavigation(
 }
 
 private val previewItems = listOf(
-    BottomNavItem("Dashboard", Icons.Outlined.Dashboard, "Dashboard"),
-    BottomNavItem("Transações", Icons.Outlined.SwapHoriz, "Transações"),
-    BottomNavItem("Fixos", Icons.Outlined.Timer, "Fixos"),
-    BottomNavItem("Perfil", Icons.Outlined.Person, "Perfil"),
+    BottomNavItem("Dashboard", LastroIcons.Dashboard, "Dashboard"),
+    BottomNavItem("Transações", LastroIcons.List, "Transações"),
+    BottomNavItem("Perfil", LastroIcons.UserCircle, "Perfil"),
 )
 
 @Preview(name = "BottomNav - Dark")

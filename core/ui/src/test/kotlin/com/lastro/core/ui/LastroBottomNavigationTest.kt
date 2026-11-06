@@ -1,14 +1,12 @@
 package com.lastro.core.ui
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Dashboard
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.lastro.core.ui.components.BottomNavItem
 import com.lastro.core.ui.components.LastroBottomNavigation
+import com.lastro.core.ui.icon.LastroIcons
 import com.lastro.core.ui.theme.LastroTheme
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -25,8 +23,8 @@ class LastroBottomNavigationTest {
     val composeRule = createComposeRule()
 
     private val items = listOf(
-        BottomNavItem("Dashboard", Icons.Outlined.Dashboard, "Dashboard"),
-        BottomNavItem("Perfil", Icons.Outlined.Person, "Perfil"),
+        BottomNavItem("Dashboard", LastroIcons.Dashboard, "Dashboard"),
+        BottomNavItem("Perfil", LastroIcons.UserCircle, "Perfil"),
     )
 
     @Test
