@@ -17,8 +17,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.lastro.core.ui.icon.LastroIcons
+import com.lastro.core.ui.theme.LastroIconSize
+import com.lastro.core.ui.theme.LastroIconWrapSize
 import com.lastro.core.ui.theme.LastroTheme
 
 enum class IconWrapVariant { Default, Positive, Negative }
@@ -37,6 +40,8 @@ fun LastroIconWrap(
     painter: Painter,
     contentDescription: String? = null,
     variant: IconWrapVariant = IconWrapVariant.Default,
+    wrapSize: Dp = LastroIconWrapSize.xl,
+    iconSize: Dp = LastroIconSize.lg,
     modifier: Modifier = Modifier,
 ) {
     val color = variant.color()
@@ -46,7 +51,7 @@ fun LastroIconWrap(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .size(64.dp)
+            .size(wrapSize)
             .clip(IconWrapShape)
             .drawBehind { drawRect(bg) }
             .border(1.dp, borderColor, IconWrapShape),
@@ -55,7 +60,7 @@ fun LastroIconWrap(
             painter = painter,
             contentDescription = contentDescription,
             tint = color,
-            modifier = Modifier.size(28.dp),
+            modifier = Modifier.size(iconSize),
         )
     }
 }
@@ -65,8 +70,10 @@ fun LastroIconWrap(
     icon: ImageVector,
     contentDescription: String? = null,
     variant: IconWrapVariant = IconWrapVariant.Default,
+    wrapSize: Dp = LastroIconWrapSize.xl,
+    iconSize: Dp = LastroIconSize.lg,
     modifier: Modifier = Modifier,
-) = LastroIconWrap(rememberVectorPainter(icon), contentDescription, variant, modifier)
+) = LastroIconWrap(rememberVectorPainter(icon), contentDescription, variant, wrapSize, iconSize, modifier)
 
 @Preview(name = "Default — Dark")
 @Composable
@@ -102,4 +109,34 @@ private fun PreviewPositiveLight() = LastroTheme(darkTheme = false) {
 @Composable
 private fun PreviewNegativeLight() = LastroTheme(darkTheme = false) {
     LastroIconWrap(painter = painterResource(LastroIcons.AlertCircle), variant = IconWrapVariant.Negative)
+}
+
+@Preview(name = "Size sm — Light")
+@Composable
+private fun PreviewSizeSm() = LastroTheme(darkTheme = false) {
+    LastroIconWrap(
+        painter = painterResource(LastroIcons.Bell),
+        wrapSize = LastroIconWrapSize.sm,
+        iconSize = LastroIconSize.sm,
+    )
+}
+
+@Preview(name = "Size md — Light")
+@Composable
+private fun PreviewSizeMd() = LastroTheme(darkTheme = false) {
+    LastroIconWrap(
+        painter = painterResource(LastroIcons.Bell),
+        wrapSize = LastroIconWrapSize.md,
+        iconSize = LastroIconSize.md,
+    )
+}
+
+@Preview(name = "Size lg — Light")
+@Composable
+private fun PreviewSizeLg() = LastroTheme(darkTheme = false) {
+    LastroIconWrap(
+        painter = painterResource(LastroIcons.Bell),
+        wrapSize = LastroIconWrapSize.lg,
+        iconSize = LastroIconSize.xl,
+    )
 }
