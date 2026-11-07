@@ -3,7 +3,6 @@ package com.lastro.feature.auth.ui
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,8 +35,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.lastro.core.ui.R as CoreR
+import com.lastro.core.ui.components.ButtonVariant
 import com.lastro.core.ui.components.LastroButton
 import com.lastro.core.ui.theme.LastroColors
+import com.lastro.core.ui.theme.LastroIconWrapSize
 import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
 import com.lastro.feature.auth.R
@@ -78,27 +78,16 @@ internal fun WelcomeScreenContent(
                     modifier = Modifier.fillMaxWidth(),
                 )
                 Spacer(modifier = Modifier.height(LastroSpacing.sm))
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(52.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .border(1.dp, LastroColors.Border, RoundedCornerShape(16.dp))
-                        .clickable(onClick = onNavigateToLogin),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(SpanStyle(color = LastroColors.TextOnSurface, fontWeight = FontWeight.Medium)) {
-                                append(stringResource(R.string.welcome_action_login_prefix))
-                            }
-                            withStyle(SpanStyle(color = LastroColors.Accent, fontWeight = FontWeight.SemiBold)) {
-                                append(stringResource(R.string.welcome_action_login))
-                            }
-                        },
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
-                }
+                LastroButton(
+                    text = buildString {
+                        append(stringResource(R.string.welcome_action_login_prefix))
+                        append(" ")
+                        append(stringResource(R.string.welcome_action_login))
+                    },
+                    onClick = onNavigateToLogin,
+                    variant = ButtonVariant.Ghost,
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
         }
     ) { innerPadding ->
@@ -114,8 +103,8 @@ internal fun WelcomeScreenContent(
 
             Box(
                 modifier = Modifier
-                    .size(72.dp)
-                    .clip(RoundedCornerShape(22.dp))
+                    .size(LastroIconWrapSize.xl)
+                    .clip(MaterialTheme.shapes.extraLarge)
                     .background(accentGradient),
                 contentAlignment = Alignment.Center,
             ) {
@@ -197,17 +186,17 @@ private fun WelcomeFeatureCard(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(18.dp))
-            .background(LastroColors.Surface)
-            .border(1.dp, LastroColors.Border, RoundedCornerShape(18.dp))
+            .clip(MaterialTheme.shapes.extraLarge)
+            .background(MaterialTheme.colorScheme.surface)
+            .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.extraLarge)
             .padding(horizontal = LastroSpacing.md, vertical = LastroSpacing.xl),
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.spacedBy(LastroSpacing.md),
     ) {
         Box(
             modifier = Modifier
-                .size(44.dp)
-                .clip(RoundedCornerShape(14.dp))
+                .size(LastroIconWrapSize.sm)
+                .clip(MaterialTheme.shapes.medium)
                 .background(iconBackground),
             contentAlignment = Alignment.Center,
         ) {
@@ -225,7 +214,7 @@ private fun WelcomeFeatureCard(
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface,
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(LastroSpacing.xs))
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodySmall,

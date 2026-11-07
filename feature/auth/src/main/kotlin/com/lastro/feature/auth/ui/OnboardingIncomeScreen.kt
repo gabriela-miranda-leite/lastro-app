@@ -145,7 +145,7 @@ internal fun OnboardingIncomeScreenContent(
                     text = "Pular por agora",
                     onClick = onSkip,
                     enabled = !uiState.isLoading,
-                    variant = ButtonVariant.Outlined,
+                    variant = ButtonVariant.Ghost,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }

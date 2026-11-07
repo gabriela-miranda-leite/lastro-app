@@ -53,8 +53,8 @@ fun LastroAvatarOverlap(
 ) {
     val brushes = listOf(
         Brush.linearGradient(listOf(LastroColors.Accent, LastroColors.AccentSecondary)),
-        Brush.linearGradient(listOf(LastroColors.Positive, Color(0xFF2DB89A))),
-        Brush.linearGradient(listOf(Color(0xFFFF7C6B), Color(0xFFFFD06B))),
+        Brush.linearGradient(listOf(LastroColors.Positive, LastroColors.Positive.copy(alpha = 0.6f))),
+        Brush.linearGradient(listOf(LastroColors.Wishes, LastroColors.Warning)),
     )
     val overlap = size * 0.4f
     Box(modifier = modifier.size(size + overlap * (initials.size - 1))) {

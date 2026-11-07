@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lastro.core.ui.icon.LastroIcons
+import com.lastro.core.ui.theme.LastroIconSize
 import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
 
@@ -57,16 +58,16 @@ fun LastroBanner(
         border = androidx.compose.foundation.BorderStroke(1.dp, border),
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = LastroSpacing.md, vertical = 12.dp),
+            modifier = Modifier.padding(horizontal = LastroSpacing.xl, vertical = LastroSpacing.md),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 painter = painterResource(iconRes),
                 contentDescription = null,
                 tint = tint,
-                modifier = Modifier.size(16.dp),
+                modifier = Modifier.size(LastroIconSize.xs),
             )
-            Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.width(LastroSpacing.md))
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodySmall,

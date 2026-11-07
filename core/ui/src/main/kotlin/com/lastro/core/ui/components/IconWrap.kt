@@ -3,7 +3,6 @@ package com.lastro.core.ui.components
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -20,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.lastro.core.ui.icon.LastroIcons
+import com.lastro.core.ui.theme.IconWrapShape
 import com.lastro.core.ui.theme.LastroIconSize
 import com.lastro.core.ui.theme.LastroIconWrapSize
 import com.lastro.core.ui.theme.LastroTheme
@@ -32,8 +32,6 @@ private fun IconWrapVariant.color(): Color = when (this) {
     IconWrapVariant.Positive -> MaterialTheme.colorScheme.tertiary
     IconWrapVariant.Negative -> MaterialTheme.colorScheme.error
 }
-
-private val IconWrapShape = RoundedCornerShape(20.dp)
 
 @Composable
 fun LastroIconWrap(
