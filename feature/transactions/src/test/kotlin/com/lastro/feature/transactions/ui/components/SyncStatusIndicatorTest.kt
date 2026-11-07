@@ -17,7 +17,7 @@ class SyncStatusIndicatorTest {
     @Test
     fun `PENDING maps to orange color and refresh icon`() {
         val state = SyncStatus.PENDING.toIndicatorState()
-        assertEquals(androidx.compose.ui.graphics.Color(0xFFFF9800), state.tint)
+        assertEquals(LastroColors.Warning, state.tint)
         assertEquals("Sincronização pendente", state.contentDescription)
     }
 
