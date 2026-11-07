@@ -67,7 +67,7 @@ fun SyncStatus.toIndicatorState(): SyncIndicatorState = when (this) {
     )
     SyncStatus.PENDING -> SyncIndicatorState(
         icon = Icons.Default.Refresh,
-        tint = androidx.compose.ui.graphics.Color(0xFFFF9800),
+        tint = LastroColors.Warning,
         contentDescription = "Sincronização pendente",
     )
     SyncStatus.ERROR -> SyncIndicatorState(

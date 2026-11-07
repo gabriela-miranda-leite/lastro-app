@@ -5,18 +5,22 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lastro.core.ui.icon.LastroIcons
+import com.lastro.core.ui.theme.LastroIconSize
+import com.lastro.core.ui.theme.LastroIconWrapSize
 import com.lastro.core.ui.theme.LastroTheme
 
 @Composable
@@ -26,18 +30,22 @@ fun LastroBackButton(
 ) {
     Box(
         modifier = modifier
-            .size(40.dp)
-            .clip(RoundedCornerShape(12.dp))
+            .size(LastroIconWrapSize.sm)
+            .clip(MaterialTheme.shapes.small)
             .background(MaterialTheme.colorScheme.surface)
-            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
-            .clickable(onClick = onClick),
+            .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.small)
+            .clickable(onClick = onClick)
+            .semantics {
+                role = Role.Button
+                contentDescription = "Voltar"
+            },
         contentAlignment = Alignment.Center,
     ) {
         Icon(
             painter = painterResource(id = LastroIcons.ArrowLeft),
-            contentDescription = "Voltar",
+            contentDescription = null,
             tint = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.size(20.dp),
+            modifier = Modifier.size(LastroIconSize.sm),
         )
     }
 }

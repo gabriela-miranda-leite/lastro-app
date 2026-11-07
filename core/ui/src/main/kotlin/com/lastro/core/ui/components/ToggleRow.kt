@@ -16,6 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lastro.core.ui.theme.LastroSpacing
@@ -33,6 +35,7 @@ fun LastroToggleRow(
     Surface(
         modifier = modifier
             .fillMaxWidth()
+            .semantics { stateDescription = if (checked) "Ativado" else "Desativado" }
             .clickable(role = Role.Switch) { onCheckedChange(!checked) },
         shape = MaterialTheme.shapes.medium,
         color = if (checked)
@@ -42,12 +45,12 @@ fun LastroToggleRow(
         tonalElevation = 0.dp,
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = LastroSpacing.xl, vertical = 14.dp),
+            modifier = Modifier.padding(horizontal = LastroSpacing.xl, vertical = LastroSpacing.toggleRowVertical),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             if (leadingIcon != null) {
                 leadingIcon()
-                Spacer(modifier = Modifier.width(10.dp))
+                Spacer(modifier = Modifier.width(LastroSpacing.md))
             }
             Column(modifier = Modifier.weight(1f)) {
                 Text(title, style = MaterialTheme.typography.bodyLarge)

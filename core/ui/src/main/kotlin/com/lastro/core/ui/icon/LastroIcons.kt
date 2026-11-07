@@ -48,8 +48,21 @@ object LastroIcons {
     @DrawableRes val PiggyBank         = R.drawable.ic_piggy_bank
     @DrawableRes val Check             = R.drawable.ic_check
     @DrawableRes val AlertCircle       = R.drawable.ic_alert_circle
+    @DrawableRes val AlertTriangle     = R.drawable.ic_alert_triangle
     @DrawableRes val CheckCircle       = R.drawable.ic_check_circle
     @DrawableRes val InfoCircle        = R.drawable.ic_info_circle
     @DrawableRes val Loader            = R.drawable.ic_loader
     @DrawableRes val WifiOff           = R.drawable.ic_wifi_off
+
+    @DrawableRes val ChevronLeft       = R.drawable.ic_chevron_left
+    @DrawableRes val ChevronDown       = R.drawable.ic_chevron_down
+    @DrawableRes val ArrowRight        = R.drawable.ic_arrow_right
+    @DrawableRes val Clock             = R.drawable.ic_clock
+    @DrawableRes val Search            = R.drawable.ic_search
+    @DrawableRes val Filter            = R.drawable.ic_filter
+    @DrawableRes val Wallet            = R.drawable.ic_wallet
+    @DrawableRes val ExternalLink      = R.drawable.ic_external_link
+    @DrawableRes val Fingerprint       = R.drawable.ic_fingerprint
+    @DrawableRes val Gamepad           = R.drawable.ic_gamepad
+    @DrawableRes val GridDots          = R.drawable.ic_grid_dots
 }

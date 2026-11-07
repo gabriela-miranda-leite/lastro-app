@@ -61,7 +61,7 @@ class LastroButtonTest {
     @Test
     fun outlined_variant_renders_text() {
         composeRule.setContent {
-            LastroTheme { LastroButton(text = "Criar conta", onClick = {}, variant = ButtonVariant.Outlined) }
+            LastroTheme { LastroButton(text = "Criar conta", onClick = {}, variant = ButtonVariant.Ghost) }
         }
         composeRule.onNodeWithText("Criar conta").assertIsDisplayed()
     }

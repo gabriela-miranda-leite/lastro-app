@@ -9,7 +9,10 @@ val LastroShapes = Shapes(
     small = RoundedCornerShape(12.dp),
     medium = RoundedCornerShape(14.dp),
     large = RoundedCornerShape(16.dp),
-    extraLarge = RoundedCornerShape(22.dp),
+    extraLarge = RoundedCornerShape(20.dp),
 )
 
 val ListIconShape = RoundedCornerShape(10.dp)
+val FabShape = RoundedCornerShape(18.dp)
+val IconWrapShape = RoundedCornerShape(18.dp)
+val BottomSheetShape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)

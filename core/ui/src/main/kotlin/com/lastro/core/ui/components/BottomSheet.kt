@@ -1,5 +1,6 @@
 package com.lastro.core.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.lastro.core.ui.theme.BottomSheetShape
 import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
 
@@ -36,26 +38,21 @@ fun LastroBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
         modifier = modifier,
-        shape = MaterialTheme.shapes.extraLarge.copy(
-            bottomStart = androidx.compose.foundation.shape.CornerSize(0.dp),
-            bottomEnd = androidx.compose.foundation.shape.CornerSize(0.dp),
-        ),
+        shape = BottomSheetShape,
         containerColor = MaterialTheme.colorScheme.surface,
         dragHandle = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 12.dp, bottom = 8.dp),
+                    .padding(top = LastroSpacing.md, bottom = LastroSpacing.sm),
                 contentAlignment = Alignment.Center,
             ) {
                 Box(
                     modifier = Modifier
-                        .width(40.dp)
-                        .height(4.dp)
+                        .width(LastroSpacing.handleWidth)
+                        .height(LastroSpacing.handleHeight)
                         .clip(MaterialTheme.shapes.extraSmall)
-                        .let {
-                            it
-                        }
+                        .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
                 )
             }
         },

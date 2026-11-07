@@ -15,4 +15,13 @@ object LastroSpacing {
     val sectionTop = 48.dp
     val sectionTopLarge = 52.dp
     val bottomSafe = 40.dp
+
+    val buttonHeight = 52.dp
+    val listItemVertical = 12.dp
+    val toggleRowVertical = 14.dp
+    val chipHorizontal = 12.dp
+    val chipVertical = 7.dp
+    val handleWidth = 36.dp
+    val handleHeight = 4.dp
+    val minTouchTarget = 44.dp
 }

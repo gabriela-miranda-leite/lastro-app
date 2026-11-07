@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lastro.core.ui.theme.LastroColors
+import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
 
 @Composable
@@ -48,7 +49,7 @@ fun LastroChip(
         shape = MaterialTheme.shapes.extraLarge,
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
+            modifier = Modifier.padding(horizontal = LastroSpacing.chipHorizontal, vertical = LastroSpacing.chipVertical),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             if (leadingIcon != null) {

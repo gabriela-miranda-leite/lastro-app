@@ -32,13 +32,13 @@ fun LastroListItem(
     Row(
         modifier = clickableModifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = 48.dp)
-            .padding(horizontal = LastroSpacing.xl, vertical = 12.dp),
+            .defaultMinSize(minHeight = LastroSpacing.minTouchTarget)
+            .padding(horizontal = LastroSpacing.xl, vertical = LastroSpacing.listItemVertical),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (leading != null) {
             leading()
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(LastroSpacing.md))
         }
         Column(modifier = Modifier.weight(1f)) {
             Text(title, style = MaterialTheme.typography.bodyLarge)
@@ -51,7 +51,7 @@ fun LastroListItem(
             }
         }
         if (trailing != null) {
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(LastroSpacing.sm))
             trailing()
         }
     }

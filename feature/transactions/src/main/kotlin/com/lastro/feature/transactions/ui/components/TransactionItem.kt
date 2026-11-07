@@ -30,6 +30,7 @@ import com.lastro.core.common.toBRL
 import com.lastro.core.domain.model.Transaction
 import com.lastro.core.domain.model.TransactionType
 import com.lastro.core.ui.theme.LastroColors
+import com.lastro.core.ui.theme.LastroIconSize
 import com.lastro.core.ui.theme.LastroSpacing
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -119,7 +120,7 @@ private fun TransactionItemContent(transaction: Transaction) {
                 )
                 SyncStatusIndicator(
                     syncStatus = transaction.syncStatus,
-                    modifier = Modifier.size(16.dp),
+                    modifier = Modifier.size(LastroIconSize.xs),
                 )
             }
         }
@@ -139,7 +140,7 @@ private fun CategoryIcon(transaction: Transaction) {
             imageVector = Icons.Default.Star,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier.size(LastroIconSize.md),
         )
     }
 }
