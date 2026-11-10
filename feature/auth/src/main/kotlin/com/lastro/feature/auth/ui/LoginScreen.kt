@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -24,10 +25,13 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -40,7 +44,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lastro.core.ui.UiText
-import com.lastro.core.ui.components.LastroBanner
 import com.lastro.core.ui.resolve
 import com.lastro.feature.auth.R
 import com.lastro.core.ui.components.LastroButton
@@ -102,6 +105,7 @@ internal fun LoginScreenContent(
     onLogin: () -> Unit,
     onForgotPassword: () -> Unit,
     onRegister: () -> Unit,
+    emailFocusRequester: FocusRequester? = null,
 ) {
     val errorMessage = uiState.error?.resolve()
 
@@ -133,14 +137,13 @@ internal fun LoginScreenContent(
 
             Spacer(modifier = Modifier.height(LastroSpacing.sectionTop))
 
-            if (errorMessage != null) LastroBanner(message = errorMessage)
-            if (errorMessage != null) Spacer(modifier = Modifier.height(LastroSpacing.md))
             LastroTextField(
                 value = email,
                 onValueChange = onEmailChange,
                 label = stringResource(R.string.login_field_email),
                 modifier = Modifier.fillMaxWidth(),
                 type = TextFieldType.Email,
+                focusRequester = emailFocusRequester,
             )
 
             Spacer(modifier = Modifier.height(LastroSpacing.md))
@@ -151,6 +154,7 @@ internal fun LoginScreenContent(
                 label = stringResource(R.string.login_field_password),
                 modifier = Modifier.fillMaxWidth(),
                 type = TextFieldType.Password,
+                error = errorMessage,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             )
 
@@ -158,15 +162,19 @@ internal fun LoginScreenContent(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End,
             ) {
-                Text(
-                    text = stringResource(R.string.login_action_forgot_password),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Medium,
+                Box(
                     modifier = Modifier
-                        .clickable(onClick = onForgotPassword)
-                        .padding(vertical = LastroSpacing.sm),
-                )
+                        .heightIn(min = LastroSpacing.minTouchTarget)
+                        .clickable(onClick = onForgotPassword),
+                    contentAlignment = Alignment.CenterEnd,
+                ) {
+                    Text(
+                        text = stringResource(R.string.login_action_forgot_password),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Medium,
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(LastroSpacing.xl))
@@ -278,5 +286,18 @@ private fun LoginScreenErrorPreview() = LastroTheme(darkTheme = false) {
         email = "gabriela@lastro.app", password = "errada",
         onEmailChange = {}, onPasswordChange = {}, onLogin = {},
         onForgotPassword = {}, onRegister = {},
+    )
+}
+
+@Preview(name = "Login - Foco no email")
+@Composable
+private fun LoginScreenFocusPreview() = LastroTheme(darkTheme = false) {
+    val focusRequester = remember { FocusRequester() }
+    LaunchedEffect(Unit) { withFrameNanos {}; focusRequester.requestFocus() }
+    LoginScreenContent(
+        uiState = AuthUiState(), email = "", password = "",
+        onEmailChange = {}, onPasswordChange = {}, onLogin = {},
+        onForgotPassword = {}, onRegister = {},
+        emailFocusRequester = focusRequester,
     )
 }

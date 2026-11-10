@@ -22,7 +22,7 @@
     <string name="login_field_password">Senha</string>
     <string name="login_action_forgot_password">Esqueci a senha</string>
     <string name="login_action_submit">Entrar</string>
-    <string name="login_action_register_prefix">Não tem conta? </string>
+    <string name="login_action_register_prefix">"Não tem conta? "</string>
     <string name="login_action_register">Criar conta</string>
     <string name="login_security_note">Seus dados são criptografados e protegidos</string>
     <string name="login_error_unauthorized">Email ou senha incorretos</string>

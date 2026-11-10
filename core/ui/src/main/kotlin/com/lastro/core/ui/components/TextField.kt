@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -14,9 +15,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.AutofillNode
+import androidx.compose.ui.autofill.AutofillType
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalAutofill
+import androidx.compose.ui.platform.LocalAutofillTree
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -30,10 +42,12 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.lastro.core.ui.theme.LastroIconSize
 import com.lastro.core.ui.theme.LastroTheme
 
 enum class TextFieldType { Default, Money, Password, Email }
 
+@OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
 @Composable
 fun LastroTextField(
     value: String,
@@ -45,6 +59,7 @@ fun LastroTextField(
     trailingIcon: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     singleLine: Boolean = true,
+    focusRequester: FocusRequester? = null,
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 
@@ -55,6 +70,7 @@ fun LastroTextField(
                     painter = painterResource(if (passwordVisible) R.drawable.ic_eye else R.drawable.ic_eye_off),
                     contentDescription = if (passwordVisible) "Ocultar senha" else "Mostrar senha",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(LastroIconSize.sm),
                 )
             }
         })
@@ -94,11 +110,35 @@ fun LastroTextField(
         else
             MaterialTheme.typography.bodyLarge
 
+        val autofillTypes = when (type) {
+            TextFieldType.Email -> listOf(AutofillType.EmailAddress)
+            TextFieldType.Password -> listOf(AutofillType.Password)
+            else -> null
+        }
+        val autofill = LocalAutofill.current
+        val autofillTree = LocalAutofillTree.current
+        val autofillNode = autofillTypes?.let { types ->
+            remember(types) { AutofillNode(autofillTypes = types, onFill = onValueChange) }
+        }
+        if (autofillNode != null) {
+            autofillTree += autofillNode
+        }
+
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier
                 .fillMaxWidth()
+                .then(focusRequester?.let { Modifier.focusRequester(it) } ?: Modifier)
+                .onGloballyPositioned { coordinates ->
+                    autofillNode?.boundingBox = coordinates.boundsInWindow()
+                }
+                .onFocusChanged { focusState ->
+                    autofillNode?.let { node ->
+                        if (focusState.isFocused) autofill?.requestAutofillForNode(node)
+                        else autofill?.cancelAutofillForNode(node)
+                    }
+                }
                 .semantics { contentDescription = label },
             textStyle = inputTextStyle,
             label = null,
@@ -118,13 +158,13 @@ fun LastroTextField(
             shape = MaterialTheme.shapes.medium,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.surface,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                errorContainerColor = MaterialTheme.colorScheme.surface,
                 focusedBorderColor = MaterialTheme.colorScheme.primary,
                 unfocusedBorderColor = MaterialTheme.colorScheme.outline,
                 focusedLabelColor = MaterialTheme.colorScheme.primary,
                 unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 errorBorderColor = MaterialTheme.colorScheme.error,
-                errorContainerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
         )
     }
@@ -167,6 +207,20 @@ private fun PreviewMoney() = LastroTheme(darkTheme = false) {
 @Composable
 private fun PreviewError() = LastroTheme(darkTheme = false) {
     LastroTextField(value = "", onValueChange = {}, label = "Email", error = "Campo obrigatório")
+}
+
+@Preview(name = "Focus - Light")
+@Composable
+private fun PreviewFocus() = LastroTheme(darkTheme = false) {
+    val focusRequester = remember { FocusRequester() }
+    LaunchedEffect(Unit) { withFrameNanos {}; focusRequester.requestFocus() }
+    LastroTextField(
+        value = "gabriela@email.com",
+        onValueChange = {},
+        label = "Email",
+        type = TextFieldType.Email,
+        focusRequester = focusRequester,
+    )
 }
 
 @Preview(name = "Password - Light")
