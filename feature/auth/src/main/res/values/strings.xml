@@ -36,9 +36,16 @@
     <string name="register_error_generic">Erro ao criar conta</string>
 
     <!-- Forgot password -->
+    <string name="forgot_password_title">Esqueci a senha</string>
+    <string name="forgot_password_subtitle">Informe o email cadastrado e enviaremos um link para redefinir sua senha.</string>
     <string name="forgot_password_field_email">Email</string>
     <string name="forgot_password_error_too_many">Muitas tentativas. Aguarde alguns minutos</string>
     <string name="forgot_password_error_generic">Não foi possível enviar o link. Tente novamente</string>
+    <string name="forgot_password_success_title">Verifique seu email</string>
+    <string name="forgot_password_success_desc">Se esse email estiver cadastrado, você receberá um link para redefinir sua senha em breve.</string>
+    <string name="forgot_password_back_to_login">Voltar ao login</string>
+    <string name="forgot_password_resend_prefix">"Não recebeu? "</string>
+    <string name="forgot_password_resend_action">Reenviar</string>
 
     <!-- Reset password -->
     <string name="reset_password_field_new">Nova senha</string>

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -41,8 +42,10 @@ fun LastroFeedbackScreen(
     @DrawableRes iconRes: Int? = null,
     primaryActionLabel: String? = null,
     onPrimaryAction: (() -> Unit)? = null,
+    primaryActionVariant: ButtonVariant = ButtonVariant.Primary,
     secondaryActionLabel: String? = null,
     onSecondaryAction: (() -> Unit)? = null,
+    footer: (@Composable () -> Unit)? = null,
 ) {
     val (iconDefault, iconTint, iconBg) = when (variant) {
         FeedbackScreenVariant.Success -> Triple(
@@ -70,29 +73,40 @@ fun LastroFeedbackScreen(
     Scaffold(
         modifier = modifier,
         bottomBar = {
-            if (primaryActionLabel != null || secondaryActionLabel != null) {
+            if (primaryActionLabel != null || secondaryActionLabel != null || footer != null) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.background)
-                        .padding(horizontal = LastroSpacing.screenHorizontal)
-                        .padding(top = LastroSpacing.md, bottom = LastroSpacing.bottomSafe),
+                        .background(MaterialTheme.colorScheme.background),
                 ) {
-                    if (primaryActionLabel != null && onPrimaryAction != null) {
-                        LastroButton(
-                            text = primaryActionLabel,
-                            onClick = onPrimaryAction,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                    }
-                    if (secondaryActionLabel != null && onSecondaryAction != null) {
-                        Spacer(modifier = Modifier.height(LastroSpacing.sm))
-                        LastroButton(
-                            text = secondaryActionLabel,
-                            onClick = onSecondaryAction,
-                            variant = ButtonVariant.Ghost,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = LastroSpacing.screenHorizontal)
+                            .padding(top = LastroSpacing.md, bottom = LastroSpacing.bottomSafe),
+                    ) {
+                        if (primaryActionLabel != null && onPrimaryAction != null) {
+                            LastroButton(
+                                text = primaryActionLabel,
+                                onClick = onPrimaryAction,
+                                variant = primaryActionVariant,
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
+                        if (secondaryActionLabel != null && onSecondaryAction != null) {
+                            Spacer(modifier = Modifier.height(LastroSpacing.sm))
+                            LastroButton(
+                                text = secondaryActionLabel,
+                                onClick = onSecondaryAction,
+                                variant = ButtonVariant.Ghost,
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
+                        if (footer != null) {
+                            Spacer(modifier = Modifier.height(LastroSpacing.md))
+                            footer()
+                        }
                     }
                 }
             }
