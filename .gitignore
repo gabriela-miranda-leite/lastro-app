@@ -10,3 +10,8 @@
 .externalNativeBuild
 .cxx
 local.properties
+.kotlin/
+*.hprof
+CLAUDE.md
+*.md
+.claude
