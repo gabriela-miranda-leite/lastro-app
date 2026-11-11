@@ -60,6 +60,7 @@ import com.lastro.core.ui.theme.IconWrapShape
 import com.lastro.core.ui.theme.LastroColors
 import com.lastro.core.ui.theme.LastroIconSize
 import com.lastro.core.ui.theme.LastroIconWrapSize
+import com.lastro.core.ui.theme.LastroSecurityNoteTextStyle
 import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
 import com.lastro.feature.auth.viewmodel.ForgotPasswordUiState
@@ -223,8 +224,8 @@ internal fun ForgotPasswordScreenContent(
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                text = "Seus dados são criptografados e protegidos",
-                style = MaterialTheme.typography.labelSmall,
+                text = stringResource(R.string.login_security_note),
+                style = LastroSecurityNoteTextStyle,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)

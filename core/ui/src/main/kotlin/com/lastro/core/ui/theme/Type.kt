@@ -71,3 +71,9 @@ val LastroTypography = Typography(
         letterSpacing = 0.8.sp,
     ),
 )
+
+val LastroSecurityNoteTextStyle = TextStyle(
+    fontFamily = InterFontFamily,
+    fontWeight = FontWeight.Normal,
+    fontSize = 11.sp,
+)

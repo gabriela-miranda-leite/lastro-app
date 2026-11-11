@@ -51,6 +51,7 @@ import com.lastro.core.ui.components.LastroLogoMark
 import com.lastro.core.ui.components.LastroTextField
 import com.lastro.core.ui.components.TextFieldType
 import com.lastro.core.ui.theme.LastroIconWrapSize
+import com.lastro.core.ui.theme.LastroSecurityNoteTextStyle
 import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
 import com.lastro.feature.auth.viewmodel.AuthEvent
@@ -239,7 +240,7 @@ internal fun LoginScreenContent(
 
             Text(
                 text = stringResource(R.string.login_security_note),
-                style = MaterialTheme.typography.labelSmall,
+                style = LastroSecurityNoteTextStyle,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
