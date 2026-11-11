@@ -20,7 +20,8 @@ class CalculateBudgetBreakdownUseCase @Inject constructor() {
         val targets = mapOf(
             BudgetType.NEEDS to BigDecimal("0.50"),
             BudgetType.WANTS to BigDecimal("0.30"),
-            BudgetType.SAVINGS to BigDecimal("0.20"),
+            BudgetType.INVESTMENTS to BigDecimal("0.10"),
+            BudgetType.SAVINGS to BigDecimal("0.10"),
         )
 
         val spentByType = transactions

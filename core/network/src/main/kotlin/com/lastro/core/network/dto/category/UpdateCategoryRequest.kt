@@ -1,0 +1,10 @@
+package com.lastro.core.network.dto.category
+
+import com.google.gson.annotations.SerializedName
+
+data class UpdateCategoryRequest(
+    @SerializedName("name") val name: String?,
+    @SerializedName("type") val type: String?,
+    @SerializedName("icon") val icon: String?,
+    @SerializedName("color") val color: String?,
+)
