@@ -98,6 +98,11 @@ fun NavGraphBuilder.authGraph(navController: NavController) {
                     popUpTo("auth/reset-password/{token}") { inclusive = true }
                 }
             },
+            onRequestNewLink = {
+                navController.navigate(Route.Auth.ForgotPassword.path) {
+                    popUpTo("auth/reset-password/{token}") { inclusive = true }
+                }
+            },
             onBack = { navController.popBackStack() },
         )
     }
