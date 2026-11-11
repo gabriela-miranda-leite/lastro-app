@@ -17,4 +17,5 @@ object LastroIconWrapSize {
     val md: Dp = 48.dp
     val lg: Dp = 56.dp
     val xl: Dp = 64.dp
+    val xxl: Dp = 72.dp
 }

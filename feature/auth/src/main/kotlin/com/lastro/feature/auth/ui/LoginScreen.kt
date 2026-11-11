@@ -50,6 +50,7 @@ import com.lastro.core.ui.components.LastroButton
 import com.lastro.core.ui.components.LastroLogoMark
 import com.lastro.core.ui.components.LastroTextField
 import com.lastro.core.ui.components.TextFieldType
+import com.lastro.core.ui.theme.LastroIconWrapSize
 import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
 import com.lastro.feature.auth.viewmodel.AuthEvent
@@ -120,7 +121,7 @@ internal fun LoginScreenContent(
         ) {
             Spacer(modifier = Modifier.height(LastroSpacing.sectionTopLarge))
 
-            LastroLogoMark(size = 72.dp)
+            LastroLogoMark(size = LastroIconWrapSize.xxl)
 
             Spacer(modifier = Modifier.height(LastroSpacing.xxl))
 

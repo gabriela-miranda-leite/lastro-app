@@ -28,7 +28,9 @@ class WelcomeScreenshotTest {
         showSystemUi = false,
     )
 
-    @Test fun default() = paparazzi.snapshot { LastroTheme(darkTheme = true) { WelcomeScreenContent(onNavigateToRegister = {}, onNavigateToLogin = {}) } }
+    @Test fun default() = paparazzi.snapshot { LastroTheme(darkTheme = false) { WelcomeScreenContent(onNavigateToRegister = {}, onNavigateToLogin = {}) } }
+
+    @Test fun default_dark() = paparazzi.snapshot { LastroTheme(darkTheme = true) { WelcomeScreenContent(onNavigateToRegister = {}, onNavigateToLogin = {}) } }
 }
 
 class LoginScreenshotTest {

@@ -3,6 +3,7 @@ package com.lastro.feature.auth.ui
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -23,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,9 +36,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.lastro.core.ui.R as CoreR
-import com.lastro.core.ui.components.ButtonVariant
 import com.lastro.core.ui.components.LastroButton
+import com.lastro.core.ui.components.LastroLogoMark
 import com.lastro.core.ui.theme.LastroColors
+import com.lastro.core.ui.theme.LastroIconSize
 import com.lastro.core.ui.theme.LastroIconWrapSize
 import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
@@ -59,10 +61,6 @@ internal fun WelcomeScreenContent(
     onNavigateToRegister: () -> Unit,
     onNavigateToLogin: () -> Unit,
 ) {
-    val accentGradient = Brush.linearGradient(
-        listOf(LastroColors.Accent, LastroColors.AccentSecondary)
-    )
-
     Scaffold(
         bottomBar = {
             Column(
@@ -77,17 +75,29 @@ internal fun WelcomeScreenContent(
                     onClick = onNavigateToRegister,
                     modifier = Modifier.fillMaxWidth(),
                 )
-                Spacer(modifier = Modifier.height(LastroSpacing.sm))
-                LastroButton(
-                    text = buildString {
-                        append(stringResource(R.string.welcome_action_login_prefix))
-                        append(" ")
-                        append(stringResource(R.string.welcome_action_login))
-                    },
-                    onClick = onNavigateToLogin,
-                    variant = ButtonVariant.Ghost,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+                Spacer(modifier = Modifier.height(LastroSpacing.xl))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = LastroSpacing.minTouchTarget)
+                        .clickable(onClick = onNavigateToLogin),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = buildAnnotatedString {
+                            append(stringResource(R.string.welcome_action_login_prefix))
+                            withStyle(
+                                SpanStyle(
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontWeight = FontWeight.SemiBold,
+                                )
+                            ) { append(stringResource(R.string.welcome_action_login)) }
+                        },
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
         }
     ) { innerPadding ->
@@ -101,20 +111,7 @@ internal fun WelcomeScreenContent(
         ) {
             Spacer(modifier = Modifier.height(LastroSpacing.sectionTopLarge))
 
-            Box(
-                modifier = Modifier
-                    .size(LastroIconWrapSize.xl)
-                    .clip(MaterialTheme.shapes.extraLarge)
-                    .background(accentGradient),
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    painter = painterResource(CoreR.drawable.ic_welcome_hero),
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.size(36.dp),
-                )
-            }
+            LastroLogoMark(size = LastroIconWrapSize.xxl)
 
             Spacer(modifier = Modifier.height(LastroSpacing.xxl))
 
@@ -128,8 +125,7 @@ internal fun WelcomeScreenContent(
                         append(stringResource(R.string.welcome_title_accent))
                     }
                 },
-                style = MaterialTheme.typography.displaySmall,
-                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.displayLarge,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center,
             )
@@ -138,7 +134,8 @@ internal fun WelcomeScreenContent(
 
             Text(
                 text = stringResource(R.string.welcome_subtitle),
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Normal,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center,
             )
@@ -147,7 +144,7 @@ internal fun WelcomeScreenContent(
 
             Column(verticalArrangement = Arrangement.spacedBy(LastroSpacing.md)) {
                 WelcomeFeatureCard(
-                    iconRes = CoreR.drawable.ic_trending_up,
+                    iconRes = CoreR.drawable.ic_chart_line,
                     iconTint = LastroColors.Accent,
                     iconBackground = LastroColors.Accent.copy(alpha = 0.15f),
                     title = stringResource(R.string.welcome_feature1_title),
@@ -161,7 +158,7 @@ internal fun WelcomeScreenContent(
                     description = stringResource(R.string.welcome_feature2_desc),
                 )
                 WelcomeFeatureCard(
-                    iconRes = CoreR.drawable.ic_calendar,
+                    iconRes = CoreR.drawable.ic_clock,
                     iconTint = LastroColors.Warning,
                     iconBackground = LastroColors.Warning.copy(alpha = 0.15f),
                     title = stringResource(R.string.welcome_feature3_title),
@@ -181,7 +178,7 @@ private fun WelcomeFeatureCard(
     iconBackground: Color,
     title: String,
     description: String,
-    iconSize: Dp = 22.dp,
+    iconSize: Dp = LastroIconSize.sm,
 ) {
     Row(
         modifier = Modifier
