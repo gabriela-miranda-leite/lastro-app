@@ -63,9 +63,23 @@
     <string name="forgot_password_resend_action">Reenviar</string>
 
     <!-- Reset password -->
+    <string name="reset_password_title">Redefinir senha</string>
+    <string name="reset_password_subtitle">Crie uma nova senha para acessar sua conta.</string>
     <string name="reset_password_field_new">Nova senha</string>
-    <string name="reset_password_field_confirm">Confirmar nova senha</string>
-    <string name="reset_password_error_link">Link inválido ou expirado. Solicite um novo link.</string>
+    <string name="reset_password_field_confirm">Confirmar senha</string>
+    <string name="reset_password_requirement_min_length">Mínimo 8 caracteres</string>
+    <string name="reset_password_requirement_uppercase">Uma letra maiúscula</string>
+    <string name="reset_password_requirement_number">Um número</string>
+    <string name="reset_password_error_mismatch">As senhas não são iguais</string>
+    <string name="reset_password_action_submit">Salvar nova senha</string>
+    <string name="reset_password_security_note">Ao redefinir, todas as sessões ativas serão encerradas</string>
+    <string name="reset_password_success_title">Senha redefinida</string>
+    <string name="reset_password_success_desc">Sua senha foi atualizada com sucesso. Faça login com a nova senha.</string>
+    <string name="reset_password_action_login">Ir para o login</string>
+    <string name="reset_password_invalid_title">Link expirado</string>
+    <string name="reset_password_invalid_desc">Este link de redefinição não é mais válido. Links expiram em 1 hora e são de uso único.</string>
+    <string name="reset_password_action_request_new">Solicitar novo link</string>
+    <string name="reset_password_remembered_prefix">"Lembrou a senha? "</string>
 
     <!-- Onboarding income -->
     <string name="onboarding_income_step_label">PASSO 3 DE 3</string>

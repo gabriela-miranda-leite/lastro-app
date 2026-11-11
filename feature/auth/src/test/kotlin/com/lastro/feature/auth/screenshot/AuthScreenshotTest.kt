@@ -116,11 +116,15 @@ class ResetPasswordScreenshotTest {
         showSystemUi = false,
     )
 
-    @Test fun default() = paparazzi.snapshot { LastroTheme(darkTheme = false) { ResetPasswordScreenContent(uiState = ResetPasswordUiState(), newPassword = "", confirmPassword = "", onNewPasswordChange = {}, onConfirmPasswordChange = {}, onSubmit = {}, onBack = {}) } }
+    @Test fun default() = paparazzi.snapshot { LastroTheme(darkTheme = false) { ResetPasswordScreenContent(uiState = ResetPasswordUiState(), newPassword = "", confirmPassword = "", onNewPasswordChange = {}, onConfirmPasswordChange = {}, onSubmit = {}, onSuccessContinue = {}, onRequestNewLink = {}, onBack = {}) } }
 
-    @Test fun filled() = paparazzi.snapshot { LastroTheme(darkTheme = false) { ResetPasswordScreenContent(uiState = ResetPasswordUiState(), newPassword = "Senha123!", confirmPassword = "Senha123!", onNewPasswordChange = {}, onConfirmPasswordChange = {}, onSubmit = {}, onBack = {}) } }
+    @Test fun weak_password() = paparazzi.snapshot { LastroTheme(darkTheme = false) { ResetPasswordScreenContent(uiState = ResetPasswordUiState(), newPassword = "abc", confirmPassword = "", onNewPasswordChange = {}, onConfirmPasswordChange = {}, onSubmit = {}, onSuccessContinue = {}, onRequestNewLink = {}, onBack = {}) } }
 
-    @Test fun error() = paparazzi.snapshot { LastroTheme(darkTheme = false) { ResetPasswordScreenContent(uiState = ResetPasswordUiState(error = UiText.Res(R.string.reset_password_error_link)), newPassword = "Senha123!", confirmPassword = "Senha123!", onNewPasswordChange = {}, onConfirmPasswordChange = {}, onSubmit = {}, onBack = {}) } }
+    @Test fun filled() = paparazzi.snapshot { LastroTheme(darkTheme = false) { ResetPasswordScreenContent(uiState = ResetPasswordUiState(), newPassword = "Senha123!", confirmPassword = "Senha123!", onNewPasswordChange = {}, onConfirmPasswordChange = {}, onSubmit = {}, onSuccessContinue = {}, onRequestNewLink = {}, onBack = {}) } }
 
-    @Test fun default_dark() = paparazzi.snapshot { LastroTheme(darkTheme = true) { ResetPasswordScreenContent(uiState = ResetPasswordUiState(), newPassword = "", confirmPassword = "", onNewPasswordChange = {}, onConfirmPasswordChange = {}, onSubmit = {}, onBack = {}) } }
+    @Test fun success() = paparazzi.snapshot { LastroTheme(darkTheme = false) { ResetPasswordScreenContent(uiState = ResetPasswordUiState(success = true), newPassword = "Senha123!", confirmPassword = "Senha123!", onNewPasswordChange = {}, onConfirmPasswordChange = {}, onSubmit = {}, onSuccessContinue = {}, onRequestNewLink = {}, onBack = {}) } }
+
+    @Test fun invalid_token() = paparazzi.snapshot { LastroTheme(darkTheme = false) { ResetPasswordScreenContent(uiState = ResetPasswordUiState(invalidToken = true), newPassword = "", confirmPassword = "", onNewPasswordChange = {}, onConfirmPasswordChange = {}, onSubmit = {}, onSuccessContinue = {}, onRequestNewLink = {}, onBack = {}) } }
+
+    @Test fun default_dark() = paparazzi.snapshot { LastroTheme(darkTheme = true) { ResetPasswordScreenContent(uiState = ResetPasswordUiState(), newPassword = "", confirmPassword = "", onNewPasswordChange = {}, onConfirmPasswordChange = {}, onSubmit = {}, onSuccessContinue = {}, onRequestNewLink = {}, onBack = {}) } }
 }
