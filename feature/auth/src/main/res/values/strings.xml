@@ -29,10 +29,25 @@
     <string name="login_error_generic">Erro ao fazer login</string>
 
     <!-- Register -->
-    <string name="register_field_name">Nome</string>
+    <string name="register_title">Criar conta</string>
+    <string name="register_section_title">Seus dados</string>
+    <string name="register_section_subtitle">Crie sua conta para começar a controlar suas finanças.</string>
+    <string name="register_field_name">Nome completo</string>
     <string name="register_field_email">Email</string>
     <string name="register_field_password">Senha</string>
     <string name="register_field_confirm_password">Confirmar senha</string>
+    <string name="register_action_submit">Continuar</string>
+    <string name="register_action_login_prefix">"Já tem conta? "</string>
+    <string name="register_action_login">Entrar</string>
+    <string name="register_terms_prefix">"Concordo com os "</string>
+    <string name="register_terms_link_terms">Termos de Uso</string>
+    <string name="register_terms_middle">" e com a "</string>
+    <string name="register_terms_link_privacy">Política de Privacidade</string>
+    <string name="register_terms_suffix">. Seus dados são tratados conforme a LGPD.</string>
+    <string name="register_error_name_required">Nome é obrigatório</string>
+    <string name="register_error_email_invalid">Email inválido</string>
+    <string name="register_error_password_invalid">Senha não atende aos requisitos</string>
+    <string name="register_error_confirm_password_mismatch">As senhas não coincidem</string>
     <string name="register_error_generic">Erro ao criar conta</string>
 
     <!-- Forgot password -->
