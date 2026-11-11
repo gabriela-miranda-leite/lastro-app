@@ -8,6 +8,7 @@ android {
 
 dependencies {
     implementation(libs.kotlinx.coroutines.android)
+    api(libs.androidx.navigation.compose)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)

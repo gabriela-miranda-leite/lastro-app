@@ -6,11 +6,12 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.lastro.core.common.navigation.Route
+import com.lastro.core.common.navigation.deepLinksFor
 import com.lastro.feature.transactions.ui.TransactionFormScreen
 import com.lastro.feature.transactions.ui.TransactionsScreen
 
 fun NavGraphBuilder.transactionsGraph(navController: NavController) {
-    composable(Route.Transactions.List.path) {
+    composable(Route.Transactions.List.path, deepLinks = deepLinksFor(Route.Transactions.List.path)) {
         TransactionsScreen(
             onNavigateToForm = { id ->
                 navController.navigate(Route.Transactions.Form(id).path)
@@ -27,7 +28,8 @@ fun NavGraphBuilder.transactionsGraph(navController: NavController) {
                 nullable = true
                 defaultValue = null
             }
-        )
+        ),
+        deepLinks = deepLinksFor("transactions/form/{id}"),
     ) { backStackEntry ->
         val id = backStackEntry.arguments?.getString("id")
         TransactionFormScreen(
@@ -36,7 +38,7 @@ fun NavGraphBuilder.transactionsGraph(navController: NavController) {
         )
     }
 
-    composable(Route.Transactions.Form().path) {
+    composable(Route.Transactions.Form().path, deepLinks = deepLinksFor(Route.Transactions.Form().path)) {
         TransactionFormScreen(
             transactionId = null,
             onBack = { navController.popBackStack() }
