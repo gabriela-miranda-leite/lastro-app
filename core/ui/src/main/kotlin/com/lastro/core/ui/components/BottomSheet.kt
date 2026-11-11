@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.lastro.core.ui.theme.BottomSheetShape
+import com.lastro.core.ui.theme.LastroBottomSheetShape
 import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
 
@@ -38,7 +38,7 @@ fun LastroBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
         modifier = modifier,
-        shape = BottomSheetShape,
+        shape = LastroBottomSheetShape,
         containerColor = MaterialTheme.colorScheme.surface,
         dragHandle = {
             Box(

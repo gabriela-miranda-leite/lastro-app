@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.lastro.core.ui.icon.LastroIcons
-import com.lastro.core.ui.theme.IconWrapShape
+import com.lastro.core.ui.theme.LastroIconWrapShape
 import com.lastro.core.ui.theme.LastroIconSize
 import com.lastro.core.ui.theme.LastroIconWrapSize
 import com.lastro.core.ui.theme.LastroTheme
@@ -50,9 +50,9 @@ fun LastroIconWrap(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .size(wrapSize)
-            .clip(IconWrapShape)
+            .clip(LastroIconWrapShape)
             .drawBehind { drawRect(bg) }
-            .border(1.dp, borderColor, IconWrapShape),
+            .border(1.dp, borderColor, LastroIconWrapShape),
     ) {
         Icon(
             painter = painter,

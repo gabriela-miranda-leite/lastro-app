@@ -53,7 +53,7 @@ import com.lastro.core.ui.components.LastroPasswordRequirements
 import com.lastro.core.ui.components.LastroTextField
 import com.lastro.core.ui.components.PasswordRequirement
 import com.lastro.core.ui.components.TextFieldType
-import com.lastro.core.ui.theme.IconWrapShape
+import com.lastro.core.ui.theme.LastroIconWrapShape
 import com.lastro.core.ui.theme.LastroColors
 import com.lastro.core.ui.theme.LastroIconSize
 import com.lastro.core.ui.theme.LastroIconWrapSize
@@ -181,8 +181,8 @@ internal fun ResetPasswordScreenContent(
             Box(
                 modifier = Modifier
                     .size(LastroIconWrapSize.lg)
-                    .background(LastroColors.Accent.copy(alpha = 0.12f), IconWrapShape)
-                    .border(1.dp, LastroColors.Accent.copy(alpha = 0.25f), IconWrapShape),
+                    .background(LastroColors.Accent.copy(alpha = 0.12f), LastroIconWrapShape)
+                    .border(1.dp, LastroColors.Accent.copy(alpha = 0.25f), LastroIconWrapShape),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
