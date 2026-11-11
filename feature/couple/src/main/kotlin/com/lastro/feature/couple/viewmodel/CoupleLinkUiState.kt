@@ -10,4 +10,5 @@ data class CoupleLinkUiState(
     val isLoading: Boolean = false,
     val error: String? = null,
     val isLinked: Boolean = false,
+    val inviterName: String? = null,
 )

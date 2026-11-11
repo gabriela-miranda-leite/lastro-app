@@ -27,8 +27,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -52,7 +55,10 @@ import com.lastro.core.ui.components.LastroSegmentedControl
 import com.lastro.core.ui.components.LastroTextField
 import com.lastro.core.ui.components.LastroTopBar
 import com.lastro.core.ui.components.TextFieldType
+import com.lastro.core.ui.theme.LastroBadgeShape
 import com.lastro.core.ui.theme.LastroColors
+import com.lastro.core.ui.theme.LastroIconSize
+import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
 import com.lastro.feature.couple.viewmodel.CoupleLinkEvent
 import com.lastro.feature.couple.viewmodel.CoupleLinkUiState
@@ -169,6 +175,7 @@ internal fun CoupleLinkContent(
             } else {
                 JoinTab(
                     code = uiState.inviteCode,
+                    inviterName = uiState.inviterName,
                     onCodeChange = onInviteCodeChange,
                     isLoading = uiState.isLoading,
                     error = uiState.error,
@@ -281,27 +288,57 @@ private fun InviteSentCard() {
 @Composable
 private fun JoinTab(
     code: String,
+    inviterName: String?,
     onCodeChange: (String) -> Unit,
     isLoading: Boolean,
     error: String?,
     onJoin: () -> Unit,
     onSkip: () -> Unit,
 ) {
+    if (inviterName != null) {
+        InviteFromCard(name = inviterName, initial = inviterName.take(1).uppercase())
+        Spacer(Modifier.height(20.dp))
+    }
+
+    val codeFocusRequester = remember { FocusRequester() }
+    LaunchedEffect(Unit) {
+        if (code.isNotBlank()) codeFocusRequester.requestFocus()
+    }
+
     LastroTextField(
         value = code,
         onValueChange = { onCodeChange(it.uppercase()) },
         label = "Código do convite",
+        type = TextFieldType.Code,
         error = error,
+        focusRequester = codeFocusRequester,
+        trailingIcon = {
+            Icon(
+                painter = painterResource(LastroIcons.Copy),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(LastroIconSize.sm),
+            )
+        },
     )
 
     Spacer(Modifier.height(20.dp))
 
+    val inviterFirstName = inviterName?.substringBefore(" ")
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         InviteStep(number = 1, text = "Cole o código que chegou no seu email.")
-        InviteStep(
-            number = 2,
-            text = "Confirme para aceitar o convite do seu parceiro.",
-        )
+        if (inviterFirstName != null) {
+            InviteStep(
+                number = 2,
+                text = "Confirme para aceitar o convite de $inviterFirstName.",
+                highlight = inviterFirstName,
+            )
+        } else {
+            InviteStep(
+                number = 2,
+                text = "Confirme para aceitar o convite do seu parceiro.",
+            )
+        }
         InviteStep(
             number = 3,
             text = "Pronto! Vocês passam a ver despesas compartilhadas e o saldo do casal.",
@@ -325,6 +362,47 @@ private fun JoinTab(
         onClick = onSkip,
         variant = ButtonVariant.Ghost,
     )
+}
+
+@Composable
+private fun InviteFromCard(name: String, initial: String, modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(LastroColors.Accent.copy(alpha = 0.08f), MaterialTheme.shapes.medium)
+            .border(1.dp, LastroColors.Accent.copy(alpha = 0.2f), MaterialTheme.shapes.medium)
+            .padding(horizontal = LastroSpacing.xl, vertical = LastroSpacing.lg),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(LastroSpacing.md),
+    ) {
+        LastroAvatar(
+            initial = initial,
+            size = 40.dp,
+            brush = Brush.linearGradient(listOf(LastroColors.Wishes, LastroColors.Warning)),
+        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = name,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
+            Text(
+                text = "quer vincular finanças com você",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Text(
+            text = "convite",
+            style = MaterialTheme.typography.labelSmall,
+            color = LastroColors.Accent,
+            modifier = Modifier
+                .clip(LastroBadgeShape)
+                .background(LastroColors.AccentSubtle)
+                .border(1.dp, LastroColors.Accent.copy(alpha = 0.2f), LastroBadgeShape)
+                .padding(horizontal = LastroSpacing.sm, vertical = LastroSpacing.xs),
+        )
+    }
 }
 
 @Composable
@@ -357,6 +435,11 @@ private fun InviteStep(
         val annotated = buildAnnotatedString {
             if (highlight != null) {
                 val parts = text.split(highlight, limit = 2)
+                if (parts[0].isNotEmpty()) {
+                    withStyle(SpanStyle(color = onSurface)) {
+                        append(parts[0])
+                    }
+                }
                 withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = onBg)) {
                     append(highlight)
                 }
@@ -509,6 +592,36 @@ private fun PreviewInviteLight() = LastroTheme(darkTheme = false) {
 private fun PreviewJoinLight() = LastroTheme(darkTheme = false) {
     CoupleLinkContent(
         uiState = CoupleLinkUiState(selectedTab = 1, inviteCode = "LASTRO-A3F8"),
+        onBack = {}, onSkip = {}, onTabSelected = {},
+        onPartnerEmailChange = {}, onInviteCodeChange = {},
+        onSendInvite = {}, onJoinCouple = {},
+    )
+}
+
+@Preview(name = "CoupleLinkScreen — Tenho convite com convidante — Dark")
+@Composable
+private fun PreviewJoinWithInviterDark() = LastroTheme {
+    CoupleLinkContent(
+        uiState = CoupleLinkUiState(
+            selectedTab = 1,
+            inviteCode = "LASTRO-A3F8",
+            inviterName = "Marlon Campos",
+        ),
+        onBack = {}, onSkip = {}, onTabSelected = {},
+        onPartnerEmailChange = {}, onInviteCodeChange = {},
+        onSendInvite = {}, onJoinCouple = {},
+    )
+}
+
+@Preview(name = "CoupleLinkScreen — Tenho convite com convidante — Light")
+@Composable
+private fun PreviewJoinWithInviterLight() = LastroTheme(darkTheme = false) {
+    CoupleLinkContent(
+        uiState = CoupleLinkUiState(
+            selectedTab = 1,
+            inviteCode = "LASTRO-A3F8",
+            inviterName = "Marlon Campos",
+        ),
         onBack = {}, onSkip = {}, onTabSelected = {},
         onPartnerEmailChange = {}, onInviteCodeChange = {},
         onSendInvite = {}, onJoinCouple = {},
