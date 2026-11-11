@@ -42,10 +42,11 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.lastro.core.ui.theme.LastroCodeTextStyle
 import com.lastro.core.ui.theme.LastroIconSize
 import com.lastro.core.ui.theme.LastroTheme
 
-enum class TextFieldType { Default, Money, Password, Email, Name }
+enum class TextFieldType { Default, Money, Password, Email, Name, Code }
 
 @OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
 @Composable
@@ -105,10 +106,11 @@ fun LastroTextField(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Spacer(modifier = Modifier.height(6.dp))
-        val inputTextStyle = if (type == TextFieldType.Money)
-            MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold)
-        else
-            MaterialTheme.typography.bodyLarge
+        val inputTextStyle = when (type) {
+            TextFieldType.Money -> MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold)
+            TextFieldType.Code -> LastroCodeTextStyle
+            else -> MaterialTheme.typography.bodyLarge
+        }
 
         val autofillTypes = when (type) {
             TextFieldType.Email -> listOf(AutofillType.EmailAddress)

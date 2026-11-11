@@ -91,6 +91,22 @@ class CoupleLinkScreenshotTest {
     }
 
     @Test
+    fun join_tab_with_invite_dark() = paparazzi.snapshot {
+        LastroTheme(darkTheme = true) {
+            CoupleLinkContent(
+                uiState = CoupleLinkUiState(
+                    selectedTab = 1,
+                    inviteCode = "LASTRO-A3F8",
+                    inviterName = "Marlon Campos",
+                ),
+                onBack = noopUnit, onSkip = noopUnit, onTabSelected = noop,
+                onPartnerEmailChange = noop, onInviteCodeChange = noop,
+                onSendInvite = noopUnit, onJoinCouple = noopUnit,
+            )
+        }
+    }
+
+    @Test
     fun invite_tab_empty_light() = paparazzi.snapshot {
         LastroTheme(darkTheme = false) {
             CoupleLinkContent(
@@ -138,6 +154,22 @@ class CoupleLinkScreenshotTest {
                     selectedTab = 1,
                     inviteCode = "LASTRO-XXXX",
                     error = "Este código expirou ou já foi utilizado.",
+                ),
+                onBack = noopUnit, onSkip = noopUnit, onTabSelected = noop,
+                onPartnerEmailChange = noop, onInviteCodeChange = noop,
+                onSendInvite = noopUnit, onJoinCouple = noopUnit,
+            )
+        }
+    }
+
+    @Test
+    fun join_tab_with_invite_light() = paparazzi.snapshot {
+        LastroTheme(darkTheme = false) {
+            CoupleLinkContent(
+                uiState = CoupleLinkUiState(
+                    selectedTab = 1,
+                    inviteCode = "LASTRO-A3F8",
+                    inviterName = "Marlon Campos",
                 ),
                 onBack = noopUnit, onSkip = noopUnit, onTabSelected = noop,
                 onPartnerEmailChange = noop, onInviteCodeChange = noop,

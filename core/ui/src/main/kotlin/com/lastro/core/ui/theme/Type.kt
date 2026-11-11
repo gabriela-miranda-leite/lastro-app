@@ -88,3 +88,10 @@ val LastroSecurityNoteTextStyle = TextStyle(
     fontWeight = FontWeight.Normal,
     fontSize = 11.sp,
 )
+
+val LastroCodeTextStyle = TextStyle(
+    fontFamily = FontFamily.Monospace,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 17.sp,
+    letterSpacing = 2.sp,
+)
