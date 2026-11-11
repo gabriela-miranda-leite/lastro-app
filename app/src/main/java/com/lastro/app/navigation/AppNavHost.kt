@@ -1,6 +1,12 @@
 package com.lastro.app.navigation
 
+import android.content.Intent
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.util.Consumer
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.lastro.core.common.navigation.Route
@@ -13,6 +19,17 @@ import com.lastro.feature.transactions.navigation.transactionsGraph
 @Composable
 fun AppNavHost() {
     val navController = rememberNavController()
+    val activity = LocalContext.current as? ComponentActivity
+
+    LaunchedEffect(Unit) {
+        activity?.intent?.let { navController.handleDeepLink(it) }
+    }
+
+    DisposableEffect(activity) {
+        val listener = Consumer<Intent> { intent -> navController.handleDeepLink(intent) }
+        activity?.addOnNewIntentListener(listener)
+        onDispose { activity?.removeOnNewIntentListener(listener) }
+    }
 
     NavHost(
         navController = navController,
