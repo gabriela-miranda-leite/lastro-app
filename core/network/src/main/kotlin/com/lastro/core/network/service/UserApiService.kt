@@ -2,6 +2,7 @@ package com.lastro.core.network.service
 
 import com.lastro.core.network.dto.user.ChangePasswordRequest
 import com.lastro.core.network.dto.user.DeleteAccountRequest
+import com.lastro.core.network.dto.user.ExportDataDto
 import com.lastro.core.network.dto.user.UpdateUserRequest
 import com.lastro.core.network.dto.user.UserDto
 import retrofit2.http.Body
@@ -23,5 +24,5 @@ interface UserApiService {
     suspend fun deleteAccount(@Body body: DeleteAccountRequest)
 
     @GET("users/me/export")
-    suspend fun export(): String
+    suspend fun export(): ExportDataDto
 }

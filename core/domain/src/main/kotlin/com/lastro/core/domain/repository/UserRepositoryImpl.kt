@@ -1,5 +1,6 @@
 package com.lastro.core.domain.repository
 
+import com.google.gson.Gson
 import com.lastro.core.common.Result
 import com.lastro.core.common.mapSuccess
 import com.lastro.core.domain.model.Partner
@@ -33,7 +34,7 @@ class UserRepositoryImpl @Inject constructor(
         safeApiCall { api.deleteAccount(DeleteAccountRequest(password)) }.mapSuccess { Unit }
 
     override suspend fun exportData(): Result<String> =
-        safeApiCall { api.export() }
+        safeApiCall { api.export() }.mapSuccess { Gson().toJson(it) }
 
     private fun UserDto.toDomain() = User(
         id = id,
