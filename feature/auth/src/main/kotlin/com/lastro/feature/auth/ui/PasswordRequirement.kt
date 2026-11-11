@@ -30,13 +30,13 @@ internal fun PasswordRequirement(met: Boolean, text: String) {
         } else {
             Text(
                 text = "·",
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
         Text(
             text = "  $text",
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.bodySmall,
             color = if (met) LastroColors.Positive else MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }

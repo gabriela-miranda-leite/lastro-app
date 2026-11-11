@@ -1,7 +1,8 @@
 package com.lastro.feature.auth.ui
 
+import android.util.Patterns
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,14 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -32,8 +28,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
@@ -50,10 +46,10 @@ import com.lastro.core.ui.resolve
 import com.lastro.feature.auth.R
 import com.lastro.core.ui.components.LastroBackButton
 import com.lastro.core.ui.components.LastroButton
+import com.lastro.core.ui.components.LastroCard
 import com.lastro.core.ui.components.LastroStepIndicator
 import com.lastro.core.ui.components.LastroTextField
 import com.lastro.core.ui.components.TextFieldType
-import com.lastro.core.ui.theme.LastroColors
 import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
 import com.lastro.feature.auth.viewmodel.AuthEvent
@@ -118,11 +114,33 @@ internal fun RegisterScreenContent(
     val hasMinLength = password.length >= 8
     val hasUppercase = password.any { it.isUpperCase() }
     val hasNumber = password.any { it.isDigit() || !it.isLetterOrDigit() }
+    val passwordValid = hasMinLength && hasUppercase && hasNumber
     val passwordsMatch = password.isNotEmpty() && password == confirmPassword
 
-    val canSubmit = name.isNotBlank() && email.isNotBlank() &&
-        hasMinLength && hasUppercase && hasNumber &&
-        passwordsMatch && termsAccepted
+    val isNameValid = name.isNotBlank()
+    val isEmailValid = email.isNotBlank() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
+
+    val canSubmit = isNameValid && isEmailValid &&
+        passwordValid && passwordsMatch && termsAccepted
+
+    var nameFocusedOnce by rememberSaveable { mutableStateOf(false) }
+    var emailFocusedOnce by rememberSaveable { mutableStateOf(false) }
+    var passwordFocusedOnce by rememberSaveable { mutableStateOf(false) }
+    var confirmPasswordFocusedOnce by rememberSaveable { mutableStateOf(false) }
+
+    var nameTouched by rememberSaveable { mutableStateOf(false) }
+    var emailTouched by rememberSaveable { mutableStateOf(false) }
+    var passwordTouched by rememberSaveable { mutableStateOf(false) }
+    var confirmPasswordTouched by rememberSaveable { mutableStateOf(false) }
+
+    val nameError = if (nameTouched && !isNameValid) stringResource(R.string.register_error_name_required) else null
+    val emailError = if (emailTouched && !isEmailValid) stringResource(R.string.register_error_email_invalid) else null
+    val passwordError = if (passwordTouched && !passwordValid) stringResource(R.string.register_error_password_invalid) else null
+    val confirmPasswordError = if (confirmPasswordTouched && !passwordsMatch) {
+        stringResource(R.string.register_error_confirm_password_mismatch)
+    } else {
+        null
+    }
 
     Scaffold(
         bottomBar = {
@@ -141,7 +159,7 @@ internal fun RegisterScreenContent(
                         .padding(top = LastroSpacing.md, bottom = LastroSpacing.bottomSafe),
                 ) {
                     LastroButton(
-                        text = "Continuar",
+                        text = stringResource(R.string.register_action_submit),
                         onClick = onRegister,
                         loading = uiState.isLoading,
                         enabled = canSubmit,
@@ -155,13 +173,13 @@ internal fun RegisterScreenContent(
                     ) {
                         Text(
                             text = buildAnnotatedString {
-                                append("Já tem conta? ")
+                                append(stringResource(R.string.register_action_login_prefix))
                                 withStyle(
                                     SpanStyle(
                                         color = MaterialTheme.colorScheme.primary,
                                         fontWeight = FontWeight.SemiBold,
                                     )
-                                ) { append("Entrar") }
+                                ) { append(stringResource(R.string.register_action_login)) }
                             },
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -187,7 +205,7 @@ internal fun RegisterScreenContent(
             ) {
                 LastroBackButton(onClick = onBack)
                 Text(
-                    text = "Criar conta",
+                    text = stringResource(R.string.register_title),
                     style = MaterialTheme.typography.titleMedium,
                 )
             }
@@ -203,12 +221,12 @@ internal fun RegisterScreenContent(
             Spacer(modifier = Modifier.height(LastroSpacing.xxxl))
 
             Text(
-                text = "Seus dados",
+                text = stringResource(R.string.register_section_title),
                 style = MaterialTheme.typography.titleLarge,
             )
             Spacer(modifier = Modifier.height(LastroSpacing.xs))
             Text(
-                text = "Crie sua conta para começar a controlar suas finanças.",
+                text = stringResource(R.string.register_section_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -221,8 +239,15 @@ internal fun RegisterScreenContent(
             LastroTextField(
                 value = name,
                 onValueChange = onNameChange,
-                label = "Nome completo",
-                modifier = Modifier.fillMaxWidth(),
+                label = stringResource(R.string.register_field_name),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged {
+                        if (it.isFocused) nameFocusedOnce = true
+                        else if (nameFocusedOnce) nameTouched = true
+                    },
+                type = TextFieldType.Name,
+                error = nameError,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             )
 
@@ -231,19 +256,19 @@ internal fun RegisterScreenContent(
             LastroTextField(
                 value = email,
                 onValueChange = onEmailChange,
-                label = "Email",
-                modifier = Modifier.fillMaxWidth(),
+                label = stringResource(R.string.register_field_email),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged {
+                        if (it.isFocused) emailFocusedOnce = true
+                        else if (emailFocusedOnce) emailTouched = true
+                    },
                 type = TextFieldType.Email,
+                error = emailError,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next,
                 ),
-            )
-            Text(
-                text = "Imutável após o cadastro.",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(top = LastroSpacing.xs, start = 2.dp),
             )
 
             Spacer(modifier = Modifier.height(LastroSpacing.md))
@@ -251,9 +276,15 @@ internal fun RegisterScreenContent(
             LastroTextField(
                 value = password,
                 onValueChange = onPasswordChange,
-                label = "Senha",
-                modifier = Modifier.fillMaxWidth(),
+                label = stringResource(R.string.register_field_password),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged {
+                        if (it.isFocused) passwordFocusedOnce = true
+                        else if (passwordFocusedOnce) passwordTouched = true
+                    },
                 type = TextFieldType.Password,
+                error = passwordError,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             )
 
@@ -267,52 +298,45 @@ internal fun RegisterScreenContent(
             LastroTextField(
                 value = confirmPassword,
                 onValueChange = onConfirmPasswordChange,
-                label = "Confirmar senha",
-                modifier = Modifier.fillMaxWidth(),
+                label = stringResource(R.string.register_field_confirm_password),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged {
+                        if (it.isFocused) confirmPasswordFocusedOnce = true
+                        else if (confirmPasswordFocusedOnce) confirmPasswordTouched = true
+                    },
                 type = TextFieldType.Password,
+                error = confirmPasswordError,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             )
 
             Spacer(modifier = Modifier.height(LastroSpacing.xxl))
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onTermsChange(!termsAccepted) },
-                horizontalArrangement = Arrangement.spacedBy(LastroSpacing.md),
+            val termsPrefix = stringResource(R.string.register_terms_prefix)
+            val termsLinkTerms = stringResource(R.string.register_terms_link_terms)
+            val termsMiddle = stringResource(R.string.register_terms_middle)
+            val termsLinkPrivacy = stringResource(R.string.register_terms_link_privacy)
+            val termsSuffix = stringResource(R.string.register_terms_suffix)
+
+            LastroCard(
+                modifier = Modifier.fillMaxWidth(),
+                padding = LastroSpacing.lg,
+                shape = MaterialTheme.shapes.medium,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                checked = termsAccepted,
+                onCheckedChange = onTermsChange,
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(if (termsAccepted) LastroColors.Accent else Color.Transparent)
-                        .border(
-                            1.dp,
-                            if (termsAccepted) LastroColors.Accent else MaterialTheme.colorScheme.outline,
-                            RoundedCornerShape(6.dp),
-                        ),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    if (termsAccepted) {
-                        Icon(
-                            imageVector = Icons.Outlined.Check,
-                            contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier.size(14.dp),
-                        )
-                    }
-                }
                 Text(
                     text = buildAnnotatedString {
-                        append("Li e aceito os ")
+                        append(termsPrefix)
                         withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Medium)) {
-                            append("Termos de Uso")
+                            append(termsLinkTerms)
                         }
-                        append(" e a ")
+                        append(termsMiddle)
                         withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Medium)) {
-                            append("Política de Privacidade")
+                            append(termsLinkPrivacy)
                         }
+                        append(termsSuffix)
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,

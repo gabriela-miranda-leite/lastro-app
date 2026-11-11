@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.dp
 import com.lastro.core.ui.theme.LastroIconSize
 import com.lastro.core.ui.theme.LastroTheme
 
-enum class TextFieldType { Default, Money, Password, Email }
+enum class TextFieldType { Default, Money, Password, Email, Name }
 
 @OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
 @Composable
@@ -113,6 +113,7 @@ fun LastroTextField(
         val autofillTypes = when (type) {
             TextFieldType.Email -> listOf(AutofillType.EmailAddress)
             TextFieldType.Password -> listOf(AutofillType.Password)
+            TextFieldType.Name -> listOf(AutofillType.PersonFullName)
             else -> null
         }
         val autofill = LocalAutofill.current
