@@ -11,7 +11,6 @@ object LastroColors {
     val TextPrimary = Color(0xFFFFFFFF)
     val TextMuted = Color(0xFFA0A0A0)
     val TextDim = Color(0xFF717171)
-    val TextOnSurface = Color(0xFF888888)
 
     val Accent = Color(0xFF6B7CFF)
     val AccentSecondary = Color(0xFF9B6BFF)
@@ -33,5 +32,4 @@ object LastroColors {
     val TextPrimaryLight = Color(0xFF111111)
     val TextMutedLight = Color(0xFF595959)
     val TextDimLight = Color(0xFF767676)
-    val TextOnSurfaceLight = Color(0xFF595959)
 }
