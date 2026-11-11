@@ -16,9 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -42,9 +41,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -59,10 +56,14 @@ import com.lastro.core.ui.resolve
 import com.lastro.feature.auth.R as AuthR
 import com.lastro.core.ui.components.ButtonVariant
 import com.lastro.core.ui.components.LastroButton
+import com.lastro.core.ui.components.LastroSectionLabel
 import com.lastro.core.ui.components.LastroStepIndicator
 import com.lastro.core.ui.components.LastroTextField
 import com.lastro.core.ui.components.TextFieldType
+import com.lastro.core.ui.theme.LastroHeroIconShape
 import com.lastro.core.ui.theme.LastroColors
+import com.lastro.core.ui.theme.LastroIconSize
+import com.lastro.core.ui.theme.LastroIconWrapSize
 import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
 import com.lastro.feature.auth.viewmodel.OnboardingIncomeEvent
@@ -140,7 +141,7 @@ internal fun OnboardingIncomeScreenContent(
                     enabled = canSubmit,
                     modifier = Modifier.fillMaxWidth(),
                 )
-                Spacer(modifier = Modifier.height(LastroSpacing.sm))
+                Spacer(modifier = Modifier.height(LastroSpacing.xl))
                 LastroButton(
                     text = "Pular por agora",
                     onClick = onSkip,
@@ -163,7 +164,7 @@ internal fun OnboardingIncomeScreenContent(
 
             LastroStepIndicator(
                 totalSteps = 3,
-                currentStep = 3,
+                currentStep = 2,
                 modifier = Modifier.fillMaxWidth(),
             )
 
@@ -171,16 +172,24 @@ internal fun OnboardingIncomeScreenContent(
 
             Box(
                 modifier = Modifier
-                    .size(72.dp)
-                    .clip(RoundedCornerShape(22.dp))
-                    .background(LastroColors.Accent.copy(alpha = 0.12f)),
+                    .size(LastroIconWrapSize.xxl)
+                    .clip(LastroHeroIconShape)
+                    .background(
+                        Brush.linearGradient(
+                            listOf(
+                                LastroColors.Accent.copy(alpha = 0.25f),
+                                LastroColors.Accent.copy(alpha = 0.1f),
+                            ),
+                        ),
+                    )
+                    .border(1.dp, LastroColors.Accent.copy(alpha = 0.3f), LastroHeroIconShape),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    painter = painterResource(id = LastroIcons.TrendingUp),
+                    painter = painterResource(id = LastroIcons.ClockCheck),
                     contentDescription = null,
                     tint = LastroColors.Accent,
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier.size(LastroIconSize.xl),
                 )
             }
 
@@ -214,27 +223,19 @@ internal fun OnboardingIncomeScreenContent(
                 label = "RENDA MENSAL LÍQUIDA",
                 modifier = Modifier.fillMaxWidth(),
                 type = TextFieldType.Money,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Decimal,
-                    imeAction = ImeAction.Done,
-                ),
             )
 
             Spacer(modifier = Modifier.height(LastroSpacing.xxl))
 
-            Text(
-                text = "META DE POUPANÇA",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+            LastroSectionLabel(text = "Meta de poupança")
             Spacer(modifier = Modifier.height(LastroSpacing.sm))
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(14.dp))
+                    .clip(MaterialTheme.shapes.medium)
                     .background(MaterialTheme.colorScheme.surface)
-                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(14.dp))
+                    .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.medium)
                     .padding(horizontal = LastroSpacing.xl, vertical = LastroSpacing.xl),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -305,16 +306,16 @@ internal fun OnboardingIncomeScreenContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
+                    .clip(MaterialTheme.shapes.small)
                     .background(MaterialTheme.colorScheme.surface)
-                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
-                    .padding(LastroSpacing.md),
+                    .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.small)
+                    .padding(horizontal = LastroSpacing.lg, vertical = LastroSpacing.md),
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_info_circle),
                     contentDescription = null,
                     tint = LastroColors.Accent,
-                    modifier = Modifier.size(16.dp).padding(top = 1.dp),
+                    modifier = Modifier.size(LastroIconSize.xs).padding(top = 1.dp),
                 )
                 Spacer(modifier = Modifier.size(LastroSpacing.sm))
                 Text(

@@ -58,6 +58,7 @@ object LastroIcons {
     @DrawableRes val ChevronDown       = R.drawable.ic_chevron_down
     @DrawableRes val ArrowRight        = R.drawable.ic_arrow_right
     @DrawableRes val Clock             = R.drawable.ic_clock
+    @DrawableRes val ClockCheck        = R.drawable.ic_clock_check
     @DrawableRes val Search            = R.drawable.ic_search
     @DrawableRes val Filter            = R.drawable.ic_filter
     @DrawableRes val Wallet            = R.drawable.ic_wallet

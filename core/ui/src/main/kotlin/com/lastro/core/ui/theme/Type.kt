@@ -26,7 +26,14 @@ val LastroTypography = Typography(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 26.sp,
+        lineHeight = 32.5.sp,
         letterSpacing = (-0.5).sp,
+    ),
+    headlineMedium = TextStyle(
+        fontFamily = InterFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 28.sp,
+        letterSpacing = (-1).sp,
     ),
     headlineSmall = TextStyle(
         fontFamily = InterFontFamily,
@@ -42,16 +49,19 @@ val LastroTypography = Typography(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 15.sp,
+        lineHeight = 22.5.sp,
     ),
     bodyMedium = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
+        lineHeight = 22.4.sp,
     ),
     bodySmall = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 13.sp,
+        lineHeight = 19.5.sp,
     ),
     labelLarge = TextStyle(
         fontFamily = InterFontFamily,
@@ -62,6 +72,7 @@ val LastroTypography = Typography(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.SemiBold,
         fontSize = 12.sp,
+        lineHeight = 18.sp,
         letterSpacing = 0.5.sp,
     ),
     labelSmall = TextStyle(

@@ -15,7 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lastro.core.ui.icon.LastroIcons
-import com.lastro.core.ui.theme.FabShape
+import com.lastro.core.ui.theme.LastroFabShape
 import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
 
@@ -29,7 +29,7 @@ fun LastroFab(
     FloatingActionButton(
         onClick = onClick,
         modifier = modifier,
-        shape = FabShape,
+        shape = LastroFabShape,
         containerColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.onPrimary,
         elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 0.dp),
@@ -48,7 +48,7 @@ fun LastroFabExtended(
     ExtendedFloatingActionButton(
         onClick = onClick,
         modifier = modifier,
-        shape = FabShape,
+        shape = LastroFabShape,
         containerColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.onPrimary,
         elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 0.dp),
