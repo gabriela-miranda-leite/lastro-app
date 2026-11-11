@@ -4,10 +4,11 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.lastro.core.common.navigation.Route
+import com.lastro.core.common.navigation.deepLinksFor
 import com.lastro.feature.couple.ui.CoupleLinkScreen
 
 fun NavGraphBuilder.coupleGraph(navController: NavController) {
-    composable(Route.Couple.Home.path) {
+    composable(Route.Couple.Home.path, deepLinks = deepLinksFor(Route.Couple.Home.path)) {
         CoupleLinkScreen(
             onBack = { navController.popBackStack() },
             onLinked = { navController.navigate(Route.Dashboard.path) {

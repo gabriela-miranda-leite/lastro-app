@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.lastro.core.common.navigation.Route
+import com.lastro.core.common.navigation.deepLinksFor
 import com.lastro.feature.auth.ui.ForgotPasswordScreen
 import com.lastro.feature.auth.ui.LoginScreen
 import com.lastro.feature.auth.ui.OnboardingIncomeScreen
@@ -15,7 +16,7 @@ import com.lastro.feature.auth.ui.SplashScreen
 import com.lastro.feature.auth.ui.WelcomeScreen
 
 fun NavGraphBuilder.authGraph(navController: NavController) {
-    composable(Route.Splash.path) {
+    composable(Route.Splash.path, deepLinks = deepLinksFor(Route.Splash.path)) {
         SplashScreen(
             onNavigateToHome = {
                 navController.navigate(Route.Dashboard.path) {
@@ -30,7 +31,7 @@ fun NavGraphBuilder.authGraph(navController: NavController) {
         )
     }
 
-    composable(Route.Auth.Welcome.path) {
+    composable(Route.Auth.Welcome.path, deepLinks = deepLinksFor(Route.Auth.Welcome.path)) {
         WelcomeScreen(
             onNavigateToRegister = {
                 navController.navigate(Route.Auth.Register.path)
@@ -41,7 +42,7 @@ fun NavGraphBuilder.authGraph(navController: NavController) {
         )
     }
 
-    composable(Route.Auth.Login.path) {
+    composable(Route.Auth.Login.path, deepLinks = deepLinksFor(Route.Auth.Login.path)) {
         LoginScreen(
             onLoginSuccess = {
                 navController.navigate(Route.Dashboard.path) {
@@ -57,7 +58,7 @@ fun NavGraphBuilder.authGraph(navController: NavController) {
         )
     }
 
-    composable(Route.Auth.Register.path) {
+    composable(Route.Auth.Register.path, deepLinks = deepLinksFor(Route.Auth.Register.path)) {
         RegisterScreen(
             onRegisterSuccess = {
                 navController.navigate(Route.Auth.OnboardingIncome.path) {
@@ -68,7 +69,7 @@ fun NavGraphBuilder.authGraph(navController: NavController) {
         )
     }
 
-    composable(Route.Auth.OnboardingIncome.path) {
+    composable(Route.Auth.OnboardingIncome.path, deepLinks = deepLinksFor(Route.Auth.OnboardingIncome.path)) {
         OnboardingIncomeScreen(
             onSuccess = {
                 navController.navigate(Route.Dashboard.path) {
@@ -78,7 +79,7 @@ fun NavGraphBuilder.authGraph(navController: NavController) {
         )
     }
 
-    composable(Route.Auth.ForgotPassword.path) {
+    composable(Route.Auth.ForgotPassword.path, deepLinks = deepLinksFor(Route.Auth.ForgotPassword.path)) {
         ForgotPasswordScreen(
             onBack = { navController.popBackStack() },
         )
@@ -87,6 +88,7 @@ fun NavGraphBuilder.authGraph(navController: NavController) {
     composable(
         route = "auth/reset-password/{token}",
         arguments = listOf(navArgument("token") { type = NavType.StringType }),
+        deepLinks = deepLinksFor("auth/reset-password/{token}"),
     ) { backStackEntry ->
         val token = backStackEntry.arguments?.getString("token").orEmpty()
         ResetPasswordScreen(
