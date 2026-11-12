@@ -16,9 +16,9 @@ fun NavGraphBuilder.dashboardGraph(navController: NavController) {
             onNavigateToProfile = {
                 navController.navigate(Route.Profile.path)
             },
-            onNavigateToCouple = {
-                navController.navigate(Route.Couple.Home.path)
-            }
+            onNavigateToNewTransaction = {
+                navController.navigate(Route.Transactions.Form().path)
+            },
         )
     }
 }

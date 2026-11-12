@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.material.icons.Icons
@@ -34,6 +35,8 @@ fun EmptyState(
     modifier: Modifier = Modifier,
     ctaLabel: String? = null,
     onCtaClick: (() -> Unit)? = null,
+    iconTint: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    iconBackground: Color = MaterialTheme.colorScheme.surfaceVariant,
 ) {
     Column(
         modifier = modifier
@@ -44,7 +47,7 @@ fun EmptyState(
     ) {
         Surface(
             shape = MaterialTheme.shapes.extraLarge,
-            color = MaterialTheme.colorScheme.surfaceVariant,
+            color = iconBackground,
             border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
             modifier = Modifier.size(LastroIconWrapSize.lg),
         ) {
@@ -53,7 +56,7 @@ fun EmptyState(
                     imageVector = icon,
                     contentDescription = null,
                     modifier = Modifier.size(LastroIconSize.md),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    tint = iconTint,
                 )
             }
         }

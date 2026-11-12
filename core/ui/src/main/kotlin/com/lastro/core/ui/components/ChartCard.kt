@@ -36,11 +36,13 @@ import com.lastro.core.ui.theme.LastroTheme
 data class ChartPoint(val label: String, val value: Float)
 data class ChartBar(val label: String, val value: Float, val color: Color)
 data class DonutSlice(val label: String, val value: Float, val color: Color)
+data class ChartAxisLabel(val index: Int, val text: String)
 
 @Composable
 private fun ChartCardContainer(
     title: String,
     subtitle: String? = null,
+    titleTrailing: String? = null,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
@@ -51,11 +53,25 @@ private fun ChartCardContainer(
             .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.extraLarge)
             .padding(LastroSpacing.xl),
     ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            if (titleTrailing != null) {
+                Text(
+                    text = titleTrailing,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = LastroColors.Accent,
+                )
+            }
+        }
         if (subtitle != null) {
             Spacer(modifier = Modifier.height(LastroSpacing.xs))
             Text(
@@ -78,10 +94,14 @@ fun LastroLineChartCard(
     subtitle: String? = null,
     lineColor: Color = LastroColors.Accent,
     chartHeight: Dp = 100.dp,
+    highlightIndex: Int? = points.lastIndex.takeIf { points.isNotEmpty() },
+    axisLabels: List<ChartAxisLabel>? = null,
 ) {
     ChartCardContainer(title = title, subtitle = subtitle, modifier = modifier) {
         if (points.size >= 2) {
             val maxVal = points.maxOf { it.value }.coerceAtLeast(1f)
+            val minVal = points.minOf { it.value }.coerceAtMost(0f)
+            val range = (maxVal - minVal).coerceAtLeast(1f)
             Canvas(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -91,12 +111,14 @@ fun LastroLineChartCard(
                 val h = size.height
                 val stepX = w / (points.size - 1).coerceAtLeast(1)
 
+                fun yOf(value: Float) = h - ((value - minVal) / range) * h * 0.9f - h * 0.05f
+
                 val path = Path()
                 val fillPath = Path()
 
                 points.forEachIndexed { i, pt ->
                     val x = i * stepX
-                    val y = h - (pt.value / maxVal) * h * 0.9f
+                    val y = yOf(pt.value)
                     if (i == 0) {
                         path.moveTo(x, y)
                         fillPath.moveTo(x, h)
@@ -120,19 +142,28 @@ fun LastroLineChartCard(
                     color = lineColor,
                     style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round),
                 )
-                val lastPt = points.last()
-                val lastX = (points.size - 1) * stepX
-                val lastY = h - (lastPt.value / maxVal) * h * 0.9f
-                drawCircle(color = lineColor, radius = 4.dp.toPx(), center = Offset(lastX, lastY))
+
+                val hlIndex = (highlightIndex ?: (points.size - 1)).coerceIn(0, points.size - 1)
+                val hlX = hlIndex * stepX
+                val hlY = yOf(points[hlIndex].value)
+                drawCircle(color = lineColor.copy(alpha = 0.2f), radius = 7.dp.toPx(), center = Offset(hlX, hlY))
+                drawCircle(color = lineColor, radius = 4.dp.toPx(), center = Offset(hlX, hlY))
             }
         }
         Spacer(modifier = Modifier.height(LastroSpacing.sm))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            points.firstOrNull()?.let {
-                Text(it.label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-            points.lastOrNull()?.let {
-                Text(it.label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            val labels = axisLabels ?: listOfNotNull(
+                points.firstOrNull()?.let { ChartAxisLabel(0, it.label) },
+                points.lastOrNull()?.let { ChartAxisLabel(points.lastIndex, it.label) },
+            )
+            labels.forEach { axisLabel ->
+                val isHighlight = axisLabel.index == highlightIndex
+                Text(
+                    text = axisLabel.text,
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = if (isHighlight) FontWeight.SemiBold else null,
+                    color = if (isHighlight) lineColor else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
         }
     }
@@ -185,10 +216,11 @@ fun LastroDonutChartCard(
     title: String,
     slices: List<DonutSlice>,
     modifier: Modifier = Modifier,
+    titleTrailing: String? = null,
     centerLabel: String? = null,
     donutSize: Dp = 120.dp,
 ) {
-    ChartCardContainer(title = title, modifier = modifier) {
+    ChartCardContainer(title = title, titleTrailing = titleTrailing, modifier = modifier) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -218,17 +250,27 @@ fun LastroDonutChartCard(
                     }
                 }
                 if (centerLabel != null) {
-                    Text(
-                        text = centerLabel,
-                        style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = "total",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Text(
+                            text = centerLabel,
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                    }
                 }
             }
             Column(verticalArrangement = Arrangement.spacedBy(LastroSpacing.sm)) {
                 slices.forEach { slice ->
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
                         Box(
                             modifier = Modifier
                                 .size(8.dp)
@@ -239,6 +281,13 @@ fun LastroDonutChartCard(
                             text = slice.label,
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.weight(1f),
+                        )
+                        Text(
+                            text = "${((slice.value / total) * 100).toInt()}%",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurface,
                         )
                     }
                 }
