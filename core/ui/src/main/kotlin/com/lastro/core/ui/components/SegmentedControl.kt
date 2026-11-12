@@ -21,7 +21,6 @@ fun LastroSegmentedControl(
     selectedIndex: Int,
     onOptionSelected: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    selectedColor: Color = MaterialTheme.colorScheme.primary,
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
@@ -36,10 +35,14 @@ fun LastroSegmentedControl(
                     modifier = Modifier.weight(1f),
                     shape = MaterialTheme.shapes.extraSmall,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (isSelected) selectedColor else Color.Transparent,
-                        contentColor = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
+                        containerColor = if (isSelected) MaterialTheme.colorScheme.surface else Color.Transparent,
+                        contentColor = if (isSelected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
                     ),
-                    elevation = null,
+                    elevation = if (isSelected) {
+                        ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
+                    } else {
+                        null
+                    },
                 ) {
                     Text(option, style = MaterialTheme.typography.labelMedium)
                 }

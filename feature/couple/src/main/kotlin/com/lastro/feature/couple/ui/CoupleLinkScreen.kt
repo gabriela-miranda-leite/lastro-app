@@ -419,6 +419,7 @@ private fun InviteStep(
         Box(
             modifier = Modifier
                 .size(28.dp)
+                .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape)
                 .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape),
             contentAlignment = Alignment.Center,
         ) {
