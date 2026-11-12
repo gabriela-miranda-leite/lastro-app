@@ -235,7 +235,7 @@ private fun InviteTab(
             enabled = email.isNotBlank(),
         )
 
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(LastroSpacing.xl))
 
         LastroButton(
             text = "Pular por agora",
@@ -355,7 +355,7 @@ private fun JoinTab(
         enabled = code.isNotBlank(),
     )
 
-    Spacer(Modifier.height(8.dp))
+    Spacer(Modifier.height(LastroSpacing.xl))
 
     LastroButton(
         text = "Pular por agora",
@@ -419,6 +419,7 @@ private fun InviteStep(
         Box(
             modifier = Modifier
                 .size(28.dp)
+                .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape)
                 .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape),
             contentAlignment = Alignment.Center,
         ) {
