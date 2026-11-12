@@ -42,4 +42,14 @@ class LastroBannerTest {
         }
         composeRule.onNodeWithText("Regra 50/30/20").assertIsDisplayed()
     }
+
+    @Test
+    fun renders_warning_message_in_light_theme() {
+        composeRule.setContent {
+            LastroTheme(darkTheme = false) {
+                LastroBanner(message = "Você usou 85% do orçamento.", type = BannerType.Warning)
+            }
+        }
+        composeRule.onNodeWithText("Você usou 85% do orçamento.").assertIsDisplayed()
+    }
 }

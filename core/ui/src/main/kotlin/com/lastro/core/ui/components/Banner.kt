@@ -14,15 +14,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lastro.core.ui.icon.LastroIcons
+import com.lastro.core.ui.theme.LastroColors
 import com.lastro.core.ui.theme.LastroIconSize
 import com.lastro.core.ui.theme.LastroSpacing
 import com.lastro.core.ui.theme.LastroTheme
 
-enum class BannerType { Error, Success, Info }
+enum class BannerType { Error, Success, Info, Warning }
 
 @Composable
 fun LastroBanner(
@@ -49,6 +51,16 @@ fun LastroBanner(
             background = MaterialTheme.colorScheme.primary.copy(alpha = 0.10f),
             border = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
         )
+        BannerType.Warning -> {
+            val isDarkTheme = MaterialTheme.colorScheme.background.luminance() < 0.5f
+            val warningTint = if (isDarkTheme) LastroColors.Warning else LastroColors.WarningLight
+            BannerStyle(
+                iconRes = LastroIcons.AlertTriangle,
+                tint = warningTint,
+                background = LastroColors.Warning.copy(alpha = if (isDarkTheme) 0.10f else 0.18f),
+                border = LastroColors.Warning.copy(alpha = 0.3f),
+            )
+        }
     }
 
     Surface(
@@ -100,4 +112,16 @@ private fun PreviewSuccess() = LastroTheme {
 @Composable
 private fun PreviewInfo() = LastroTheme(darkTheme = false) {
     LastroBanner(message = "Regra 50/30/20 — sugerimos guardar pelo menos 20% da renda.", type = BannerType.Info)
+}
+
+@Preview(name = "Banner Warning - Dark")
+@Composable
+private fun PreviewWarningDark() = LastroTheme {
+    LastroBanner(message = "Você usou 85% do orçamento de Lazer este mês.", type = BannerType.Warning)
+}
+
+@Preview(name = "Banner Warning - Light")
+@Composable
+private fun PreviewWarningLight() = LastroTheme(darkTheme = false) {
+    LastroBanner(message = "Você usou 85% do orçamento de Lazer este mês.", type = BannerType.Warning)
 }

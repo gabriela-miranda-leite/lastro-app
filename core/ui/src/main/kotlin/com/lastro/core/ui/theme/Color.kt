@@ -20,10 +20,13 @@ object LastroColors {
     val Negative = Color(0xFFFF6B6B)
     val Warning = Color(0xFFFFD06B)
     val Wishes = Color(0xFFFF7C6B)
+    val Neutral = Color(0xFF5A5A5A)
 
     val AccentSubtle = Color(0x1F6B7CFF)
     val PositiveSubtle = Color(0x1F4ECBA8)
     val NegativeSubtle = Color(0x14FF6B6B)
+
+    val WarningLight = Color(0xFF8A5A00)
 
     val BackgroundLight = Color(0xFFF5F5F0)
     val SurfaceLight = Color(0xFFFFFFFF)
